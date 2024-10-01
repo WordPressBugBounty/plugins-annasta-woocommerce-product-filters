@@ -1,0 +1,24 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 2,
+	"name": "a-w-f/awf-block",
+	"version": "1.0.0",
+	"title": "annasta WooCommerce Filters",
+	"description": "Display annasta Filters preset",
+	"keywords": [ "filters", "product filters", "Woocommerce", "Woocommerce filters" ],
+	"category": "widgets",
+	"icon": "filter",
+	"textdomain": "annasta-filters",
+	"attributes": {
+		"blockID": {
+			"type": "string"
+		},
+		"annastaPreset": {
+			"type": "string"
+		},
+		"blockEditMode": {
+			"type": "boolean",
+			"default": true
+		}
+	}
+}

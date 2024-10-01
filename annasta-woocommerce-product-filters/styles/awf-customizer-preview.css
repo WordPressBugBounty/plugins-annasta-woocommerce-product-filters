@@ -1,0 +1,57 @@
+/**
+ * Styles for annasta Filters presets of Wordpress Customizer Preview
+ */
+ 
+.awf-preset-wrapper div.blockOverlay {
+	top: -2px !important;
+	right: -2px !important;
+	bottom: -2px !important;
+	left: -2px !important;
+	width: auto !important;
+	height: auto !important;
+	background-color: #fff !important;
+/*	border: 2px solid #eb2222 !important;*/
+	border-radius: 5px !important;
+	opacity: 1 !important;
+	
+	background-image: linear-gradient(90deg, #eb2222 50%, #ffffff 50%), linear-gradient(90deg, #eb2222 50%, #ffffff 50%), linear-gradient(0deg, #eb2222 50%, #ffffff 50%), linear-gradient(0deg, #eb2222 50%, #ffffff 50%);
+	background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+	background-size: 7px 2px, 7px 2px, 2px 7px, 2px 7px;
+/*	background-size: 15px 2px, 15px 2px, 2px 15px, 2px 15px;*/
+	background-position: left top, right bottom, left bottom, right top;
+	animation: awf-preset-loading-border 1s infinite linear;
+}
+
+@keyframes awf-preset-loading-border {
+	0% {
+		background-position: left top, right bottom, left bottom, right   top;
+	}
+	100% {
+		background-position: left 15px top, right 15px bottom , left bottom 15px , right   top 15px;
+	}
+}
+
+button.awf-focus-panel-button {
+	position: relative;
+	float: left;
+	margin-left: -30px;
+	margin-top: -30px;
+	padding: 0;
+	width: 28px;
+	height: 28px;
+	min-width: 28px;
+	min-height: 28px;
+	color: transparent;
+	background: top left / contain no-repeat url(images/awf-logo-128x128.png);
+	border: none;
+	border-radius: 0;
+	box-shadow: 0 2px 1px rgba(46,68,83,.15);
+	cursor: pointer;
+	pointer-events: auto;
+	z-index: 1010;
+}
+
+button.awf-focus-panel-button:hover {
+	width: 30px;
+	height: 30px;
+}

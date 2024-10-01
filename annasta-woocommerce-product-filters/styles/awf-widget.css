@@ -1,0 +1,14 @@
+#available-widgets [class*=awf_widget] .widget-title:before {
+    content: "\f536";
+    top: -2px;
+}
+
+.awf-widget-title {
+  display: none;
+  margin-bottom: 20px;
+}
+
+.awf-widget-label {
+  padding-left: 5px;
+  line-height: 40px;
+}

@@ -1,0 +1,27 @@
+<wpml-config>
+  <admin-texts>
+    <key name="awf_preset_*_title"/>
+    <key name="awf_preset_*_description"/>
+    <key name="awf_preset_*_filter_btn_label"/>
+    <key name="awf_preset_*_reset_btn_label"/>
+    <key name="awf_filter_*_settings">
+      <key name="title"/>
+      <key name="active_prefix"/>
+      <key name="reset_active_label"/>
+      <key name="placeholder"/>
+      <key name="style_options">
+        <key name="value_prefix"/>
+        <key name="value_postfix"/>
+        <key name="term_labels"/>
+        <key name="submit_button_label"/>
+        <key name="autocomplete_view_all_label"/>
+      </key>
+      <key name="type_options">
+        <key name="range_labels"/>
+        <key name="ac_product_cat_header"/>
+        <key name="ac_product_tag_header"/>
+        <key name="ac_products_header"/>
+      </key>
+    </key>
+  </admin-texts>
+</wpml-config>
