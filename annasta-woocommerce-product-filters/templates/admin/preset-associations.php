@@ -29,7 +29,7 @@ echo '<select id="awf-taxonomy-associations-select" style="display:none;"></sele
     <tr>
       <td class="awf-association-name"><?php echo esc_html( $label ); ?></td>
       <td class="awf-buttons-column">
-        <button type="button" class="button button-secondary awf-icon awf-delete-btn awf-delete-association-btn" title="<?php esc_attr_e( 'Remove page association', 'annasta-filters' ); ?>" data-association="<?php echo esc_attr( $association_id ); ?>"></button>
+        <button type="button" class="button button-secondary awf-fa-icon awf-fas-icon awf-fa-delete-btn awf-delete-association-btn" title="<?php esc_attr_e( 'Remove page association', 'annasta-filters' ); ?>" data-association="<?php echo esc_attr( $association_id ); ?>"></button>
       </td>
     </tr>
 <?php endforeach; ?>

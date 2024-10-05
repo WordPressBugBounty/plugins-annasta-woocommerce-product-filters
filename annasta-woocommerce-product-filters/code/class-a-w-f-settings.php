@@ -395,7 +395,7 @@ if( ! class_exists( 'A_W_F_settings' ) ) {
       ;
 
       if( A_W_F::$premium ) {
-        echo '<button class="button button-secondary awf-fa-icon awf-fas-icon awf-popup-preset-templates-btn" type="button" title="', esc_attr__( 'Apply template', 'annasta-filters' ), '" data-preset-id="', esc_attr( $this->preset->id ), '"></button>'
+        echo '<button class="button button-secondary awf-fa-icon awf-fas-icon awf-popup-preset-templates-btn" type="button" title="', esc_attr__( 'Import settings from another preset or template', 'annasta-filters' ), '" data-preset-id="', esc_attr( $this->preset->id ), '"></button>'
         ;
       }
 

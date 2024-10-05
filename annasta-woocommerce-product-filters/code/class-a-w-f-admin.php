@@ -574,7 +574,8 @@ if(! class_exists('A_W_F_admin') ) {
             'range_change_confirmation' => esc_html__( 'Changing the range type will force a preset update. Some of the current range settings might be lost. Are you ready to proceed?', 'annasta-filters' ),
             'add_seo_filters_btn_label' => esc_html__( 'Insert annasta filters list', 'annasta-filters' ),
             'apply_filter_template_confirmation' => esc_html__( 'Any unsaved changes to preset or filters will be lost! Please use the Cancel button to go back to preset settings to save any changes before proceeding. To ensure the proper template application the page needs to reload twice. Apply filter template and reload this page?', 'annasta-filters' ),
-            'apply_preset_template_confirmation' => esc_html__( 'The settings and filters of the current preset will be changed to reflect the chosen template. To ensure the proper template application the page needs to reload twice. Apply preset template and reload this page?', 'annasta-filters' ),
+            'apply_preset_template_confirmation' => esc_html__( 'The settings and filters of the current preset will be changed to reflect the chosen template. To ensure the proper template application the page needs to reload twice. Apply preset clone or template and reload this page?', 'annasta-filters' ),
+            'preset_cloning_error' => esc_html__( 'An error has occured during preset cloning. Please contact the plugin development team.', 'annasta-filters' ),
             'wrappers_detection_btn_label' => esc_html__( 'Wrapper auto-detection', 'annasta-filters' )
           ),
         ) );
@@ -1510,6 +1511,15 @@ if( 'compatibility_mode' === $ajax_mode ) {
 
 <?php if( 'togglable' === get_option( 'awf_preset_1_display_mode' ) ) : ?>
 
+            <div class="awf-dashboard-slide"><div id="awf-dashboard-disable-togglable" class="awf-dashboard-item">
+              <i class="fas fa-lightbulb"></i> 
+              <div>
+<?php
+echo sprintf( wp_kses( __( '<div class="awf-dashboard-slide-header">Place your filters into a sidebar or header</div>Learn about disabling the modal sidebar mode in our <a href="%1$s" target="_blank"><strong>Getting Started tutorial</strong></a>.', 'annasta-filters' ), array( 'div' => array( 'class' => array() ), 'a' => array( 'href' => array(), 'target' => array() ), 'strong' => array() ) ), esc_url( 'https://annasta.net/plugins/annasta-woocommerce-product-filters/tutorials/getting-started/#display-options' ) );
+?>
+              </div>
+            </div></div>
+            
             <div class="awf-dashboard-slide"><div id="awf-dashboard-toggle-btn" class="awf-dashboard-item">
               <i class="fas fa-info-circle"></i> 
               <div>
@@ -2204,7 +2214,7 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
       foreach( $filter->settings[$limitations_list] as $ei ) {
         if( isset( $terms_by_id[$ei] ) ) {
           $html .= '<tr id="awf-terms-limitation_' . $filter->preset_id . '_' . $filter->id . '_' . sanitize_html_class( $ei ) . '" class="awf-terms-limitation-container"><td>' . esc_html( $terms_by_id[$ei]->name ) . '</td>';
-          $html .= '<td class="awf-terms-limitation-btn-container"><button type="button" class="button button-secondary awf-icon awf-delete-btn awf-remove-terms-limitation-btn"';
+          $html .= '<td class="awf-terms-limitation-btn-container"><button type="button" class="button button-secondary awf-fa-icon awf-fas-icon awf-fa-delete-btn awf-remove-terms-limitation-btn"';
           $html .= ' title="' . esc_attr( $remove_label ) . '"></button></td>';
           $html .= '</tr>';
         }
@@ -2264,7 +2274,7 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
           $html .= '<span class="dashicons dashicons-yes" title="' . esc_attr__( 'This is the default products per page value for your shop. You can change it in the Plugin Settings tab.', 'annasta-filters' ) . '"></span>';
         }
         $html .= '</td>';
-        $html .= '<td class="awf-buttons-column"><button type="button" class="button button-secondary awf-icon awf-delete-btn awf-remove-ppp-value-btn" title="' . esc_attr__( 'Delete value', 'annasta-filters' ) . '"></button></td>';
+        $html .= '<td class="awf-buttons-column"><button type="button" class="button button-secondary awf-fa-icon awf-fas-icon awf-fa-delete-btn awf-remove-ppp-value-btn" title="' . esc_attr__( 'Delete value', 'annasta-filters' ) . '"></button></td>';
         $html .= '</tr>';
       }
 
@@ -3360,7 +3370,7 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
             '<input name="' . $setting_id . '_priority" type="text" value="' . esc_attr( isset( $data['priority'] ) ? $data['priority'] : '15' ) . '" style="width: 5em;">',
             '</td>',
             '<td class="awf-buttons-column">',
-              '<button type="button" class="button button-secondary awf-icon awf-delete-btn awf-delete-template-option-btn" title="',
+              '<button type="button" class="button button-secondary awf-fa-icon awf-fas-icon awf-fa-delete-btn awf-delete-template-option-btn" title="',
               esc_attr( 'Remove', 'annasta-filters' ), '" data-option="', esc_attr( $option ), '" data-setting-id="', esc_attr( $id ), '"></button>',
             '</td>',
             '</tr>'
@@ -5265,6 +5275,10 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
 				$css .= '.awf-filter-wrapper.awf-dropdown .awf-filters-container{box-shadow:0px 1px 2px 0px ' . $this->sanitize_css_color( $options['awf_dropdown_filters_container_box_shadow_color'] ) . ';}';
 			}
 			
+			if( ! empty( $options['awf_dropdown_z_index'] ) ) {
+				$css .= '.awf-filter-wrapper.awf-dropdown .awf-filters-container, .awf-filter-wrapper.awf-dropdown .awf-submit-btn-container, .awf-filter-wrapper.awf-dropdown .awf-thl-container{z-index:' . absint( $options['awf_dropdown_z_index'] ) . ';}';
+			}
+			
 			if( ! empty( $options['awf_filter_label_hover_color'] ) ) {
 				$css .= '.awf-filter-container label:hover,.awf-filter-container.awf-active label:hover{color:' . $this->sanitize_css_color( $options['awf_filter_label_hover_color'] ) . ';}';
 			}
@@ -5734,6 +5748,7 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
 						$defaults[$section . '_filters_container_background_color'] = '#ffffff';
 						$defaults[$section . '_filters_container_border_color'] = '#cccccc';
 						$defaults[$section . '_filters_container_box_shadow_color'] = 'rgba(0, 0, 0, 0.1)';
+						$defaults[$section . '_z_index'] = '3';
 						break;
 					case 'awf_filter_label':
 						$defaults[$section . '_hover_color'] = '#000000';

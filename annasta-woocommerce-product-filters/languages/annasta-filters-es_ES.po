@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: annasta WooCommerce Product Filters\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-10 14:22+0000\n"
-"PO-Revision-Date: 2024-06-12 05:55+0000\n"
+"PO-Revision-Date: 2024-10-04 15:01+0000\n"
 "Last-Translator: Cursos Mandala\n"
 "Language-Team: Spanish (Spain)\n"
 "Language: es_ES\n"
@@ -19,19 +19,19 @@ msgstr ""
 msgid "\"%s\" taxonomy associated with this filter was not found!"
 msgstr "¡No se encontró la taxonomía \"%s\" asociada con este filtro!"
 
-#: code/class-a-w-f-admin.php:2888
+#: code/class-a-w-f-admin.php:2898
 msgid "\"Filters\" button mode"
 msgstr "Modo de botón \"Filtros\""
 
-#: code/class-a-w-f-admin.php:3494
+#: code/class-a-w-f-admin.php:3504
 msgid "\"Filters\" Toggle Button"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:4236
+#: code/class-a-w-f-admin.php:4242
 msgid "\"Filters\" toggle button settings"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:2985
+#: code/class-a-w-f-admin.php:2995
 msgid "\"Load More\" button"
 msgstr "Botón \"Cargar más\""
 
@@ -39,109 +39,114 @@ msgstr "Botón \"Cargar más\""
 msgid "\"Show more\" button"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:1426 code/class-a-w-f-admin.php:1618
+#: code/class-a-w-f-premium-admin.php:237
+#, php-format
+msgid "%1$s [CLONE]"
+msgstr ""
+
+#: code/class-a-w-f-admin.php:1427 code/class-a-w-f-admin.php:1628
 #, php-format
 msgid "%1$s archive pages"
 msgstr "%1$s páginas de archivo"
 
-#: code/class-a-w-f-premium-admin.php:1549
+#: code/class-a-w-f-premium-admin.php:1578
 #, php-format
 msgid "%1$s label:"
 msgstr "Etiqueta %1$s: "
 
-#: code/class-a-w-f-premium-admin.php:821
-#: code/class-a-w-f-premium-admin.php:1068
-#: code/class-a-w-f-premium-admin.php:1071
+#: code/class-a-w-f-premium-admin.php:850
+#: code/class-a-w-f-premium-admin.php:1097
+#: code/class-a-w-f-premium-admin.php:1100
 #, php-format
 msgid "%1$s Meta"
 msgstr "%1$s Meta"
 
-#: code/class-a-w-f-admin.php:2687
+#: code/class-a-w-f-admin.php:2697
 #, php-format
 msgid "%1$s Meta Data Filter"
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:2519
-#: code/class-a-w-f-premium-admin.php:2526
-#: code/class-a-w-f-premium-admin.php:2848
+#: code/class-a-w-f-premium-admin.php:2549
+#: code/class-a-w-f-premium-admin.php:2556
+#: code/class-a-w-f-premium-admin.php:2922
 #, php-format
 msgid "%1$s template"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:1402 code/class-a-w-f-admin.php:1460
+#: code/class-a-w-f-admin.php:1403 code/class-a-w-f-admin.php:1461
 #, php-format
 msgid "%s taxonomy archive pages"
 msgstr "%s páginas de archivo de taxonomía"
 
-#: code/class-a-w-f-admin.php:2864 code/class-a-w-f-premium-admin.php:301
+#: code/class-a-w-f-admin.php:2874 code/class-a-w-f-premium-admin.php:330
 msgid "1 column"
 msgstr "1 columna"
 
-#: code/class-a-w-f-customizer.php:2165
+#: code/class-a-w-f-customizer.php:2169
 msgid "100 - Thin"
 msgstr "100 - Delgado"
 
-#: code/class-a-w-f-admin.php:2865 code/class-a-w-f-premium-admin.php:302
+#: code/class-a-w-f-admin.php:2875 code/class-a-w-f-premium-admin.php:331
 msgid "2 columns"
 msgstr ""
 
-#: code/class-a-w-f-customizer.php:2165
+#: code/class-a-w-f-customizer.php:2169
 msgid "200 - Light"
 msgstr "200 - Luz"
 
-#: code/class-a-w-f-admin.php:2866 code/class-a-w-f-premium-admin.php:303
+#: code/class-a-w-f-admin.php:2876 code/class-a-w-f-premium-admin.php:332
 msgid "3 columns"
 msgstr ""
 
-#: code/class-a-w-f-customizer.php:2165
+#: code/class-a-w-f-customizer.php:2169
 msgid "300 Book"
 msgstr "300 Libro"
 
-#: code/class-a-w-f-admin.php:4338
+#: code/class-a-w-f-admin.php:4344
 msgid "3d party parameters support"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:2867 code/class-a-w-f-premium-admin.php:304
+#: code/class-a-w-f-admin.php:2877 code/class-a-w-f-premium-admin.php:333
 msgid "4 columns"
 msgstr "4 columnas"
 
-#: code/class-a-w-f-customizer.php:2165
+#: code/class-a-w-f-customizer.php:2169
 msgid "400 Normal"
 msgstr "400 Normal"
 
-#: code/class-a-w-f-customizer.php:2165
+#: code/class-a-w-f-customizer.php:2169
 msgid "500 Medium"
 msgstr "500 Medio"
 
-#: code/class-a-w-f-customizer.php:2165
+#: code/class-a-w-f-customizer.php:2169
 msgid "600 Semibold"
 msgstr "600 Semi negrita"
 
-#: code/class-a-w-f-customizer.php:2165
+#: code/class-a-w-f-customizer.php:2169
 msgid "700 Bold"
 msgstr "700 Negrita"
 
-#: code/class-a-w-f-customizer.php:2165
+#: code/class-a-w-f-customizer.php:2169
 msgid "800 Heavy"
 msgstr "800 Pesado"
 
-#: code/class-a-w-f-customizer.php:2165
+#: code/class-a-w-f-customizer.php:2169
 msgid "900 Black"
 msgstr "900 Negro"
 
-#: code/class-a-w-f-admin.php:1539
+#: code/class-a-w-f-admin.php:1549
 #, php-format
 msgid "<a href=\"%1$s\" target=\"_blank\">annasta Filters Support page</a>"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:4430
+#: code/class-a-w-f-admin.php:4436
 #, php-format
 msgid ""
 "<a href=\"%1$s\" target=\"_blank\">Read about the \"Filters\" button "
 "settings</a> in plugin Documentation."
 msgstr ""
 
-#: code/class-a-w-f-admin.php:4424
+#: code/class-a-w-f-admin.php:4430
 #, php-format
 msgid ""
 "<a href=\"%1$s\">Click here to customize the button appearance in the "
@@ -153,20 +158,29 @@ msgstr ""
 msgid "<a href=\"%1$s\">No pages are associated with this preset.</a>"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:1502
+#: code/class-a-w-f-admin.php:1503
 #, php-format
 msgid ""
 "<div class=\"awf-dashboard-slide-header\">AJAX compatibility mode is on. "
 "</div><a href=\"%1$s\">Try the dedicated AJAX mode for faster loads!</a>"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:1517
+#: code/class-a-w-f-admin.php:1527
 #, php-format
 msgid ""
 "<div class=\"awf-dashboard-slide-header\">Customize the \"Filters\" "
 "button</div><div>Go to annasta Filters > Plugin settings > <a href=\"%1$s\" "
 "target=\"_blank\"><strong>\"Filters\" toggle button settings</strong></a>."
 "</div>"
+msgstr ""
+
+#: code/class-a-w-f-admin.php:1518
+#, php-format
+msgid ""
+"<div class=\"awf-dashboard-slide-header\">Place your filters into a sidebar "
+"or header</div>Learn about disabling the modal sidebar mode in our <a "
+"href=\"%1$s\" target=\"_blank\"><strong>Getting Started tutorial</strong></a>"
+"."
 msgstr ""
 
 #: code/class-a-w-f-frontend.php:2578
@@ -184,7 +198,7 @@ msgid ""
 "depending on its display settings."
 msgstr ""
 
-#: code/class-a-w-f-admin.php:2279
+#: code/class-a-w-f-admin.php:2289
 #, php-format
 msgid ""
 "<strong><a href=\"%1$s\">Upgrade</a></strong> to <strong>annasta Woocommerce "
@@ -204,7 +218,7 @@ msgid ""
 "any of the pages of your site. Please add page associations below."
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:973
+#: code/class-a-w-f-premium-admin.php:1002
 msgid ""
 "<strong>WARNING: </strong>use this option with caution, making sure that the "
 "labels that you choose do not already exist as any of the Wordpress, "
@@ -218,7 +232,7 @@ msgstr ""
 "Utiliza solo los caracteres alfanuméricos en minúscula, guiones y guiones "
 "bajos para las etiquetas de los parámetros."
 
-#: code/class-a-w-f-premium-admin.php:2938
+#: code/class-a-w-f-premium-admin.php:3015
 #, php-format
 msgid ""
 "A JSON file for the \"%3$s\" filter template has been created. Please <a "
@@ -226,7 +240,7 @@ msgid ""
 "click here</a> if the download hasn't started automatically."
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:2614
+#: code/class-a-w-f-premium-admin.php:2647
 #, php-format
 msgid ""
 "A JSON file for the \"%3$s\" preset template has been created. Please <a "
@@ -234,35 +248,35 @@ msgid ""
 "click here</a> if the download hasn't started automatically."
 msgstr ""
 
-#: code/class-a-w-f-admin.php:2034
+#: code/class-a-w-f-admin.php:2044
 msgid "Above slider handles"
 msgstr "Por encima de los controles deslizantes"
 
-#: code/class-a-w-f-premium-admin.php:924
+#: code/class-a-w-f-premium-admin.php:953
 msgid "Active badge reset tip"
 msgstr "Punta de restablecimiento de insignia activa"
 
-#: code/class-a-w-f-premium-admin.php:915
+#: code/class-a-w-f-premium-admin.php:944
 msgid "Active badges exceptions"
 msgstr "Excepciones de insignias activas"
 
-#: code/class-a-w-f-admin.php:1918
+#: code/class-a-w-f-admin.php:1928
 msgid "Active filter"
 msgstr "Filtro activo"
 
-#: code/class-a-w-f-admin.php:3499
+#: code/class-a-w-f-admin.php:3509
 msgid "Active Filter Badges"
 msgstr "Insignias de filtro activo"
 
-#: code/class-a-w-f-admin.php:2743
+#: code/class-a-w-f-admin.php:2753
 msgid "Active filter badges"
 msgstr "Insignias de filtro activo"
 
-#: code/class-a-w-f-customizer.php:972
+#: code/class-a-w-f-customizer.php:976
 msgid "Active filter color"
 msgstr "Color de filtro activo"
 
-#: code/class-a-w-f-admin.php:1927
+#: code/class-a-w-f-admin.php:1937
 msgid "Active filter hover"
 msgstr "Desplazamiento activo del filtro"
 
@@ -270,18 +284,18 @@ msgstr "Desplazamiento activo del filtro"
 msgid "Active filters"
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:569
+#: code/class-a-w-f-premium-admin.php:598
 msgid "Active filters badges"
 msgstr "Insignias de filtros activos"
 
-#: code/class-a-w-f-admin.php:2192
+#: code/class-a-w-f-admin.php:2202
 msgid ""
 "Active filters list refreshes on page loads. If this renders it incompatible "
 "with some AJAX-based options, use the URL filtering style or the \"Force "
 "page reloads\" filter setting."
 msgstr ""
 
-#: code/class-a-w-f-admin.php:2178
+#: code/class-a-w-f-admin.php:2188
 msgid "Active filters mode doesn't support ranges!"
 msgstr ""
 
@@ -289,24 +303,24 @@ msgstr ""
 msgid "Active filters will remain uncollapsed."
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:1429
+#: code/class-a-w-f-premium-admin.php:1458
 msgid "Active Hover"
 msgstr "Flotar activo"
 
-#: code/class-a-w-f-premium-admin.php:1427
+#: code/class-a-w-f-premium-admin.php:1456
 msgid "Active Icon"
 msgstr "Icono activo"
 
-#: code/class-a-w-f-admin.php:3324 templates/admin/filters-list.php:12
+#: code/class-a-w-f-admin.php:3334 templates/admin/filters-list.php:12
 #: templates/admin/preset-associations.php:22
 msgid "Add"
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:379
+#: code/class-a-w-f-premium-admin.php:408
 msgid "Add column"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3065
+#: code/class-a-w-f-admin.php:3075
 msgid "Add elements"
 msgstr ""
 
@@ -314,15 +328,15 @@ msgstr ""
 msgid "Add filter or control"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:2807
+#: code/class-a-w-f-admin.php:2817
 msgid "Add filters one by one"
 msgstr "Agregar filtros uno por uno"
 
-#: code/class-a-w-f-admin.php:3941 code/class-a-w-f-premium-admin.php:687
+#: code/class-a-w-f-admin.php:3951 code/class-a-w-f-premium-admin.php:716
 msgid "Add meta description"
 msgstr "Añadir meta descripción"
 
-#: code/class-a-w-f-admin.php:1770
+#: code/class-a-w-f-admin.php:1780
 msgid "Add new value to the range"
 msgstr "Agregar nuevo valor al rango"
 
@@ -330,8 +344,8 @@ msgstr "Agregar nuevo valor al rango"
 msgid "Add page association"
 msgstr "Agregar asociación de página"
 
-#: code/class-a-w-f-premium-admin.php:261
-#: code/class-a-w-f-premium-admin.php:267
+#: code/class-a-w-f-premium-admin.php:290
+#: code/class-a-w-f-premium-admin.php:296
 msgid "Add preset"
 msgstr ""
 
@@ -347,19 +361,19 @@ msgstr ""
 "Agrega la fuente de los filtros a tu sitio. Desmarca si tu tema ya "
 "proporciona la fuente seleccionada."
 
-#: code/class-a-w-f-admin.php:3943 code/class-a-w-f-premium-admin.php:689
+#: code/class-a-w-f-admin.php:3953 code/class-a-w-f-premium-admin.php:718
 msgid "Add the meta \"description\" tag to the pages of your shop."
 msgstr "Agrega la etiqueta meta \"descripción\" a las páginas de tu tienda."
 
-#: code/class-a-w-f-admin.php:3324
+#: code/class-a-w-f-admin.php:3334
 msgid "Add to product lists"
 msgstr "Agregar a listas de productos"
 
-#: code/class-a-w-f-admin.php:2164
+#: code/class-a-w-f-admin.php:2174
 msgid "Add to selected"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:1770
+#: code/class-a-w-f-admin.php:1780
 #: templates/admin/filter-options/ppp_values.php:17
 msgid "Add value"
 msgstr "Añadir valor"
@@ -374,7 +388,7 @@ msgid ""
 "hidden via the Empty items style setting."
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:802
+#: code/class-a-w-f-premium-admin.php:831
 msgid ""
 "Adjust the filter terms' labels as needed. If you wish to display a string "
 "in the title whenever the filter is not active, put it into the "
@@ -388,60 +402,66 @@ msgstr ""
 msgid "Admin sort order"
 msgstr "Orden de clasificación de administrador"
 
-#: code/class-a-w-f-premium-admin.php:954
+#: code/class-a-w-f-premium-admin.php:983
 msgid "Advanced Settings"
 msgstr "Ajustes avanzados"
 
-#: code/class-a-w-f-admin.php:3580
+#: code/class-a-w-f-admin.php:3590
 msgid "AJAX loader"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3011
+#: code/class-a-w-f-admin.php:3021
 msgid "AJAX mode"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:2995
+#: code/class-a-w-f-admin.php:3005
 msgid "AJAX options"
 msgstr "Opciones de AJAX"
 
-#: code/class-a-w-f-admin.php:2983
+#: code/class-a-w-f-admin.php:2993
 msgid "AJAX pagination"
 msgstr "Paginación AJAX"
 
-#: code/class-a-w-f-admin.php:3027
+#: code/class-a-w-f-admin.php:3037
 #, fuzzy
 #| msgid "Ajax scroll adjustment"
 msgid "AJAX scroll adjustment"
 msgstr "Ajuste de desplazamiento Ajax"
 
-#: code/class-a-w-f-admin.php:2784
+#: code/class-a-w-f-admin.php:2794
 msgid "AJAX with button submission"
 msgstr "AJAX con envío de botón"
 
-#: code/class-a-w-f-admin.php:2785
+#: code/class-a-w-f-admin.php:2795
 msgid "AJAX with delegated submission"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:2783
+#: code/class-a-w-f-admin.php:2793
 msgid "AJAX with instant submission"
 msgstr "AJAX con envío instantáneo"
 
-#: code/class-a-w-f-admin.php:1587 code/class-a-w-f-filter.php:86
+#: code/class-a-w-f-admin.php:1597 code/class-a-w-f-filter.php:86
 msgid "All"
 msgstr "Todo"
 
-#: code/class-a-w-f-admin.php:1386 code/class-a-w-f-admin.php:1442
+#: code/class-a-w-f-admin.php:1387 code/class-a-w-f-admin.php:1443
 msgid "All pages"
 msgstr "Todas las páginas"
 
-#: code/class-a-w-f-admin.php:4466
+#: code/class-a-w-f-admin.php:4472
 msgid ""
 "Amount of days to keep the product counts cache transients in the database. "
 "Set to 0 to completely disable any cache produced by filters, including the "
 "Woocommerce products loop cache created during AJAX calls."
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:1671
+#: code/class-a-w-f-admin.php:578
+msgid ""
+"An error has occured during preset cloning. Please contact the plugin "
+"development team."
+msgstr ""
+
+#: code/class-a-w-f-premium-admin.php:1700
 msgid ""
 "An error has occured when sorting the range positions. Please reload this "
 "page and try again."
@@ -449,41 +469,41 @@ msgstr ""
 "Se ha producido un error al ordenar las posiciones de rango. Vuelve a cargar "
 "esta página e inténtalo nuevamente."
 
-#: code/class-a-w-f-admin.php:1041
+#: code/class-a-w-f-admin.php:1042
 msgid "An error occured when updating filters' positions."
 msgstr "Se produjo un error al actualizar las posiciones de los filtros."
 
-#: code/class-a-w-f-premium-admin.php:292
+#: code/class-a-w-f-premium-admin.php:321
 msgid "An error occured when updating presets positions."
 msgstr "Se produjo un error al actualizar las posiciones preestablecidas."
 
-#: code/class-a-w-f-customizer.php:2181
+#: code/class-a-w-f-customizer.php:2185
 msgid "Angle"
 msgstr "Ángulo"
 
-#: code/class-a-w-f-customizer.php:1375
+#: code/class-a-w-f-customizer.php:1379
 msgid "Animation duration (milliseconds)"
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:639
+#: code/class-a-w-f-premium-admin.php:668
 msgid "annasta Default page title"
 msgstr "annasta Título de página predeterminado"
 
-#: code/class-a-w-f-premium-admin.php:651
+#: code/class-a-w-f-premium-admin.php:680
 msgctxt "annasta Default page title"
 msgid "Shop"
 msgstr "Tienda"
 
-#: code/class-a-w-f-premium-admin.php:660
+#: code/class-a-w-f-premium-admin.php:689
 msgid "annasta Default shop title"
 msgstr "annasta Título de tienda predeterminado"
 
-#: code/class-a-w-f-premium-admin.php:672
+#: code/class-a-w-f-premium-admin.php:701
 msgctxt "annasta Default shop title"
 msgid "Shop"
 msgstr "Tienda"
 
-#: code/class-a-w-f-admin.php:3901 code/class-a-w-f-admin.php:3914
+#: code/class-a-w-f-admin.php:3911 code/class-a-w-f-admin.php:3924
 msgid "annasta Default title"
 msgstr "annasta Título predeterminado"
 
@@ -492,7 +512,7 @@ msgstr "annasta Título predeterminado"
 msgid "annasta Filters"
 msgstr "annasta Filtros"
 
-#: code/class-a-w-f-admin.php:3282
+#: code/class-a-w-f-admin.php:3292
 msgid "annasta Filters preset"
 msgstr "filtros annasta preestablecidos"
 
@@ -506,7 +526,7 @@ msgstr "annasta filtros preestablecidos #%1$s"
 msgid "annasta Filters Settings"
 msgstr "Configuración de filtros annasta"
 
-#: code/class-a-w-f-admin.php:1484
+#: code/class-a-w-f-admin.php:1485
 msgid "annasta Highlights"
 msgstr ""
 
@@ -561,35 +581,35 @@ msgstr ""
 msgid "Apply filters to autocomplete results"
 msgstr "Aplicar filtros para autocompletar resultados"
 
-#: code/class-a-w-f-premium-admin.php:2689
-#: code/class-a-w-f-premium-admin.php:3067 code/class-a-w-f-settings.php:398
-#: templates/admin/filter.php:49
-msgid "Apply template"
-msgstr ""
-
-#: code/class-a-w-f-premium-admin.php:2711
-#: code/class-a-w-f-premium-admin.php:3102
+#: code/class-a-w-f-premium-admin.php:2773
+#: code/class-a-w-f-premium-admin.php:3213
 #, php-format
 msgid "Apply to %1$s"
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:3102
+#: code/class-a-w-f-premium-admin.php:3213
 msgid "Apply to current filter"
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:2711
+#: code/class-a-w-f-premium-admin.php:2773
 msgid "Apply to current preset"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3037
+#: code/class-a-w-f-premium-admin.php:2724
+msgid ""
+"Applying template or transferring settings from another preset will replace "
+"all the settings and filters of the current preset."
+msgstr ""
+
+#: code/class-a-w-f-admin.php:3047
 msgid "Archive pages settings"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3049
+#: code/class-a-w-f-admin.php:3059
 msgid "Archive pages support"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3545
+#: code/class-a-w-f-admin.php:3555
 msgid "Arrows"
 msgstr ""
 
@@ -597,11 +617,11 @@ msgstr ""
 msgid "Ascending"
 msgstr "Ascendente"
 
-#: code/class-a-w-f-admin.php:3546
+#: code/class-a-w-f-admin.php:3556
 msgid "Asterisk"
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:1514
+#: code/class-a-w-f-premium-admin.php:1543
 msgid ""
 "At least 2 filter items are needed for the range control creation. Please "
 "create more terms for this taxonomy (or adjust the excluded filter items) "
@@ -611,19 +631,19 @@ msgstr ""
 "rango. Crea más términos para esta taxonomía (o ajusta los elementos de "
 "filtro excluidos) e intenta nuevamente."
 
-#: code/class-a-w-f-admin.php:2756
+#: code/class-a-w-f-admin.php:2766
 msgid "At the bottom of the preset"
 msgstr "En la parte inferior del preestablecido"
 
-#: code/class-a-w-f-admin.php:2755
+#: code/class-a-w-f-admin.php:2765
 msgid "At the top of the preset"
 msgstr "En la parte superior del preestablecido"
 
-#: code/class-a-w-f-premium-admin.php:375
+#: code/class-a-w-f-premium-admin.php:404
 msgid "Auto width"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:2305 code/class-a-w-f-settings.php:180
+#: code/class-a-w-f-admin.php:2315 code/class-a-w-f-settings.php:180
 msgid "Auto-inserted!"
 msgstr ""
 
@@ -631,22 +651,22 @@ msgstr ""
 msgid "Auto-shrink for shorter options list"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3226
+#: code/class-a-w-f-admin.php:3236
 msgid "Auto-shrink the wrapper"
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:1684
+#: code/class-a-w-f-premium-admin.php:1713
 msgid "Autocomplete height limit (pixels)"
 msgstr "Límite de altura de autocompletar (píxeles)"
 
-#: code/class-a-w-f-customizer.php:672
+#: code/class-a-w-f-customizer.php:676
 #: templates/admin/filter-options/autocomplete.php:7
 msgid "Autocomplete settings"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3902 code/class-a-w-f-admin.php:3915
-#: code/class-a-w-f-premium-admin.php:640
-#: code/class-a-w-f-premium-admin.php:661
+#: code/class-a-w-f-admin.php:3912 code/class-a-w-f-admin.php:3925
+#: code/class-a-w-f-premium-admin.php:669
+#: code/class-a-w-f-premium-admin.php:690
 msgid "Autogenerated list of annasta filters"
 msgstr "Lista autogenerada de filtros annasta"
 
@@ -654,7 +674,7 @@ msgstr "Lista autogenerada de filtros annasta"
 msgid "Automatically calculated numeric values"
 msgstr "Valores numéricos calculados automáticamente"
 
-#: code/class-a-w-f-premium-admin.php:1043
+#: code/class-a-w-f-premium-admin.php:1072
 msgid "Availability"
 msgstr "Disponibilidad"
 
@@ -666,39 +686,39 @@ msgstr "Esperado"
 msgid "Back"
 msgstr "Atrás"
 
-#: code/class-a-w-f-admin.php:2837
+#: code/class-a-w-f-admin.php:2847
 msgid "Back button"
 msgstr "Botón de retroceso"
 
-#: code/class-a-w-f-admin.php:2839
+#: code/class-a-w-f-admin.php:2849
 msgid "Back button can be useful when displaying one filter at a time."
 msgstr "El botón Atrás puede ser útil cuando se muestra un filtro a la vez."
 
-#: code/class-a-w-f-customizer.php:2050
+#: code/class-a-w-f-customizer.php:2054
 msgid "Background color"
 msgstr "Color de fondo"
 
-#: code/class-a-w-f-customizer.php:2072
+#: code/class-a-w-f-customizer.php:2076
 msgid "Background color on hover"
 msgstr "Color de fondo al pasar el mouse"
 
-#: code/class-a-w-f-customizer.php:1644
+#: code/class-a-w-f-customizer.php:1648
 msgid "Badge alignment"
 msgstr "Alineación de la insignia"
 
-#: code/class-a-w-f-admin.php:3529 code/class-a-w-f-customizer.php:2173
+#: code/class-a-w-f-admin.php:3539 code/class-a-w-f-customizer.php:2177
 msgid "Bars"
 msgstr ""
 
-#: code/class-a-w-f-customizer.php:717
+#: code/class-a-w-f-customizer.php:721
 msgid "Base color"
 msgstr ""
 
-#: code/class-a-w-f-customizer.php:90 code/class-a-w-f-customizer.php:673
+#: code/class-a-w-f-customizer.php:90 code/class-a-w-f-customizer.php:677
 msgid "Base font color"
 msgstr "Color de fuente base"
 
-#: code/class-a-w-f-customizer.php:140 code/class-a-w-f-customizer.php:674
+#: code/class-a-w-f-customizer.php:140 code/class-a-w-f-customizer.php:678
 msgid "Base font size (px)"
 msgstr "Tamaño de fuente base (px)"
 
@@ -714,28 +734,28 @@ msgstr "Comenzar autocompletar después"
 msgid "Block deactivation"
 msgstr ""
 
-#: code/class-a-w-f-customizer.php:1763
+#: code/class-a-w-f-customizer.php:1767
 msgid "Border radius (px)"
 msgstr "Radio del borde (px)"
 
-#: code/class-a-w-f-admin.php:2757
+#: code/class-a-w-f-admin.php:2767
 msgid "Both at the top and at the bottom"
 msgstr "Tanto en la parte superior como en la parte inferior."
 
-#: code/class-a-w-f-admin.php:4403 code/class-a-w-f-customizer.php:1565
-#: code/class-a-w-f-customizer.php:1834 code/class-a-w-f-customizer.php:1922
+#: code/class-a-w-f-admin.php:4409 code/class-a-w-f-customizer.php:1569
+#: code/class-a-w-f-customizer.php:1838 code/class-a-w-f-customizer.php:1926
 msgid "Bottom"
 msgstr "Fondo"
 
-#: code/class-a-w-f-customizer.php:1675
+#: code/class-a-w-f-customizer.php:1679
 msgid "Bottom border"
 msgstr "Borde inferior"
 
-#: code/class-a-w-f-admin.php:3057
+#: code/class-a-w-f-admin.php:3067
 msgid "Breadcrumbs support"
 msgstr ""
 
-#: code/class-a-w-f-customizer.php:1396
+#: code/class-a-w-f-customizer.php:1400
 msgid "Button label"
 msgstr ""
 
@@ -747,15 +767,15 @@ msgstr ""
 msgid "Button padding (px)"
 msgstr ""
 
-#: code/class-a-w-f-customizer.php:1514
+#: code/class-a-w-f-customizer.php:1518
 msgid "Button position (px)"
 msgstr ""
 
-#: code/class-a-w-f-customizer.php:2169
+#: code/class-a-w-f-customizer.php:2173
 msgid "Capitalize"
 msgstr "Capitalizar"
 
-#: code/class-a-w-f-customizer.php:2181
+#: code/class-a-w-f-customizer.php:2185
 msgid "Caret"
 msgstr "Signo de intercalación"
 
@@ -767,11 +787,11 @@ msgstr ""
 msgid "Categories header"
 msgstr ""
 
-#: code/class-a-w-f-customizer.php:1648 code/class-a-w-f-customizer.php:2177
+#: code/class-a-w-f-customizer.php:1652 code/class-a-w-f-customizer.php:2181
 msgid "Center"
 msgstr "Centrar"
 
-#: code/class-a-w-f-premium-admin.php:990
+#: code/class-a-w-f-premium-admin.php:1019
 msgid "Change the default 'IN' operator for taxonomy queries."
 msgstr "Cambia el operador predeterminado 'EN' para consultas de taxonomía"
 
@@ -788,7 +808,7 @@ msgstr ""
 msgid "characters"
 msgstr "caracteres"
 
-#: code/class-a-w-f-premium-admin.php:800
+#: code/class-a-w-f-premium-admin.php:829
 msgid ""
 "Check to use the filter for the title generation, uncheck to exclude. The "
 "meta description filters list is not affected by this option, it will "
@@ -798,11 +818,11 @@ msgstr ""
 "excluir. La lista de filtros de meta descripción no se ve afectada por esta "
 "opción, contendrá todos los filtros activos."
 
-#: code/class-a-w-f-customizer.php:2181
+#: code/class-a-w-f-customizer.php:2185
 msgid "Chevron"
 msgstr "Cheurón"
 
-#: code/class-a-w-f-admin.php:3984 code/class-a-w-f-premium-admin.php:739
+#: code/class-a-w-f-admin.php:3994 code/class-a-w-f-premium-admin.php:768
 msgid ""
 "Choose a combination of characters to be used between the values of the same "
 "filter (for instance, multiple colors selected in a product colors filter). "
@@ -814,7 +834,7 @@ msgstr ""
 "del producto). Un ejemplo de un título creado con el valor predeterminado de "
 "\",\" sería \"Fruta, Bayas - Rojo, Verde, Púrpura - Pequeño, Mediano\"."
 
-#: code/class-a-w-f-admin.php:2869
+#: code/class-a-w-f-admin.php:2879
 #, fuzzy
 #| msgid ""
 #| "Choose the 4-column layout for headers or footers, 1-column layout is "
@@ -826,7 +846,7 @@ msgstr ""
 "Elige el diseño de 4 columnas para encabezados o pies de página, el diseño "
 "de 1 columna es mejor para las barras laterales."
 
-#: code/class-a-w-f-premium-admin.php:652
+#: code/class-a-w-f-premium-admin.php:681
 msgid ""
 "Choose the \"annasta Default page title\" in the \"Page title\" setting to "
 "display this string as a browser (HTML document) title for the pages of your "
@@ -839,7 +859,7 @@ msgstr ""
 "como título de página siempre que no haya filtros activos para mostrar en "
 "las listas de filtros autogenerados."
 
-#: code/class-a-w-f-premium-admin.php:673
+#: code/class-a-w-f-premium-admin.php:702
 msgid ""
 "Choose the \"annasta Default shop title\" in the \"Shop title\" setting to "
 "display this string as a heading in your shop pages. This title will also be "
@@ -852,7 +872,7 @@ msgstr ""
 "tienda siempre que no haya filtros activos para mostrar en las listas de "
 "filtros autogenerados."
 
-#: code/class-a-w-f-admin.php:3927
+#: code/class-a-w-f-admin.php:3937
 msgid ""
 "Choose the \"annasta Default title\" in the \"Page title\" or \"Shop title\" "
 "setting to display this string as a title for your shop pages. This title "
@@ -865,7 +885,7 @@ msgstr ""
 "listas de filtros autogenerados siempre que no haya filtros activos "
 "aplicados a la tienda."
 
-#: code/class-a-w-f-admin.php:2894
+#: code/class-a-w-f-admin.php:2904
 msgid ""
 "Choose the preset style when its visibility is controlled by the \"Filters\" "
 "button (see the \"Visibility\" setting)."
@@ -873,11 +893,11 @@ msgstr ""
 "Elige el estilo preestablecido cuando su visibilidad esté controlada por el "
 "botón \"Filtros\" (consulta la configuración \"Visibilidad\")."
 
-#: code/class-a-w-f-admin.php:3542
+#: code/class-a-w-f-admin.php:3552
 msgid "Circle 1"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3543
+#: code/class-a-w-f-admin.php:3553
 msgid "Circle 2"
 msgstr ""
 
@@ -890,32 +910,36 @@ msgstr "Limpiar todo"
 msgid "Clear all filters"
 msgstr "Limpiar todos los filtros"
 
-#: code/class-a-w-f-admin.php:4470
+#: code/class-a-w-f-admin.php:4476
 msgid "Clear filters cache"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:1956 code/class-a-w-f-premium-admin.php:1474
+#: code/class-a-w-f-admin.php:1966 code/class-a-w-f-premium-admin.php:1503
 msgid "Click an icon to copy to clipboard, then paste to the chosen box"
 msgstr ""
 "Haz clic en un icono para copiar al portapapeles, luego pégalo en el cuadro "
 "elegido"
 
-#: code/class-a-w-f-admin.php:4437 templates/admin/presets-list.php:66
+#: code/class-a-w-f-admin.php:4443 templates/admin/presets-list.php:66
 msgid "Click to copy shortcode to clipboard"
 msgstr ""
 
-#: code/class-a-w-f-customizer.php:2113
+#: code/class-a-w-f-customizer.php:2117
 msgid "Click to customize annasta Filters"
 msgstr "Haz clic para personalizar los filtros de annasta"
 
-#: code/class-a-w-f-admin.php:2366 code/class-a-w-f-admin.php:2374
-#: code/class-a-w-f-premium-admin.php:317
-#: code/class-a-w-f-premium-admin.php:2456
-#: code/class-a-w-f-premium-admin.php:2545
-#: code/class-a-w-f-premium-admin.php:2686
-#: code/class-a-w-f-premium-admin.php:2785
-#: code/class-a-w-f-premium-admin.php:2869
-#: code/class-a-w-f-premium-admin.php:3064
+#: code/class-a-w-f-premium-admin.php:284
+msgid "Clone preset"
+msgstr ""
+
+#: code/class-a-w-f-admin.php:2376 code/class-a-w-f-admin.php:2384
+#: code/class-a-w-f-premium-admin.php:346
+#: code/class-a-w-f-premium-admin.php:2485
+#: code/class-a-w-f-premium-admin.php:2578
+#: code/class-a-w-f-premium-admin.php:2720
+#: code/class-a-w-f-premium-admin.php:2859
+#: code/class-a-w-f-premium-admin.php:2946
+#: code/class-a-w-f-premium-admin.php:3141
 msgid "Close"
 msgstr ""
 
@@ -923,24 +947,24 @@ msgstr ""
 msgid "Close button settings"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:4257 code/class-a-w-f-customizer.php:1387
+#: code/class-a-w-f-admin.php:4263 code/class-a-w-f-customizer.php:1391
 #: code/class-a-w-f-preset-frontend.php:100
 msgid "Close filters"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:4256
+#: code/class-a-w-f-admin.php:4262
 msgid "Close togglable popup label"
 msgstr ""
 
-#: code/class-a-w-f-customizer.php:2173
+#: code/class-a-w-f-customizer.php:2177
 msgid "Cog"
 msgstr ""
 
-#: code/class-a-w-f-customizer.php:2173
+#: code/class-a-w-f-customizer.php:2177
 msgid "Cogs"
 msgstr ""
 
-#: code/class-a-w-f-customizer.php:1602
+#: code/class-a-w-f-customizer.php:1606
 msgid "Collapse icon"
 msgstr "Icono colapsar"
 
@@ -948,11 +972,11 @@ msgstr "Icono colapsar"
 msgid "Collapsible"
 msgstr "Plegable"
 
-#: code/class-a-w-f-customizer.php:1300 code/class-a-w-f-customizer.php:1707
+#: code/class-a-w-f-customizer.php:1304 code/class-a-w-f-customizer.php:1711
 msgid "Color"
 msgstr "Color"
 
-#: code/class-a-w-f-admin.php:3463 code/class-a-w-f-customizer.php:191
+#: code/class-a-w-f-admin.php:3473 code/class-a-w-f-customizer.php:191
 msgid "Color box style"
 msgstr "Estilo de caja de color"
 
@@ -960,12 +984,12 @@ msgstr "Estilo de caja de color"
 msgid "Color boxes"
 msgstr "Cajas de colores"
 
-#: code/class-a-w-f-premium-admin.php:365
+#: code/class-a-w-f-premium-admin.php:394
 #, php-format
 msgid "Column #%1$s"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:4382
+#: code/class-a-w-f-admin.php:4388
 msgid ""
 "Configure the floating \"Filters\" button.</br></br>Set only 2 of the "
 "Top/Right/Bottom/Left values and leave the rest blank. For example, to fix "
@@ -981,31 +1005,31 @@ msgstr ""
 msgid "Control the display of hierarchical sub-levels."
 msgstr "Controla la visualización de sub niveles jerárquicos."
 
-#: code/class-a-w-f-admin.php:2917
+#: code/class-a-w-f-admin.php:2927
 msgid "Controlled by \"Filters\" button"
 msgstr "Controlado por el botón \"Filtros\""
 
-#: code/class-a-w-f-admin.php:1955 code/class-a-w-f-premium-admin.php:1473
+#: code/class-a-w-f-admin.php:1965 code/class-a-w-f-premium-admin.php:1502
 msgid "Copied to clipboard"
 msgstr "Copiado al portapapeles"
 
-#: code/class-a-w-f-admin.php:6001
+#: code/class-a-w-f-admin.php:6012
 msgid "Couldn't detect the wrapper"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:5970
+#: code/class-a-w-f-admin.php:5981
 msgid ""
 "Couldn't detect WooCommerce pagination containers! Please make sure that the "
 "shop pagination works properly, and if needed, set the custom pagination "
 "selector."
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:2420
-#: code/class-a-w-f-premium-admin.php:2438
+#: code/class-a-w-f-premium-admin.php:2449
+#: code/class-a-w-f-premium-admin.php:2467
 msgid "Create"
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:2438
+#: code/class-a-w-f-premium-admin.php:2467
 msgid "Create filter template"
 msgstr ""
 
@@ -1019,28 +1043,28 @@ msgstr ""
 "diferentes niveles del mismo filtro. El filtro permanecerá deshabilitado "
 "hasta que se active su nivel principal."
 
-#: code/class-a-w-f-premium-admin.php:2420
+#: code/class-a-w-f-premium-admin.php:2449
 msgid "Create preset template"
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:2459
-#: code/class-a-w-f-premium-admin.php:2788
+#: code/class-a-w-f-premium-admin.php:2488
+#: code/class-a-w-f-premium-admin.php:2862
 msgid "Create template"
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:305
+#: code/class-a-w-f-premium-admin.php:334
 msgid "Custom"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3874
+#: code/class-a-w-f-admin.php:3884
 msgid "Custom CSS"
 msgstr "CSS personalizado"
 
-#: code/class-a-w-f-customizer.php:1158
+#: code/class-a-w-f-customizer.php:1162
 msgid "Custom icon"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3503
+#: code/class-a-w-f-admin.php:3513
 msgid "Custom Icons"
 msgstr "Iconos personalizados"
 
@@ -1048,7 +1072,7 @@ msgstr "Iconos personalizados"
 msgid "Custom icons"
 msgstr "Iconos personalizados"
 
-#: code/class-a-w-f-admin.php:4455
+#: code/class-a-w-f-admin.php:4461
 msgid "Custom Javascript"
 msgstr "Javascript personalizado"
 
@@ -1056,11 +1080,11 @@ msgstr "Javascript personalizado"
 msgid "Custom numeric values"
 msgstr "Valores numéricos personalizados"
 
-#: code/class-a-w-f-premium-admin.php:320
+#: code/class-a-w-f-premium-admin.php:349
 msgid "Custom preset layout"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3120
+#: code/class-a-w-f-admin.php:3130
 msgid "Custom selectors"
 msgstr ""
 
@@ -1072,7 +1096,7 @@ msgstr "Iconos y etiquetas de términos personalizados"
 msgid "Customize columns"
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:926
+#: code/class-a-w-f-premium-admin.php:955
 msgid ""
 "Customize hover tip for the active badge reset button. Leave blank if not "
 "needed."
@@ -1080,7 +1104,7 @@ msgstr ""
 "Personaliza la sugerencia de desplazamiento para el botón de reinicio de "
 "insignia activo. Deja en blanco si no es necesario."
 
-#: code/class-a-w-f-admin.php:4250
+#: code/class-a-w-f-admin.php:4256
 msgid "Customize label for the \"Filters\" toggle button."
 msgstr "Personaliza la etiqueta para el botón de alternancia \"Filtros\"."
 
@@ -1090,7 +1114,7 @@ msgid ""
 "product counts)."
 msgstr ""
 
-#: code/class-a-w-f-admin.php:4258
+#: code/class-a-w-f-admin.php:4264
 msgid ""
 "Customize the label of the togglable popup \"Close\" button. Leave blank to "
 "remove the label."
@@ -1103,7 +1127,7 @@ msgid ""
 msgstr ""
 "Personaliza la visualización del nivel jerárquico inicial del filtro actual."
 
-#: code/class-a-w-f-admin.php:2114
+#: code/class-a-w-f-admin.php:2124
 #, php-format
 msgid ""
 "Customize your sliders appearance in the <strong><a href=\"%1$s\" "
@@ -1111,11 +1135,11 @@ msgid ""
 "</strong>."
 msgstr ""
 
-#: code/class-a-w-f-customizer.php:2161
+#: code/class-a-w-f-customizer.php:2165
 msgid "Dashed"
 msgstr "Punteado"
 
-#: code/class-a-w-f-admin.php:1855
+#: code/class-a-w-f-admin.php:1865
 msgid "Database date format"
 msgstr "Formato de fecha de base de datos"
 
@@ -1123,7 +1147,7 @@ msgstr "Formato de fecha de base de datos"
 msgid "Date picker"
 msgstr "Selector de fechas"
 
-#: code/class-a-w-f-admin.php:1844
+#: code/class-a-w-f-admin.php:1854
 msgid "Date picker type"
 msgstr "Tipo de selector de fecha"
 
@@ -1132,7 +1156,7 @@ msgctxt "Datepicker \"Clear\" button label"
 msgid "Clear"
 msgstr "Limpiar"
 
-#: code/class-a-w-f-admin.php:1849
+#: code/class-a-w-f-admin.php:1859
 msgid "Dates range picker"
 msgstr "Selector de rango de fechas"
 
@@ -1140,30 +1164,30 @@ msgstr "Selector de rango de fechas"
 msgid "Dates selection"
 msgstr "Selección de fechas"
 
-#: code/class-a-w-f-admin.php:4286
+#: code/class-a-w-f-admin.php:4292
 msgid ""
 "Declare the pages with WooCommerce [products] shortcodes that you wish to "
 "filter. Filters placed on undeclared pages will redirect to the main "
 "WooCommerce shop page."
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3009
+#: code/class-a-w-f-admin.php:3019
 msgid "Dedicated AJAX"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:2982 code/class-a-w-f-admin.php:3418
-#: code/class-a-w-f-admin.php:3527 code/class-a-w-f-admin.php:3541
-#: code/class-a-w-f-customizer.php:75 code/class-a-w-f-customizer.php:2161
-#: code/class-a-w-f-customizer.php:2165 code/class-a-w-f-customizer.php:2169
-#: code/class-a-w-f-customizer.php:2177 code/class-a-w-f-customizer.php:2181
+#: code/class-a-w-f-admin.php:2992 code/class-a-w-f-admin.php:3428
+#: code/class-a-w-f-admin.php:3537 code/class-a-w-f-admin.php:3551
+#: code/class-a-w-f-customizer.php:75 code/class-a-w-f-customizer.php:2165
+#: code/class-a-w-f-customizer.php:2169 code/class-a-w-f-customizer.php:2173
+#: code/class-a-w-f-customizer.php:2181 code/class-a-w-f-customizer.php:2185
 msgid "Default"
 msgstr "Defecto"
 
-#: code/class-a-w-f-premium-admin.php:650
+#: code/class-a-w-f-premium-admin.php:679
 msgid "Default page title"
 msgstr "Título de página predeterminado"
 
-#: code/class-a-w-f-admin.php:3926 code/class-a-w-f-admin.php:4043
+#: code/class-a-w-f-admin.php:3936 code/class-a-w-f-admin.php:4053
 #: code/class-a-w-f-frontend.php:2941 code/class-a-w-f-frontend.php:2966
 #: code/class-a-w-f.php:556
 msgctxt "Default page title"
@@ -1174,7 +1198,7 @@ msgstr "Tienda"
 msgid "Default Preset"
 msgstr "Preestablecido por defecto"
 
-#: code/class-a-w-f-premium-admin.php:671
+#: code/class-a-w-f-premium-admin.php:700
 msgid "Default shop title"
 msgstr "Título de tienda predeterminado"
 
@@ -1182,15 +1206,15 @@ msgstr "Título de tienda predeterminado"
 msgid "Default sorting"
 msgstr "Clasificación por defecto"
 
-#: code/class-a-w-f-admin.php:3925
+#: code/class-a-w-f-admin.php:3935
 msgid "Default title"
 msgstr "Título predeterminado"
 
-#: code/class-a-w-f-admin.php:3276
+#: code/class-a-w-f-admin.php:3286
 msgid "Default WooCommerce pagination"
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:968
+#: code/class-a-w-f-premium-admin.php:997
 msgid ""
 "Define labels for the filters' URL query parameters. Leave blank to use the "
 "default value."
@@ -1198,7 +1222,7 @@ msgstr ""
 "Define etiquetas para los parámetros de consulta de URL de los filtros. "
 "Déjalo en blanco para usar el valor predeterminado."
 
-#: code/class-a-w-f-admin.php:1747
+#: code/class-a-w-f-admin.php:1757
 msgid ""
 "Define the amount of range segments. In a range slider this will control the "
 "amount of poles with labeled values displayed on the range scale. This "
@@ -1213,7 +1237,7 @@ msgstr ""
 "0.1) entre los polos, puede dar lugar a una distribución desigual de los "
 "segmentos."
 
-#: code/class-a-w-f-admin.php:1710
+#: code/class-a-w-f-admin.php:1720
 msgid ""
 "Define the amount of range values' decimals (digits to the right of the "
 "decimal point). This value controls only the display format of range values, "
@@ -1224,24 +1248,24 @@ msgstr ""
 "visualización de los valores de rango, internamente se redondean "
 "automáticamente a 2 puntos decimales."
 
-#: code/class-a-w-f-premium-admin.php:364
+#: code/class-a-w-f-premium-admin.php:393
 msgid "Delete"
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:255
+#: code/class-a-w-f-premium-admin.php:283
 msgid "Delete preset"
 msgstr "Eliminar preestablecido"
 
-#: code/class-a-w-f-premium-admin.php:2352
-#: code/class-a-w-f-premium-admin.php:2390
+#: code/class-a-w-f-premium-admin.php:2381
+#: code/class-a-w-f-premium-admin.php:2419
 msgid "Delete template"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:1760 code/class-a-w-f-admin.php:2267
+#: code/class-a-w-f-admin.php:1770 code/class-a-w-f-admin.php:2277
 msgid "Delete value"
 msgstr "Eliminar valor"
 
-#: code/class-a-w-f-admin.php:3419
+#: code/class-a-w-f-admin.php:3429
 msgid "Deprecated since version 1.3.0"
 msgstr "En desuso desde la versión 1.3.0"
 
@@ -1253,7 +1277,7 @@ msgstr "En desuso: sin soporte de personalizador"
 msgid "Descending"
 msgstr "Descendente"
 
-#: code/class-a-w-f-admin.php:3205
+#: code/class-a-w-f-admin.php:3215
 msgid "Detect wrapper"
 msgstr ""
 
@@ -1261,7 +1285,7 @@ msgstr ""
 msgid "Disable dropdown auto-collapse"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:4364
+#: code/class-a-w-f-admin.php:4370
 msgid ""
 "Disable the built-in WooCommerce categories and subcategories display. This "
 "display is not supported by the filters AJAX mode. Go to annasta Filters > "
@@ -1269,18 +1293,18 @@ msgid ""
 "categories/subcategories block supported by the filters."
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3223
+#: code/class-a-w-f-admin.php:3233
 msgid ""
 "Disable the wrapper detection scripts to fix pagination and other AJAX "
 "update issues. To manually limit the AJAX updates scope use the Products "
 "HTML wrapper field above."
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3226
+#: code/class-a-w-f-admin.php:3236
 msgid "Disable wrapper shrinkage"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3562 code/class-a-w-f-premium-admin.php:1324
+#: code/class-a-w-f-admin.php:3572 code/class-a-w-f-premium-admin.php:1353
 msgid "Disabled"
 msgstr "Deshabilitado"
 
@@ -1292,18 +1316,18 @@ msgid ""
 "level button submission."
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:1637
+#: code/class-a-w-f-premium-admin.php:1666
 msgid "Display \"min - max\" values below slider"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:2745
+#: code/class-a-w-f-admin.php:2755
 msgid ""
 "Display active filter badges with reset buttons on top of the preset filters."
 msgstr ""
 "Mostrar insignias de filtro activas con botones de reinicio en la parte "
 "superior de los filtros predefinidos."
 
-#: code/class-a-w-f-admin.php:2190
+#: code/class-a-w-f-admin.php:2200
 msgid "Display active filters siblings"
 msgstr ""
 
@@ -1319,7 +1343,7 @@ msgstr "Mostrar como filtro plegable"
 msgid "Display as dropdown"
 msgstr "Mostrar como desplegable"
 
-#: code/class-a-w-f-admin.php:2737
+#: code/class-a-w-f-admin.php:2747
 msgid "Display custom text under the preset title. Leave blank if not needed."
 msgstr ""
 "Mostrar texto personalizado debajo del título preestablecido. Deja en blanco "
@@ -1347,7 +1371,7 @@ msgstr "Mostrar elementos en una fila"
 msgid "Display items search"
 msgstr "Mostrar búsqueda de artículos"
 
-#: code/class-a-w-f-admin.php:1986 code/class-a-w-f-premium-admin.php:1349
+#: code/class-a-w-f-admin.php:1996 code/class-a-w-f-premium-admin.php:1378
 msgid "Display label"
 msgstr "Mostrar etiqueta"
 
@@ -1355,26 +1379,26 @@ msgstr "Mostrar etiqueta"
 msgid "Display on"
 msgstr "Mostrar en"
 
-#: code/class-a-w-f-admin.php:2808
+#: code/class-a-w-f-admin.php:2818
 msgid "Display one filter at a time"
 msgstr "Mostrar un filtro a la vez"
 
-#: code/class-a-w-f-admin.php:2855
+#: code/class-a-w-f-admin.php:2865
 msgid "Display options"
 msgstr "Opciones de pantalla"
 
-#: code/class-a-w-f-admin.php:4314
+#: code/class-a-w-f-admin.php:4320
 msgid "Display parent presets on child pages"
 msgstr "Mostrar preajustes principales en páginas secundarias"
 
-#: code/class-a-w-f-admin.php:2892
+#: code/class-a-w-f-admin.php:2902
 #, fuzzy
 #| msgid "Display preset filters in a left popup sidebar"
 msgid "Display preset filters in a popup sidebar"
 msgstr ""
 "Mostrar filtros preestablecidos en una barra lateral emergente izquierda"
 
-#: code/class-a-w-f-admin.php:2891
+#: code/class-a-w-f-admin.php:2901
 msgid "Display preset filters under the \"Filters\" button"
 msgstr "Mostrar filtros preestablecidos debajo del botón \"Filtros\""
 
@@ -1402,7 +1426,7 @@ msgstr ""
 msgid "Documentation"
 msgstr "Documentación"
 
-#: code/class-a-w-f-admin.php:2332 code/class-a-w-f-settings.php:163
+#: code/class-a-w-f-admin.php:2342 code/class-a-w-f-settings.php:163
 #, php-format
 msgid ""
 "Don't forget to <a href=\"%1$s\" target=\"_blank\"><strong>insert this "
@@ -1418,15 +1442,15 @@ msgstr ""
 msgid "Don't hide the selected items."
 msgstr ""
 
-#: code/class-a-w-f-admin.php:2374
+#: code/class-a-w-f-admin.php:2384
 msgid "Done"
 msgstr ""
 
-#: code/class-a-w-f-customizer.php:2161
+#: code/class-a-w-f-customizer.php:2165
 msgid "Dotted"
 msgstr "Punteado"
 
-#: code/class-a-w-f-customizer.php:2161
+#: code/class-a-w-f-customizer.php:2165
 msgid "Double"
 msgstr "Doble"
 
@@ -1454,7 +1478,7 @@ msgstr "Color del borde de la lista desplegable"
 msgid "Dropdown list shadow color"
 msgstr "Color de sombra de lista desplegable"
 
-#: code/class-a-w-f-premium-admin.php:549
+#: code/class-a-w-f-premium-admin.php:578
 msgid "Dropdowns"
 msgstr "Listas desplegables"
 
@@ -1468,7 +1492,7 @@ msgstr ""
 "preajuste. La configuración del nombre de metadatos del filtro %1$s se ha "
 "restablecido."
 
-#: code/class-a-w-f-admin.php:4293
+#: code/class-a-w-f-admin.php:4299
 msgid "Dynamic price sliders"
 msgstr "Deslizadores de precios dinámicos"
 
@@ -1480,7 +1504,7 @@ msgstr "Editar preestablecido"
 msgid "Empty items style"
 msgstr "Estilo de artículos vacíos"
 
-#: code/class-a-w-f-admin.php:3021
+#: code/class-a-w-f-admin.php:3031
 #, fuzzy
 #| msgid ""
 #| "Enable an animated scroll to the top of the products list on ajax filter "
@@ -1496,7 +1520,7 @@ msgstr ""
 msgid "Enable autocomplete"
 msgstr "Habilitar autocompletar"
 
-#: code/class-a-w-f-admin.php:4190
+#: code/class-a-w-f-admin.php:4200
 #, php-format
 msgid "Enable built-in support for %1$s theme"
 msgstr "Habilita la compatibilidad integrada para el tema %1$s"
@@ -1509,22 +1533,22 @@ msgstr ""
 msgid "Enable categories search"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3473
+#: code/class-a-w-f-admin.php:3483
 msgid ""
 "Enable Font Awesome support for filters icons. Set to \"Disabled\" if the "
 "full Font Awesome 5 Free support is provided by your theme. The \"Extended\" "
 "option provides basic Font Awesome support for the whole site."
 msgstr ""
 
-#: code/class-a-w-f-admin.php:2187
+#: code/class-a-w-f-admin.php:2197
 msgid "Enable one level up button"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3444
+#: code/class-a-w-f-admin.php:3454
 msgid "Enable pretty scrollbars"
 msgstr "Habilitar bonitas barras de desplazamiento"
 
-#: code/class-a-w-f-admin.php:4332
+#: code/class-a-w-f-admin.php:4338
 msgid ""
 "Enable stock filter support for variable products. WARNING: this beta option "
 "may slow down products display on sites with many products and/or slow "
@@ -1538,14 +1562,14 @@ msgstr ""
 msgid "Enable tags search"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3223
+#: code/class-a-w-f-admin.php:3233
 msgid ""
 "Enable the automatic wrapper detection whenever the Products HTML wrapper is "
 "not set. This may help avoid conflicts with multiple product lists and "
 "optimize scripts execution speed, but is incompatible with some themes."
 msgstr ""
 
-#: code/class-a-w-f-admin.php:4316
+#: code/class-a-w-f-admin.php:4322
 msgid ""
 "Enable the display of filter presets associated with term's parents on child "
 "term pages. For example, in a case of Clothes > Jeans category > subcategory "
@@ -1558,21 +1582,21 @@ msgstr ""
 "opción hará que todos los ajustes preestablecidos asociados con la categoría "
 "Ropa también se muestren para la subcategoría Jeans."
 
-#: code/class-a-w-f-admin.php:2320 code/class-a-w-f-settings.php:171
+#: code/class-a-w-f-admin.php:2330 code/class-a-w-f-settings.php:171
 msgid "Enable the floating \"Filters\" button mode."
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3008
+#: code/class-a-w-f-admin.php:3018
 msgid "Enhanced compatibility"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3013
+#: code/class-a-w-f-admin.php:3023
 msgid ""
 "Enhanced compatibility mode will work with most themes. Try the dedicated "
 "AJAX mode for faster AJAX calls."
 msgstr ""
 
-#: code/class-a-w-f-customizer.php:992
+#: code/class-a-w-f-customizer.php:996
 msgid ""
 "Enter a valid font (or comma-separated multiple fonts), enqueued or imported "
 "via CSS stylesheet."
@@ -1580,7 +1604,7 @@ msgstr ""
 "Introduce una fuente válida (o varias fuentes separadas por comas), en cola "
 "o importada a través de una hoja de estilo CSS."
 
-#: code/class-a-w-f-admin.php:3975 code/class-a-w-f-premium-admin.php:730
+#: code/class-a-w-f-admin.php:3985 code/class-a-w-f-premium-admin.php:759
 msgid ""
 "Enter the string that you wish to be used between the different filter "
 "groups in the SEO adjusted page and shop title. An example of a title "
@@ -1592,13 +1616,13 @@ msgstr ""
 "título generado utilizando el valor predeterminado de \"-\" sería \"Fruta, "
 "Bayas - Rojo, Verde, Púrpura - Pequeño, Mediano\"."
 
-#: code/class-a-w-f-customizer.php:1159
+#: code/class-a-w-f-customizer.php:1163
 msgid ""
 "Enter the unicode of any solid Font Awesome 5 icon to override the icon "
 "setting (example: f142)"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:2847
+#: code/class-a-w-f-admin.php:2857
 msgid ""
 "Enter the URL of the page to which you wish to apply the filters. Leave "
 "blank to filter the current page, or redirect to the shop page from a non-"
@@ -1615,11 +1639,11 @@ msgstr ""
 "después de \"?\" signo de su cadena de URL, así: https://mysite."
 "com/brand/brand-1/?archive-filter=1."
 
-#: code/class-a-w-f-admin.php:802
+#: code/class-a-w-f-admin.php:803
 msgid "Error completing request: association already exists."
 msgstr "Error al completar la solicitud: la asociación ya existe."
 
-#: code/class-a-w-f-admin.php:932
+#: code/class-a-w-f-admin.php:933
 msgid "Error creating filter: invalid preset, filter, or taxonomy."
 msgstr ""
 "Error al crear el filtro: valor predeterminado, filtro o taxonomía no "
@@ -1630,24 +1654,24 @@ msgstr ""
 msgid "Error requesting paged URL"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:1013
+#: code/class-a-w-f-admin.php:1014
 #, php-format
 msgid "Error: a problem occured while deleting filter %1$s."
 msgstr "Error: se produjo un problema al eliminar el filtro %1$s."
 
-#: code/class-a-w-f-admin.php:666
+#: code/class-a-w-f-admin.php:667
 msgid "Error: filter doesn't exist"
 msgstr "Error: el filtro no existe"
 
-#: code/class-a-w-f-admin.php:592
+#: code/class-a-w-f-admin.php:593
 msgid "Error: permission denied."
 msgstr "Error: permiso denegado."
 
-#: code/class-a-w-f-admin.php:634
+#: code/class-a-w-f-admin.php:635
 msgid "Error: preset doesn't exist"
 msgstr "Error: el preajuste no existe"
 
-#: code/class-a-w-f-admin.php:2168
+#: code/class-a-w-f-admin.php:2178
 msgid "Exclude"
 msgstr "Excluir"
 
@@ -1655,50 +1679,50 @@ msgstr "Excluir"
 msgid "Exclude from list"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3480
+#: code/class-a-w-f-admin.php:3490
 msgid "Excluded Customizer sections"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:2194
+#: code/class-a-w-f-admin.php:2204
 msgid "Excluded terms"
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:2351
-#: code/class-a-w-f-premium-admin.php:2389
+#: code/class-a-w-f-premium-admin.php:2380
+#: code/class-a-w-f-premium-admin.php:2418
 msgid "Export template to JSON file"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3562
+#: code/class-a-w-f-admin.php:3572
 msgid "Extended"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3556
+#: code/class-a-w-f-admin.php:3566
 msgid "Fast"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:4120
+#: code/class-a-w-f-admin.php:4130
 msgid "featured"
 msgstr "destacado"
 
-#: code/class-a-w-f-filter.php:96 code/class-a-w-f-premium-admin.php:1044
+#: code/class-a-w-f-filter.php:96 code/class-a-w-f-premium-admin.php:1073
 msgid "Featured products"
 msgstr "Productos destacados"
 
-#: code/class-a-w-f-admin.php:2667
+#: code/class-a-w-f-admin.php:2677
 msgid "Featured Products Filter"
 msgstr "Filtro de productos destacados"
 
-#: code/class-a-w-f-customizer.php:2173 code/class-a-w-f-premium-admin.php:2827
+#: code/class-a-w-f-customizer.php:2177 code/class-a-w-f-premium-admin.php:2901
 #: code/class-a-w-f-preset.php:38 code/class-a-w-f-preset.php:41
 #: code/class-a-w-f.php:272
 msgid "Filter"
 msgstr "Filtro"
 
-#: code/class-a-w-f-customizer.php:2173
+#: code/class-a-w-f-customizer.php:2177
 msgid "Filter + dollar sign"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:4284
+#: code/class-a-w-f-admin.php:4290
 msgid "Filter [products] shortcodes on"
 msgstr ""
 
@@ -1714,7 +1738,7 @@ msgstr ""
 msgid "Filter items sort order"
 msgstr "Filtrar orden de artículos"
 
-#: code/class-a-w-f-admin.php:3502
+#: code/class-a-w-f-admin.php:3512
 msgid "Filter Label"
 msgstr "Etiqueta del filtro"
 
@@ -1738,11 +1762,11 @@ msgid ""
 "title / description containing the word 'apple'."
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:2436
+#: code/class-a-w-f-premium-admin.php:2465
 msgid "Filter templates"
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:1422
+#: code/class-a-w-f-premium-admin.php:1451
 msgid "Filter Terms"
 msgstr "Términos de filtro"
 
@@ -1762,7 +1786,7 @@ msgstr ""
 "¡Filtra los productos de tu tienda Woocommerce por categoría, taxonomías "
 "personalizadas, atributos, precio, stock, productos en oferta y más!"
 
-#: code/class-a-w-f-admin.php:3501
+#: code/class-a-w-f-admin.php:3511
 msgid "Filter Title"
 msgstr "Título del filtro"
 
@@ -1778,19 +1802,19 @@ msgstr "Tipo de filtro"
 msgid "Filter value prefix"
 msgstr "Prefijo de valor de filtro"
 
-#: code/class-a-w-f-admin.php:3982 code/class-a-w-f-premium-admin.php:737
+#: code/class-a-w-f-admin.php:3992 code/class-a-w-f-premium-admin.php:766
 msgid "Filter values separator"
 msgstr "Separador de valores de filtro"
 
-#: code/class-a-w-f-premium-admin.php:963
+#: code/class-a-w-f-premium-admin.php:992
 msgid "Filterable archive identifier"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:2780
+#: code/class-a-w-f-admin.php:2790
 msgid "Filtering style"
 msgstr "Estilo de filtrado"
 
-#: code/class-a-w-f-admin.php:4249 code/class-a-w-f-customizer.php:1108
+#: code/class-a-w-f-admin.php:4255 code/class-a-w-f-customizer.php:1112
 #: code/class-a-w-f-frontend.php:2441 templates/admin/presets-list.php:62
 msgid "Filters"
 msgstr ""
@@ -1803,7 +1827,7 @@ msgstr "Fuente de filtros"
 msgid "Filters for WooCommerce products."
 msgstr "Filtros para productos WooCommerce."
 
-#: code/class-a-w-f-admin.php:3300
+#: code/class-a-w-f-admin.php:3310
 #, fuzzy
 #| msgid ""
 #| "Filters insertion and some other options of this section will only work "
@@ -1818,23 +1842,23 @@ msgstr ""
 "correctamente solo con la opción <strong>Forzar recarga del "
 "contenedor</strong> (ver más abajo) desactivada."
 
-#: code/class-a-w-f-premium-admin.php:802
+#: code/class-a-w-f-premium-admin.php:831
 msgid "Filters labels"
 msgstr "Filtra etiquetas"
 
-#: code/class-a-w-f-admin.php:3958 code/class-a-w-f-premium-admin.php:704
+#: code/class-a-w-f-admin.php:3968 code/class-a-w-f-premium-admin.php:733
 msgid "Filters List Generation"
 msgstr "Lista de filtros de generación"
 
-#: code/class-a-w-f-admin.php:3562
+#: code/class-a-w-f-admin.php:3572
 msgid "Filters only"
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:719
+#: code/class-a-w-f-premium-admin.php:748
 msgid "Filters postfix"
 msgstr "Filtros sufijos"
 
-#: code/class-a-w-f-admin.php:3964 code/class-a-w-f-premium-admin.php:710
+#: code/class-a-w-f-admin.php:3974 code/class-a-w-f-premium-admin.php:739
 msgid "Filters prefix"
 msgstr "Prefijo de filtros"
 
@@ -1857,87 +1881,87 @@ msgid ""
 "the block settings to select another preset."
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3973 code/class-a-w-f-premium-admin.php:728
+#: code/class-a-w-f-admin.php:3983 code/class-a-w-f-premium-admin.php:757
 msgid "Filters separator"
 msgstr "Separador de filtros"
 
-#: code/class-a-w-f-premium-admin.php:796
+#: code/class-a-w-f-premium-admin.php:825
 msgid "Filters Settings"
 msgstr "Configuraciones de filtros"
 
-#: code/class-a-w-f-admin.php:3437 code/class-a-w-f-customizer.php:72
+#: code/class-a-w-f-admin.php:3447 code/class-a-w-f-customizer.php:72
 msgid "Filters style"
 msgstr "Estilo de filtros"
 
-#: code/class-a-w-f-admin.php:2816
+#: code/class-a-w-f-admin.php:2826
 msgid "Filters submission"
 msgstr "Envío de filtros"
 
-#: code/class-a-w-f-admin.php:4248
+#: code/class-a-w-f-admin.php:4254
 msgid "Filters toggle button label"
 msgstr "Etiqueta de botón de alternancia de filtros"
 
-#: code/class-a-w-f-customizer.php:1417
+#: code/class-a-w-f-customizer.php:1421
 msgid "Fix close button page position"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3598
+#: code/class-a-w-f-admin.php:3608
 msgid "Fix in the center"
 msgstr ""
 
-#: code/class-a-w-f-customizer.php:1459
+#: code/class-a-w-f-customizer.php:1463
 msgid "Fix page position"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:4381
+#: code/class-a-w-f-admin.php:4387
 msgid "Fix page position (px)"
 msgstr ""
 
-#: code/class-a-w-f-customizer.php:1476
+#: code/class-a-w-f-customizer.php:1480
 msgid "Fix position starting with device width"
 msgstr ""
 
-#: code/class-a-w-f-customizer.php:1493
+#: code/class-a-w-f-customizer.php:1497
 msgid "Fix position up to device width"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:2319 code/class-a-w-f-settings.php:170
+#: code/class-a-w-f-admin.php:2329 code/class-a-w-f-settings.php:170
 msgid "Fix the \"Filters\" button page position"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3471 code/class-a-w-f-customizer.php:228
+#: code/class-a-w-f-admin.php:3481 code/class-a-w-f-customizer.php:228
 msgid "Font Awesome support"
 msgstr ""
 
-#: code/class-a-w-f-customizer.php:932
+#: code/class-a-w-f-customizer.php:936
 msgid "Font Color"
 msgstr "Color de fuente"
 
-#: code/class-a-w-f-customizer.php:714
+#: code/class-a-w-f-customizer.php:718
 msgid "Font color"
 msgstr ""
 
-#: code/class-a-w-f-customizer.php:952
+#: code/class-a-w-f-customizer.php:956
 msgid "Font color on hover"
 msgstr "Color de fuente al pasar el mouse"
 
-#: code/class-a-w-f-customizer.php:991
+#: code/class-a-w-f-customizer.php:995
 msgid "Font family"
 msgstr "Familia tipográfica"
 
-#: code/class-a-w-f-customizer.php:715 code/class-a-w-f-customizer.php:1012
+#: code/class-a-w-f-customizer.php:719 code/class-a-w-f-customizer.php:1016
 msgid "Font size (px)"
 msgstr "Tamaño de fuente (px)"
 
-#: code/class-a-w-f-customizer.php:1053
+#: code/class-a-w-f-customizer.php:1057
 msgid "Font style"
 msgstr "Estilo de fuente"
 
-#: code/class-a-w-f-customizer.php:1032
+#: code/class-a-w-f-customizer.php:1036
 msgid "Font weight"
 msgstr "Peso de fuente"
 
-#: code/class-a-w-f-admin.php:3861
+#: code/class-a-w-f-admin.php:3871
 #, php-format
 msgid ""
 "For further modification of filters appearance <strong><a href=\"%1$s\">go "
@@ -1960,11 +1984,11 @@ msgstr ""
 msgid "Force instant submission"
 msgstr ""
 
-#: code/class-a-w-f-customizer.php:1096
+#: code/class-a-w-f-customizer.php:1100
 msgid "Force one-line display"
 msgstr "Forzar visualización de una línea"
 
-#: code/class-a-w-f-premium-admin.php:399
+#: code/class-a-w-f-premium-admin.php:428
 msgid "Force one-row display"
 msgstr ""
 
@@ -1976,11 +2000,11 @@ msgstr ""
 msgid "Force page reloads when applying the filter in AJAX mode."
 msgstr ""
 
-#: code/class-a-w-f-admin.php:4362
+#: code/class-a-w-f-admin.php:4368
 msgid "Force products display"
 msgstr "Mostrar productos de fuerza"
 
-#: code/class-a-w-f-admin.php:4356
+#: code/class-a-w-f-admin.php:4362
 msgid ""
 "Force the redirection of all the archive pages for the products-related "
 "taxonomies (such as categories, tags, brands) to the shop page with the "
@@ -2002,43 +2026,55 @@ msgid ""
 "non-instant filtering styles."
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3213
+#: code/class-a-w-f-admin.php:3223
 msgid "Force wrapper reload"
 msgstr "Forzar la recarga de la envoltura"
 
-#: code/class-a-w-f-admin.php:2787
+#: code/class-a-w-f-admin.php:2797
 msgid "Form with button submission"
 msgstr "Formulario con envío de botón"
 
-#: code/class-a-w-f-admin.php:3493
+#: code/class-a-w-f-premium-admin.php:3198
+msgid "From another filter"
+msgstr ""
+
+#: code/class-a-w-f-premium-admin.php:2757
+msgid "From another preset"
+msgstr ""
+
+#: code/class-a-w-f-premium-admin.php:2771
+msgid "From template"
+msgstr ""
+
+#: code/class-a-w-f-admin.php:3503
 msgid "General"
 msgstr "General"
 
-#: code/class-a-w-f-customizer.php:2161
+#: code/class-a-w-f-customizer.php:2165
 msgid "Groove"
 msgstr "Ranura"
 
-#: code/class-a-w-f-customizer.php:719
+#: code/class-a-w-f-customizer.php:723
 msgid "Handles color"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3547
+#: code/class-a-w-f-admin.php:3557
 msgid "Hearts"
 msgstr ""
 
-#: code/class-a-w-f-customizer.php:1959
+#: code/class-a-w-f-customizer.php:1963
 msgid "Height (px)"
 msgstr ""
 
-#: code/class-a-w-f-customizer.php:2161 code/class-a-w-f-premium-admin.php:1322
+#: code/class-a-w-f-customizer.php:2165 code/class-a-w-f-premium-admin.php:1351
 msgid "Hidden"
 msgstr "Oculto"
 
-#: code/class-a-w-f-admin.php:2186
+#: code/class-a-w-f-admin.php:2196
 msgid "Hide active filter parents"
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:896
+#: code/class-a-w-f-premium-admin.php:925
 msgid "Hide empty filters"
 msgstr "Ocultar filtros vacíos"
 
@@ -2050,29 +2086,29 @@ msgstr ""
 msgid "Hide filter options"
 msgstr "Ocultar opciones de filtro"
 
-#: code/class-a-w-f-customizer.php:1180
+#: code/class-a-w-f-customizer.php:1184
 msgid "Hide icon"
 msgstr "Esconder icono"
 
-#: code/class-a-w-f-admin.php:2059
+#: code/class-a-w-f-admin.php:2069
 msgid "Hide poles"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:2066
+#: code/class-a-w-f-admin.php:2076
 msgid "Hide slider"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:2067
+#: code/class-a-w-f-admin.php:2077
 msgid ""
 "Hide the slider in cases when you wish to submit range values exclusively "
 "through interactive tooltips controls."
 msgstr ""
 
-#: code/class-a-w-f-admin.php:2052
+#: code/class-a-w-f-admin.php:2062
 msgid "Hide value labels"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:4346
+#: code/class-a-w-f-admin.php:4352
 msgid "Hierarchical archive links"
 msgstr "Vínculos de archivos jerárquicos"
 
@@ -2081,11 +2117,11 @@ msgstr "Vínculos de archivos jerárquicos"
 msgid "Hierarchical level"
 msgstr "Nivel jerárquico"
 
-#: code/class-a-w-f-admin.php:3378
+#: code/class-a-w-f-admin.php:3388
 msgid "Hook"
 msgstr "Hook"
 
-#: code/class-a-w-f-premium-admin.php:1425
+#: code/class-a-w-f-premium-admin.php:1454
 msgid "Hover Icon"
 msgstr "Icono de desplazamiento"
 
@@ -2093,31 +2129,31 @@ msgstr "Icono de desplazamiento"
 msgid "https://www.annasta.net"
 msgstr "https://www.annasta.net"
 
-#: code/class-a-w-f-customizer.php:1137 code/class-a-w-f-premium-admin.php:1423
+#: code/class-a-w-f-customizer.php:1141 code/class-a-w-f-premium-admin.php:1452
 msgid "Icon"
 msgstr "Icono"
 
-#: code/class-a-w-f-customizer.php:1282
+#: code/class-a-w-f-customizer.php:1286
 msgid "Icon border right"
 msgstr ""
 
-#: code/class-a-w-f-customizer.php:1221
+#: code/class-a-w-f-customizer.php:1225
 msgid "Icon color"
 msgstr ""
 
-#: code/class-a-w-f-customizer.php:1240
+#: code/class-a-w-f-customizer.php:1244
 msgid "Icon padding right (px)"
 msgstr ""
 
-#: code/class-a-w-f-customizer.php:1200
+#: code/class-a-w-f-customizer.php:1204
 msgid "Icon size (em relative to font size)"
 msgstr ""
 
-#: code/class-a-w-f-customizer.php:667
+#: code/class-a-w-f-customizer.php:671
 msgid "Icons color"
 msgstr ""
 
-#: code/class-a-w-f-customizer.php:666
+#: code/class-a-w-f-customizer.php:670
 msgid "Icons size (em relative to font size)"
 msgstr ""
 
@@ -2125,7 +2161,7 @@ msgstr ""
 msgid "ID"
 msgstr "ID"
 
-#: code/class-a-w-f-admin.php:2880
+#: code/class-a-w-f-admin.php:2890
 msgid ""
 "If enabled, the \"Filters\" button will be displayed to toggle the filters "
 "visibility. Button-controlled presets will only work on pages with "
@@ -2138,14 +2174,14 @@ msgid ""
 "combination with the hidden Empty items style."
 msgstr ""
 
-#: code/class-a-w-f-admin.php:6008
+#: code/class-a-w-f-admin.php:6019
 #, php-format
 msgid ""
 "If the new HTML wrapper doesn't work, make sure that you have the \"Force "
 "wrapper reload\" option disabled, and try the following selectors: %1$s"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3126
+#: code/class-a-w-f-admin.php:3136
 msgid ""
 "If the products, pagination, result counts or other native WooCommerce "
 "elements do not get properly updated in AJAX mode, use this section to "
@@ -2154,25 +2190,25 @@ msgid ""
 "by the \"#\" sign) into the relevant fields."
 msgstr ""
 
-#: code/class-a-w-f-admin.php:1505
+#: code/class-a-w-f-admin.php:1506
 #, php-format
 msgid ""
 "If you ran into AJAX styling issues, try the <strong><a href=\"%1$s\">"
 "Enhanced compatibility AJAX mode</a></strong>."
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3482
+#: code/class-a-w-f-admin.php:3492
 msgid ""
 "If your Customizer page gets slow, remove the unneeded sections. The active "
 "settings of the removed sections will continue working."
 msgstr ""
 
-#: code/class-a-w-f-customizer.php:209 code/class-a-w-f-premium-admin.php:603
+#: code/class-a-w-f-customizer.php:209 code/class-a-w-f-premium-admin.php:632
 msgid "Image filter style"
 msgstr "Estilo de filtro de imagen"
 
-#: code/class-a-w-f-premium-admin.php:1362
-#: code/class-a-w-f-premium-admin.php:1401
+#: code/class-a-w-f-premium-admin.php:1391
+#: code/class-a-w-f-premium-admin.php:1430
 msgid "Image link"
 msgstr "Enlace de imagen"
 
@@ -2180,26 +2216,48 @@ msgstr "Enlace de imagen"
 msgid "Images"
 msgstr "Imágenes"
 
-#: code/class-a-w-f-premium-admin.php:2421
-#: code/class-a-w-f-premium-admin.php:2439
+#: code/class-a-w-f-premium-admin.php:2450
+#: code/class-a-w-f-premium-admin.php:2468
 msgid "Import"
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:2984
+#: code/class-a-w-f-premium-admin.php:2759
+#: code/class-a-w-f-premium-admin.php:3200
+#, php-format
+msgid "Import into %1$s"
+msgstr ""
+
+#: code/class-a-w-f-premium-admin.php:3200
+msgid "Import into the current filter"
+msgstr ""
+
+#: code/class-a-w-f-premium-admin.php:2759
+msgid "Import into the current preset"
+msgstr ""
+
+#: code/class-a-w-f-premium-admin.php:3061
 msgid "Import operation aborted: invalid template parameters."
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:2633
-#: code/class-a-w-f-premium-admin.php:2975
+#: code/class-a-w-f-premium-admin.php:2666
+#: code/class-a-w-f-premium-admin.php:3052
 msgid "Import operation aborted: provided file is of invalid format."
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:2421
-#: code/class-a-w-f-premium-admin.php:2439
+#: code/class-a-w-f-premium-admin.php:3144 templates/admin/filter.php:49
+msgid "Import settings from another filter or template"
+msgstr ""
+
+#: code/class-a-w-f-premium-admin.php:2723 code/class-a-w-f-settings.php:398
+msgid "Import settings from another preset or template"
+msgstr ""
+
+#: code/class-a-w-f-premium-admin.php:2450
+#: code/class-a-w-f-premium-admin.php:2468
 msgid "Import template from JSON file"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3446 code/class-a-w-f-customizer.php:175
+#: code/class-a-w-f-admin.php:3456 code/class-a-w-f-customizer.php:175
 msgid ""
 "In filters with limited height replace the standard browser scrollbars with "
 "minimalistic."
@@ -2211,47 +2269,47 @@ msgstr ""
 msgid "In stock"
 msgstr "En stock"
 
-#: code/class-a-w-f-admin.php:4124
+#: code/class-a-w-f-admin.php:4134
 msgid "in stock"
 msgstr "en stock"
 
-#: code/class-a-w-f-admin.php:2196
+#: code/class-a-w-f-admin.php:2206
 msgid ""
 "In the Active Filters mode the excluded items list will affect the filter "
 "display when none of its options is selected."
 msgstr ""
 
-#: code/class-a-w-f-admin.php:1900
+#: code/class-a-w-f-admin.php:1910
 msgid "Inactive filter"
 msgstr "Filtro inactivo"
 
-#: code/class-a-w-f-admin.php:1909
+#: code/class-a-w-f-admin.php:1919
 msgid "Inactive filter hover"
 msgstr "Desplazamiento de filtro inactivo"
 
-#: code/class-a-w-f-premium-admin.php:839
+#: code/class-a-w-f-premium-admin.php:868
 msgid "inactive filter string..."
 msgstr "cadena de filtro inactiva ... "
 
-#: code/class-a-w-f-premium-admin.php:800
+#: code/class-a-w-f-premium-admin.php:829
 msgid "Include filter"
 msgstr "Incluir filtro"
 
-#: code/class-a-w-f-admin.php:4340
+#: code/class-a-w-f-admin.php:4346
 msgid ""
 "Include non-filtering URL parameters (analytics, language etc) in filters' "
 "URLs."
 msgstr ""
 
-#: code/class-a-w-f-admin.php:4322
+#: code/class-a-w-f-admin.php:4328
 msgid "Include subterms' products"
 msgstr "Incluir sub-términos de productos"
 
-#: code/class-a-w-f-admin.php:2984
+#: code/class-a-w-f-admin.php:2994
 msgid "Infinite Scroll"
 msgstr "Scroll infinito"
 
-#: code/class-a-w-f-customizer.php:2161
+#: code/class-a-w-f-customizer.php:2165
 msgid "inherit"
 msgstr "heredar"
 
@@ -2268,17 +2326,17 @@ msgstr "Inicializar con los hijos colapsados"
 msgid "Insert annasta filters list"
 msgstr "Insertar lista de filtros annasta"
 
-#: code/class-a-w-f-customizer.php:2161
+#: code/class-a-w-f-customizer.php:2165
 msgid "Inset"
 msgstr "Recuadro"
 
-#: code/class-a-w-f-premium-admin.php:1634
+#: code/class-a-w-f-premium-admin.php:1663
 msgid "Interactive tooltips above range slider"
 msgstr ""
 "Información sobre herramientas interactiva sobre el control deslizante de "
 "rango\n"
 
-#: code/class-a-w-f-customizer.php:1075
+#: code/class-a-w-f-customizer.php:1079
 msgid "Italic"
 msgstr "Itálica"
 
@@ -2290,19 +2348,19 @@ msgstr "Nombre del artículo"
 msgid "Items search box placeholder"
 msgstr "Marcador de posición del cuadro de búsqueda de artículos"
 
-#: code/class-a-w-f-premium-admin.php:580
+#: code/class-a-w-f-premium-admin.php:609
 msgid "Javascript"
 msgstr "Javascript"
 
-#: code/class-a-w-f-customizer.php:2177
+#: code/class-a-w-f-customizer.php:2181
 msgid "Justify"
 msgstr "Justificar"
 
-#: code/class-a-w-f-customizer.php:1648
+#: code/class-a-w-f-customizer.php:1652
 msgid "Justify (default)"
 msgstr "Justificar (predeterminado)"
 
-#: code/class-a-w-f-premium-admin.php:1604
+#: code/class-a-w-f-premium-admin.php:1633
 msgid "Label"
 msgstr "Etiqueta"
 
@@ -2310,17 +2368,17 @@ msgstr "Etiqueta"
 msgid "label"
 msgstr "etiqueta"
 
-#: code/class-a-w-f-premium-admin.php:1431
+#: code/class-a-w-f-premium-admin.php:1460
 msgid "Label (optional)"
 msgstr "Etiqueta (opcional)"
 
-#: code/class-a-w-f-admin.php:299 code/class-a-w-f-premium-admin.php:1701
-#: code/class-a-w-f-premium-admin.php:1778
-#: code/class-a-w-f-premium-admin.php:1806
-#: code/class-a-w-f-premium-admin.php:1868
+#: code/class-a-w-f-admin.php:299 code/class-a-w-f-premium-admin.php:1730
+#: code/class-a-w-f-premium-admin.php:1807
+#: code/class-a-w-f-premium-admin.php:1835
 #: code/class-a-w-f-premium-admin.php:1897
-#: code/class-a-w-f-premium-admin.php:1923
+#: code/class-a-w-f-premium-admin.php:1926
 #: code/class-a-w-f-premium-admin.php:1952
+#: code/class-a-w-f-premium-admin.php:1981
 msgctxt "Label for single filter reset button"
 msgid "Clear filters"
 msgstr "Filtros claros"
@@ -2329,20 +2387,20 @@ msgstr "Filtros claros"
 msgid "Labels"
 msgstr "Etiquetas"
 
-#: code/class-a-w-f-admin.php:2861
+#: code/class-a-w-f-admin.php:2871
 msgid "Layout"
 msgstr "Diseño"
 
-#: code/class-a-w-f-customizer.php:2029
+#: code/class-a-w-f-customizer.php:2033
 msgid "Leave blank for auto width"
 msgstr "Dejar en blanco para el ancho automático"
 
-#: code/class-a-w-f-admin.php:3113
+#: code/class-a-w-f-admin.php:3123
 #, php-format
 msgid "Leave blank for the %1$s theme default selector"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3112
+#: code/class-a-w-f-admin.php:3122
 msgid "Leave blank for the default WooCommerce selector"
 msgstr ""
 
@@ -2352,7 +2410,7 @@ msgstr ""
 msgid "Leave blank if not needed."
 msgstr ""
 
-#: code/class-a-w-f-admin.php:4267
+#: code/class-a-w-f-admin.php:4273
 msgid ""
 "Leave blank to auto-insert the button above product lists.</br></br>The "
 "custom selector should be unique. To ensure this, it is preferrable to use "
@@ -2360,30 +2418,30 @@ msgid ""
 "(example: .class) or the combination of classes (.class-1.class-2.class-3)."
 msgstr ""
 
-#: code/class-a-w-f-customizer.php:1397
+#: code/class-a-w-f-customizer.php:1401
 msgid "Leave blank to display only the icon"
 msgstr ""
 
-#: code/class-a-w-f-customizer.php:1118
+#: code/class-a-w-f-customizer.php:1122
 msgid "Leave blank to display the icon"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:4409 code/class-a-w-f-customizer.php:1358
-#: code/class-a-w-f-customizer.php:1582 code/class-a-w-f-customizer.php:1627
-#: code/class-a-w-f-customizer.php:1851 code/class-a-w-f-customizer.php:1939
-#: code/class-a-w-f-customizer.php:2177
+#: code/class-a-w-f-admin.php:4415 code/class-a-w-f-customizer.php:1362
+#: code/class-a-w-f-customizer.php:1586 code/class-a-w-f-customizer.php:1631
+#: code/class-a-w-f-customizer.php:1855 code/class-a-w-f-customizer.php:1943
+#: code/class-a-w-f-customizer.php:2181
 msgid "Left"
 msgstr "Izquierdo"
 
-#: code/class-a-w-f-customizer.php:1675
+#: code/class-a-w-f-customizer.php:1679
 msgid "Left border"
 msgstr "Borde izquierdo"
 
-#: code/class-a-w-f-admin.php:2187
+#: code/class-a-w-f-admin.php:2197
 msgid "Level up tip"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3197
+#: code/class-a-w-f-admin.php:3207
 msgid ""
 "Limit AJAX updates to custom page element.</br></br>Enter jQuery selector "
 "for the wrapper element that includes both WooCommerce product list and "
@@ -2394,7 +2452,7 @@ msgstr ""
 msgid "Limit filter height"
 msgstr "Limite la altura del filtro"
 
-#: code/class-a-w-f-admin.php:2181
+#: code/class-a-w-f-admin.php:2191
 msgid ""
 "Limit the filter display to the hierarchical branches of the currently "
 "selected terms. Use the additional settings below to further control the "
@@ -2415,7 +2473,7 @@ msgstr ""
 msgid "Limitation style"
 msgstr ""
 
-#: code/class-a-w-f-customizer.php:1979
+#: code/class-a-w-f-customizer.php:1983
 msgid "Line height (px)"
 msgstr "Altura de la línea (px)"
 
@@ -2423,23 +2481,23 @@ msgstr "Altura de la línea (px)"
 msgid "Load more products"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3602
+#: code/class-a-w-f-admin.php:3612
 msgid "Loader color"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3608
+#: code/class-a-w-f-admin.php:3618
 msgid "Loader opacity"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3614
+#: code/class-a-w-f-admin.php:3624
 msgid "Loader size"
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:1323
+#: code/class-a-w-f-premium-admin.php:1352
 msgid "Lower opacity"
 msgstr "Baja opacidad"
 
-#: code/class-a-w-f-customizer.php:2169
+#: code/class-a-w-f-customizer.php:2173
 msgid "Lowercase"
 msgstr "Minúscula"
 
@@ -2461,23 +2519,23 @@ msgstr ""
 msgid "Manual selection"
 msgstr ""
 
-#: code/class-a-w-f-customizer.php:1783
+#: code/class-a-w-f-customizer.php:1787
 msgid "Margins (px)"
 msgstr "Márgenes (px)"
 
-#: code/class-a-w-f-admin.php:3530
+#: code/class-a-w-f-admin.php:3540
 msgid "Markers"
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:527
+#: code/class-a-w-f-premium-admin.php:556
 msgid "Markers 3D"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:1742
+#: code/class-a-w-f-admin.php:1752
 msgid "Maximum value"
 msgstr "Valor máximo"
 
-#: code/class-a-w-f-admin.php:3555
+#: code/class-a-w-f-admin.php:3565
 msgid "Medium"
 msgstr ""
 
@@ -2485,31 +2543,31 @@ msgstr ""
 msgid "Meta data name"
 msgstr "Nombre de metadatos"
 
-#: code/class-a-w-f-admin.php:3935 code/class-a-w-f-premium-admin.php:681
+#: code/class-a-w-f-admin.php:3945 code/class-a-w-f-premium-admin.php:710
 msgid "Meta Description"
 msgstr "Meta descripción"
 
-#: code/class-a-w-f-admin.php:3949 code/class-a-w-f-premium-admin.php:695
+#: code/class-a-w-f-admin.php:3959 code/class-a-w-f-premium-admin.php:724
 msgid "Meta description"
 msgstr "Meta descripción"
 
-#: code/class-a-w-f-premium-admin.php:532
+#: code/class-a-w-f-premium-admin.php:561
 msgid "Minimalistic Bars"
 msgstr "Barras minimalistas"
 
-#: code/class-a-w-f-premium-admin.php:531
+#: code/class-a-w-f-premium-admin.php:560
 msgid "Minimalistic Rounded"
 msgstr "Redondeado minimalista"
 
-#: code/class-a-w-f-admin.php:3531
+#: code/class-a-w-f-admin.php:3541
 msgid "Minimalistic Rounded 3D"
 msgstr "Redondeado minimalista 3D"
 
-#: code/class-a-w-f-admin.php:1738
+#: code/class-a-w-f-admin.php:1748
 msgid "Minimum value"
 msgstr "Valor mínimo"
 
-#: code/class-a-w-f-customizer.php:675
+#: code/class-a-w-f-customizer.php:679
 msgid "Minimum width"
 msgstr ""
 
@@ -2523,7 +2581,7 @@ msgstr ""
 "Mueve hacia arriba o hacia abajo para organizar los preajustes en un orden "
 "conveniente."
 
-#: code/class-a-w-f-premium-admin.php:831
+#: code/class-a-w-f-premium-admin.php:860
 msgid ""
 "Move up or down to arrange the filters in order in which you want to see "
 "them in titles."
@@ -2531,7 +2589,7 @@ msgstr ""
 "Mueve hacia arriba o hacia abajo para organizar los filtros en el orden en "
 "que deseas verlos en los títulos."
 
-#: code/class-a-w-f-premium-admin.php:1545
+#: code/class-a-w-f-premium-admin.php:1574
 msgid "Move up or down to arrange the terms in the ascending order."
 msgstr ""
 "Mueve hacia arriba o hacia abajo para organizar los términos en orden "
@@ -2541,8 +2599,8 @@ msgstr ""
 msgid "Multiple items selection"
 msgstr "Selección de artículos múltiples"
 
-#: code/class-a-w-f-premium-admin.php:2674
-#: code/class-a-w-f-premium-admin.php:2958
+#: code/class-a-w-f-premium-admin.php:2707
+#: code/class-a-w-f-premium-admin.php:3035
 #, php-format
 msgid "New template \"%1$s\" has been successfuly imported."
 msgstr ""
@@ -2551,11 +2609,11 @@ msgstr ""
 msgid "Next"
 msgstr "Siguiente"
 
-#: code/class-a-w-f-admin.php:2829
+#: code/class-a-w-f-admin.php:2839
 msgid "Next button"
 msgstr "Siguiente botón"
 
-#: code/class-a-w-f-admin.php:3169
+#: code/class-a-w-f-admin.php:3179
 msgid "Next page selector"
 msgstr ""
 
@@ -2563,7 +2621,14 @@ msgstr ""
 msgid "No"
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:917
+#: code/class-a-w-f-premium-admin.php:2744
+msgid ""
+"No additional presets or templates have been found on this installation. "
+"Please add more presets or go to annasta Filters > Templates admin section "
+"to import templates."
+msgstr ""
+
+#: code/class-a-w-f-premium-admin.php:946
 msgid ""
 "No badges will be created for the filters and controls selected in this "
 "setting."
@@ -2571,18 +2636,19 @@ msgstr ""
 "No se crearán distintivos para los filtros y controles seleccionados en esta "
 "configuración."
 
-#: code/class-a-w-f-premium-admin.php:2465
-#: code/class-a-w-f-premium-admin.php:2794
+#: code/class-a-w-f-premium-admin.php:2494
+#: code/class-a-w-f-premium-admin.php:2868
 msgid "No filter presets have been found!"
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:2699
+#: code/class-a-w-f-premium-admin.php:3187
 msgid ""
-"No preset templates have been found on this installation. Please go to "
-"annasta Filters > Templates admin section to create or import templates."
+"No matching filters or templates were found on this installation. Please "
+"create the same kind of filter in another preset or import a matching "
+"template in the annasta Filters > Templates section of your admin."
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3187
+#: code/class-a-w-f-admin.php:3197
 msgid "No results selector"
 msgstr ""
 
@@ -2590,14 +2656,14 @@ msgstr ""
 msgid "Non-numeric filter terms"
 msgstr "Términos de filtro no numéricos"
 
-#: code/class-a-w-f-admin.php:2034 code/class-a-w-f-admin.php:2754
-#: code/class-a-w-f-customizer.php:2161 code/class-a-w-f-customizer.php:2169
+#: code/class-a-w-f-admin.php:2044 code/class-a-w-f-admin.php:2764
+#: code/class-a-w-f-customizer.php:2165 code/class-a-w-f-customizer.php:2173
 #: code/class-a-w-f-gutenberg.php:51
 #: templates/admin/filter-options/premium/is_collapsible.php:15
 msgid "None"
 msgstr "Ninguno"
 
-#: code/class-a-w-f-admin.php:1709
+#: code/class-a-w-f-admin.php:1719
 msgid "Number of decimals"
 msgstr "Número de decimales"
 
@@ -2605,7 +2671,7 @@ msgstr "Número de decimales"
 msgid "Numeric"
 msgstr "Numérico"
 
-#: code/class-a-w-f-admin.php:4126
+#: code/class-a-w-f-admin.php:4136
 msgid "on backorder"
 msgstr "realizado pedido"
 
@@ -2613,11 +2679,11 @@ msgstr "realizado pedido"
 msgid "On sale"
 msgstr "En promoción"
 
-#: code/class-a-w-f-admin.php:4117
+#: code/class-a-w-f-admin.php:4127
 msgid "on sale"
 msgstr "en promoción"
 
-#: code/class-a-w-f-premium-admin.php:1354
+#: code/class-a-w-f-premium-admin.php:1383
 msgid "One image for all terms"
 msgstr "Una imagen para todos los términos"
 
@@ -2629,27 +2695,27 @@ msgstr "Orden de creación"
 msgid "Out of stock"
 msgstr "Fuera de stock"
 
-#: code/class-a-w-f-admin.php:4125
+#: code/class-a-w-f-admin.php:4135
 msgid "out of stock"
 msgstr "fuera de stock"
 
-#: code/class-a-w-f-customizer.php:2161
+#: code/class-a-w-f-customizer.php:2165
 msgid "Outset"
 msgstr "Comienzo"
 
-#: code/class-a-w-f-admin.php:3631
+#: code/class-a-w-f-admin.php:3641
 msgid "Overlay color"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3637
+#: code/class-a-w-f-admin.php:3647
 msgid "Overlay opacity"
 msgstr ""
 
-#: code/class-a-w-f-customizer.php:1871
+#: code/class-a-w-f-customizer.php:1875
 msgid "Padding (px)"
 msgstr "Relleno (px)"
 
-#: code/class-a-w-f-admin.php:3906 code/class-a-w-f-premium-admin.php:644
+#: code/class-a-w-f-admin.php:3916 code/class-a-w-f-premium-admin.php:673
 msgid ""
 "Page (HTML document) title can be seen as the name of the page at the top of "
 "the browser window (or tab). It is also taken into account by the search "
@@ -2660,19 +2726,19 @@ msgstr ""
 "lo tienen en cuenta los motores de búsqueda que indexan las páginas de tu "
 "tienda."
 
-#: code/class-a-w-f-admin.php:3160
+#: code/class-a-w-f-admin.php:3170
 msgid "Page number selector"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3904 code/class-a-w-f-premium-admin.php:642
+#: code/class-a-w-f-admin.php:3914 code/class-a-w-f-premium-admin.php:671
 msgid "Page title"
 msgstr "Título de la página"
 
-#: code/class-a-w-f-admin.php:2987 code/class-a-w-f-admin.php:3275
+#: code/class-a-w-f-admin.php:2997 code/class-a-w-f-admin.php:3285
 msgid "Pagination"
 msgstr "Paginación"
 
-#: code/class-a-w-f-admin.php:3151
+#: code/class-a-w-f-admin.php:3161
 msgid "Pagination selector"
 msgstr ""
 
@@ -2680,16 +2746,16 @@ msgstr ""
 msgid "pixels"
 msgstr "píxeles"
 
-#: code/class-a-w-f-admin.php:1867
+#: code/class-a-w-f-admin.php:1877
 #: templates/admin/filter-options/placeholder.php:4
 msgid "Placeholder text"
 msgstr "Texto del marcador"
 
-#: code/class-a-w-f-premium-admin.php:561
+#: code/class-a-w-f-premium-admin.php:590
 msgid "Plain image"
 msgstr "Imagen simple"
 
-#: code/class-a-w-f-premium-admin.php:2414
+#: code/class-a-w-f-premium-admin.php:2443
 #, php-format
 msgid ""
 "Please consult the <a href=\"%1$s\" target=\"_blank\">plugin "
@@ -2702,7 +2768,7 @@ msgstr ""
 msgid "Please create annasta Filters Preset"
 msgstr "Por favor, crea los filtros preestablecidos de annasta"
 
-#: code/class-a-w-f-customizer.php:2123
+#: code/class-a-w-f-customizer.php:2127
 msgid ""
 "Please edit only the options that you need changed. Leave the rest blank or "
 "set to default."
@@ -2710,7 +2776,7 @@ msgstr ""
 "Edita solo las opciones que necesitas cambiar. Deja el resto en blanco o "
 "establece el valor predeterminado."
 
-#: code/class-a-w-f-admin.php:1270 code/class-a-w-f-admin.php:1291
+#: code/class-a-w-f-admin.php:1271 code/class-a-w-f-admin.php:1292
 msgid "Please save preset before adding or deleting values of the range."
 msgstr "Guarda el preajuste antes de agregar o eliminar valores del rango."
 
@@ -2724,7 +2790,7 @@ msgid ""
 "least one filters preset."
 msgstr ""
 
-#: code/class-a-w-f-admin.php:4199
+#: code/class-a-w-f-admin.php:4208
 msgid ""
 "Please use the Astra theme Customizer (and not the \"Product columns\" and "
 "\"Products per page\" settings of the current page) to adjust the amount of "
@@ -2740,7 +2806,7 @@ msgstr ""
 msgid "Please use the block settings to select filters preset."
 msgstr ""
 
-#: code/class-a-w-f-admin.php:4206
+#: code/class-a-w-f-admin.php:4213
 msgid ""
 "Please use the eCommerce Gem theme Customizer (and not the \"Product "
 "columns\" and \"Products per page\" settings of the current page) to adjust "
@@ -2752,7 +2818,7 @@ msgstr ""
 "página actual) para ajustar la cantidad de columnas de la tienda y productos "
 "por página. annasta Filtros usará la configuración del tema."
 
-#: code/class-a-w-f-admin.php:4231 code/class-a-w-f-settings.php:74
+#: code/class-a-w-f-admin.php:4237 code/class-a-w-f-settings.php:74
 msgid "Plugin Settings"
 msgstr "Configuración del plugin"
 
@@ -2760,56 +2826,56 @@ msgstr "Configuración del plugin"
 msgid "Plugin settings"
 msgstr "Configuración del plugin"
 
-#: code/class-a-w-f-customizer.php:2181
+#: code/class-a-w-f-customizer.php:2185
 msgid "Plus / Minus"
 msgstr "Mas/menos"
 
-#: code/class-a-w-f-customizer.php:720
+#: code/class-a-w-f-customizer.php:724
 msgid "Poles color"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3495
+#: code/class-a-w-f-admin.php:3505
 msgid "Popup sidebar"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:4265
+#: code/class-a-w-f-admin.php:4271
 msgid "Position before custom selector"
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:803
+#: code/class-a-w-f-premium-admin.php:832
 msgid "Postfix"
 msgstr "Sufijo"
 
-#: code/class-a-w-f-premium-admin.php:867
+#: code/class-a-w-f-premium-admin.php:896
 msgid "postfix..."
 msgstr "sufijo... "
 
-#: code/class-a-w-f-admin.php:1703
+#: code/class-a-w-f-admin.php:1713
 msgid "Precision"
 msgstr "Precisión"
 
-#: code/class-a-w-f-admin.php:4306
+#: code/class-a-w-f-admin.php:4312
 msgid "Preferred string search engine"
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:801
+#: code/class-a-w-f-premium-admin.php:830
 msgid "Prefix"
 msgstr "Prefijo"
 
-#: code/class-a-w-f-premium-admin.php:835
+#: code/class-a-w-f-premium-admin.php:864
 msgid "prefix..."
 msgstr "prefijo... "
 
-#: code/class-a-w-f-premium-admin.php:2478
-#: code/class-a-w-f-premium-admin.php:2808 templates/admin/presets-list.php:13
+#: code/class-a-w-f-premium-admin.php:2507
+#: code/class-a-w-f-premium-admin.php:2882 templates/admin/presets-list.php:13
 msgid "Preset"
 msgstr "Preestablecido"
 
-#: code/class-a-w-f-admin.php:3497
+#: code/class-a-w-f-admin.php:3507
 msgid "Preset Description"
 msgstr "Descripción predeterminada"
 
-#: code/class-a-w-f-admin.php:2735
+#: code/class-a-w-f-admin.php:2745
 msgid "Preset description"
 msgstr "Descripción preestablecida"
 
@@ -2817,28 +2883,28 @@ msgstr "Descripción preestablecida"
 msgid "Preset Filters"
 msgstr "Filtros preestablecidos"
 
-#: code/class-a-w-f-premium-admin.php:2814
+#: code/class-a-w-f-premium-admin.php:2888
 msgid "Preset has no filters"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:2714
+#: code/class-a-w-f-admin.php:2724
 #, php-format
 msgid "Preset id: %1$s"
 msgstr "Identificación preestablecida: %1$s"
 
-#: code/class-a-w-f-admin.php:2720
+#: code/class-a-w-f-admin.php:2730
 msgid "Preset name"
 msgstr "Nombre preestablecido"
 
-#: code/class-a-w-f-premium-admin.php:2418
+#: code/class-a-w-f-premium-admin.php:2447
 msgid "Preset templates"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3496
+#: code/class-a-w-f-admin.php:3506
 msgid "Preset Title"
 msgstr "Título preestablecido"
 
-#: code/class-a-w-f-admin.php:2727
+#: code/class-a-w-f-admin.php:2737
 msgid "Preset title"
 msgstr "Título preestablecido"
 
@@ -2857,11 +2923,11 @@ msgid ""
 "Prevents filter deselection (complete reset) in single or multiselect modes."
 msgstr ""
 
-#: code/class-a-w-f-admin.php:1938
+#: code/class-a-w-f-admin.php:1948
 msgid "Preview"
 msgstr "Vista previa"
 
-#: code/class-a-w-f-admin.php:4030
+#: code/class-a-w-f-admin.php:4040
 msgid "Preview for a title with autogenerated filters list"
 msgstr "Vista previa de un título con la lista de filtros autogenerados"
 
@@ -2873,23 +2939,23 @@ msgstr ""
 msgid "Prices"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:4134
+#: code/class-a-w-f-admin.php:4144
 msgid "prices "
 msgstr " precios  "
 
-#: code/class-a-w-f-admin.php:3379
+#: code/class-a-w-f-admin.php:3389
 msgid "Priority"
 msgstr "Prioridad"
 
-#: code/class-a-w-f-admin.php:3278
+#: code/class-a-w-f-admin.php:3288
 msgid "Product categories / subcategories"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:2963
+#: code/class-a-w-f-admin.php:2973
 msgid "Product columns"
 msgstr "Columnas de productos"
 
-#: code/class-a-w-f-admin.php:4465
+#: code/class-a-w-f-admin.php:4471
 msgid "Product counts cache lifespan"
 msgstr ""
 
@@ -2909,7 +2975,7 @@ msgstr ""
 msgid "Products header"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3196
+#: code/class-a-w-f-admin.php:3206
 #, fuzzy
 #| msgid "Products html wrapper"
 msgid "Products HTML wrapper"
@@ -2919,72 +2985,72 @@ msgstr "Envoltura de productos html "
 msgid "Products list"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3133
+#: code/class-a-w-f-admin.php:3143
 msgid "Products list selector"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:2671
+#: code/class-a-w-f-admin.php:2681
 msgid "Products Meta Data Filter"
 msgstr "Filtro de metadatos de productos"
 
-#: code/class-a-w-f-admin.php:2668
+#: code/class-a-w-f-admin.php:2678
 msgid "Products on Sale Filter"
 msgstr "Filtro de productos en oferta"
 
-#: code/class-a-w-f-admin.php:2664
+#: code/class-a-w-f-admin.php:2674
 #: templates/admin/filter-options/ppp_values.php:3
 msgid "Products Per Page"
 msgstr "Productos por página"
 
-#: code/class-a-w-f-admin.php:2972 code/class-a-w-f-premium-admin.php:1042
+#: code/class-a-w-f-admin.php:2982 code/class-a-w-f-premium-admin.php:1071
 msgid "Products per page"
 msgstr "Productos por página"
 
-#: code/class-a-w-f-admin.php:2589 code/class-a-w-f-premium-admin.php:1906
+#: code/class-a-w-f-admin.php:2599 code/class-a-w-f-premium-admin.php:1935
 msgid "products per page"
 msgstr "productos por página"
 
-#: code/class-a-w-f-admin.php:2666
+#: code/class-a-w-f-admin.php:2676
 msgid "Products Price Filter"
 msgstr "Filtro de precios de productos"
 
-#: code/class-a-w-f-admin.php:2669
+#: code/class-a-w-f-admin.php:2679
 msgid "Products Rating Filter"
 msgstr "Filtro de calificación de productos"
 
-#: code/class-a-w-f-admin.php:2663
+#: code/class-a-w-f-admin.php:2673
 msgid "Products Search"
 msgstr "Búsqueda de productos"
 
-#: code/class-a-w-f-admin.php:2670
+#: code/class-a-w-f-admin.php:2680
 msgid "Products Sort by Control"
 msgstr "Productos ordenados por control"
 
-#: code/class-a-w-f-admin.php:2665
+#: code/class-a-w-f-admin.php:2675
 msgid "Products Stock Status Filter"
 msgstr "Filtro de estado del stock de productos"
 
-#: code/class-a-w-f-customizer.php:1418
+#: code/class-a-w-f-customizer.php:1422
 msgid "Publish for correct previews"
 msgstr ""
 
-#: code/class-a-w-f-customizer.php:2126
+#: code/class-a-w-f-customizer.php:2130
 msgid "Publish for correct previews!"
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:990
+#: code/class-a-w-f-premium-admin.php:1019
 msgid "Query operators for product taxonomies"
 msgstr "Consultar operadores para taxonomías de productos"
 
-#: code/class-a-w-f-premium-admin.php:968
+#: code/class-a-w-f-premium-admin.php:997
 msgid "Query parameters' labels"
 msgstr "Consultar etiquetas de parámetros"
 
-#: code/class-a-w-f-premium-admin.php:1602
+#: code/class-a-w-f-premium-admin.php:1631
 msgid "Range"
 msgstr "Rango"
 
-#: code/class-a-w-f-admin.php:1746
+#: code/class-a-w-f-admin.php:1756
 msgid "Range divisions"
 msgstr "Divisiones de rango"
 
@@ -2996,7 +3062,7 @@ msgstr "Selección de rango "
 msgid "Range slider"
 msgstr "Control deslizante de rango"
 
-#: code/class-a-w-f-admin.php:3455 code/class-a-w-f-customizer.php:707
+#: code/class-a-w-f-admin.php:3465 code/class-a-w-f-customizer.php:711
 msgid "Range slider style"
 msgstr "Estilo de control deslizante de rango"
 
@@ -3004,11 +3070,11 @@ msgstr "Estilo de control deslizante de rango"
 msgid "Range values"
 msgstr "Valores de rango"
 
-#: code/class-a-w-f-admin.php:4137
+#: code/class-a-w-f-admin.php:4147
 msgid "rating "
 msgstr "clasificación "
 
-#: code/class-a-w-f-admin.php:4295
+#: code/class-a-w-f-admin.php:4301
 #, fuzzy
 #| msgid "Recalculate price slider ranges for each active filters combination."
 msgid "Recalculate price slider ranges for each filters combination."
@@ -3016,7 +3082,7 @@ msgstr ""
 "Vuelve a calcular los rangos del control deslizante de precios para cada "
 "combinación de filtros activos."
 
-#: code/class-a-w-f-admin.php:4354
+#: code/class-a-w-f-admin.php:4360
 msgid "Redirect archives to shop"
 msgstr "Redireccionar archivos para comprar"
 
@@ -3024,15 +3090,15 @@ msgstr "Redireccionar archivos para comprar"
 msgid "Redirect to archives"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:2845
+#: code/class-a-w-f-admin.php:2855
 msgid "Redirect URL"
 msgstr "Redireccionar URL"
 
-#: code/class-a-w-f-premium-admin.php:1321
+#: code/class-a-w-f-premium-admin.php:1350
 msgid "Regular display"
 msgstr "Visualización regular"
 
-#: code/class-a-w-f-admin.php:3217
+#: code/class-a-w-f-admin.php:3227
 msgid ""
 "Reload the products list header and footer on each AJAX call. Set the HTML "
 "container that wraps the products list with its header and footer in the "
@@ -3040,7 +3106,7 @@ msgid ""
 "with some themes and options."
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3077
+#: code/class-a-w-f-admin.php:3087
 msgid "Remove elements"
 msgstr ""
 
@@ -3048,15 +3114,15 @@ msgstr ""
 msgid "Remove filter"
 msgstr "Remover filtro"
 
-#: code/class-a-w-f-admin.php:2169
+#: code/class-a-w-f-admin.php:2179
 msgid "Remove from exclusions"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:2165
+#: code/class-a-w-f-admin.php:2175
 msgid "Remove from selected"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3099
+#: code/class-a-w-f-admin.php:3109
 msgid "Remove or hide all the native Woocommerce Sort by controls."
 msgstr ""
 "Elimina u oculta todos los controles nativos de Ordenar por Woocommerce."
@@ -3065,31 +3131,31 @@ msgstr ""
 msgid "Remove page association"
 msgstr "Eliminar asociación de página"
 
-#: code/class-a-w-f-admin.php:3091
+#: code/class-a-w-f-admin.php:3101
 msgid "Remove Woocommerce page title from shop page."
 msgstr ""
 "Elimina el título de la página de Woocommerce de la página de la tienda."
 
-#: code/class-a-w-f-premium-admin.php:2556
-#: code/class-a-w-f-premium-admin.php:2880
+#: code/class-a-w-f-premium-admin.php:2589
+#: code/class-a-w-f-premium-admin.php:2957
 msgid "Rename"
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:2350
-#: code/class-a-w-f-premium-admin.php:2388
-#: code/class-a-w-f-premium-admin.php:2548
-#: code/class-a-w-f-premium-admin.php:2556
-#: code/class-a-w-f-premium-admin.php:2872
-#: code/class-a-w-f-premium-admin.php:2880
+#: code/class-a-w-f-premium-admin.php:2379
+#: code/class-a-w-f-premium-admin.php:2417
+#: code/class-a-w-f-premium-admin.php:2581
+#: code/class-a-w-f-premium-admin.php:2589
+#: code/class-a-w-f-premium-admin.php:2949
+#: code/class-a-w-f-premium-admin.php:2957
 msgid "Rename template"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:830
+#: code/class-a-w-f-admin.php:831
 msgid "Request couldn't be completed: invalid association id."
 msgstr ""
 "No se pudo completar la solicitud: identificación de asociación no válida."
 
-#: code/class-a-w-f-admin.php:923
+#: code/class-a-w-f-admin.php:924
 msgid "Request couldn't be completed: wrong preset or association."
 msgstr "No se pudo completar la solicitud: preajuste o asociación incorrecto."
 
@@ -3097,28 +3163,28 @@ msgstr "No se pudo completar la solicitud: preajuste o asociación incorrecto."
 msgid "Reset all"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3500
+#: code/class-a-w-f-admin.php:3510
 msgid "Reset All Button"
 msgstr "Botón Restablecer todo"
 
-#: code/class-a-w-f-admin.php:2751
+#: code/class-a-w-f-admin.php:2761
 msgid "Reset all button"
 msgstr "Botón restablecer todo"
 
-#: code/class-a-w-f-premium-admin.php:570
+#: code/class-a-w-f-premium-admin.php:599
 msgid "Reset all filters button"
 msgstr "Botón Restablecer todos los filtros"
 
-#: code/class-a-w-f-premium-admin.php:905
+#: code/class-a-w-f-premium-admin.php:934
 msgid "Reset button exceptions"
 msgstr "Restablecer excepciones de botón"
 
-#: code/class-a-w-f-admin.php:2766
+#: code/class-a-w-f-admin.php:2776
 #: templates/admin/filter-options/premium/reset_active.php:11
 msgid "Reset button label"
 msgstr "Etiqueta del botón de reinicio"
 
-#: code/class-a-w-f-customizer.php:1623
+#: code/class-a-w-f-customizer.php:1627
 msgid "Reset icon position"
 msgstr "Restablecer la posición del icono"
 
@@ -3126,7 +3192,7 @@ msgstr "Restablecer la posición del icono"
 msgid "Reset other filters"
 msgstr "Restablecer otros filtros"
 
-#: code/class-a-w-f-admin.php:2902
+#: code/class-a-w-f-admin.php:2912
 msgid "Responsive width"
 msgstr "Ancho de respuesta"
 
@@ -3134,77 +3200,77 @@ msgstr "Ancho de respuesta"
 msgid "results"
 msgstr "resultados"
 
-#: code/class-a-w-f-admin.php:3277
+#: code/class-a-w-f-admin.php:3287
 #, fuzzy
 #| msgid "Result count message"
 msgid "Results count message"
 msgstr "Mensaje de recuento de resultados"
 
-#: code/class-a-w-f-customizer.php:2161
+#: code/class-a-w-f-customizer.php:2165
 msgid "Ridge"
 msgstr "Cresta"
 
-#: code/class-a-w-f-admin.php:4397 code/class-a-w-f-customizer.php:1358
-#: code/class-a-w-f-customizer.php:1548 code/class-a-w-f-customizer.php:1817
-#: code/class-a-w-f-customizer.php:1905 code/class-a-w-f-customizer.php:2177
+#: code/class-a-w-f-admin.php:4403 code/class-a-w-f-customizer.php:1362
+#: code/class-a-w-f-customizer.php:1552 code/class-a-w-f-customizer.php:1821
+#: code/class-a-w-f-customizer.php:1909 code/class-a-w-f-customizer.php:2181
 msgid "Right"
 msgstr "Derecha"
 
-#: code/class-a-w-f-customizer.php:1627
+#: code/class-a-w-f-customizer.php:1631
 msgid "Right (default)"
 msgstr "Derecha (predeterminado)"
 
-#: code/class-a-w-f-customizer.php:1675
+#: code/class-a-w-f-customizer.php:1679
 msgid "Right border"
 msgstr "Borde derecho"
 
-#: code/class-a-w-f-admin.php:3544
+#: code/class-a-w-f-admin.php:3554
 msgid "Ripples"
 msgstr ""
 
-#: code/class-a-w-f-customizer.php:2094
+#: code/class-a-w-f-customizer.php:2098
 msgid "Rotation"
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:538
-#: code/class-a-w-f-premium-admin.php:560
+#: code/class-a-w-f-premium-admin.php:567
+#: code/class-a-w-f-premium-admin.php:589
 msgid "Round"
 msgstr "Redondo"
 
-#: code/class-a-w-f-admin.php:3528
+#: code/class-a-w-f-admin.php:3538
 msgid "Rounded"
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:527
+#: code/class-a-w-f-premium-admin.php:556
 msgid "Rounded 3D"
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:1045
+#: code/class-a-w-f-premium-admin.php:1074
 msgid "Sale products"
 msgstr "Venta de productos"
 
-#: code/class-a-w-f-premium-admin.php:405
+#: code/class-a-w-f-premium-admin.php:434
 msgid "Save & Exit"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:2074
+#: code/class-a-w-f-admin.php:2084
 msgid "Save and refresh range preview"
 msgstr "Guardar y actualizar vista previa de rango"
 
-#: code/class-a-w-f-premium-admin.php:2485
-#: code/class-a-w-f-premium-admin.php:2834
+#: code/class-a-w-f-premium-admin.php:2514
+#: code/class-a-w-f-premium-admin.php:2908
 msgid "Save as template"
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:2834
+#: code/class-a-w-f-premium-admin.php:2908
 msgid "Save selected filter as template"
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:2485
+#: code/class-a-w-f-premium-admin.php:2514
 msgid "Save selected preset as template"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3019
+#: code/class-a-w-f-admin.php:3029
 #, fuzzy
 #| msgid "Scroll to ajax results"
 msgid "Scroll to AJAX results"
@@ -3214,7 +3280,7 @@ msgstr "Desplazarse a los resultados de ajax"
 msgid "Scrollbars"
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:1685
+#: code/class-a-w-f-premium-admin.php:1714
 msgid ""
 "Scrollbars will be added to the autocomplete box whenever the height of the "
 "list of suggested products exceeds this setting in pixels. Set to zero to "
@@ -3224,7 +3290,7 @@ msgstr ""
 "que la altura de la lista de productos sugeridos exceda esta configuración "
 "en píxeles.. Establecer en cero para deshabilitar."
 
-#: code/class-a-w-f-premium-admin.php:1041 code/class-a-w-f.php:253
+#: code/class-a-w-f-premium-admin.php:1070 code/class-a-w-f.php:253
 msgid "Search"
 msgstr "Buscar"
 
@@ -3233,13 +3299,13 @@ msgstr "Buscar"
 msgid "Search %1$s"
 msgstr "Buscar %1$s"
 
-#: code/class-a-w-f-admin.php:6018
+#: code/class-a-w-f-admin.php:6029
 msgid ""
 "Search algorithm doesn't support spaces in the products and pagination "
 "selectors."
 msgstr ""
 
-#: code/class-a-w-f-admin.php:2469 code/class-a-w-f-premium-admin.php:1763
+#: code/class-a-w-f-admin.php:2479 code/class-a-w-f-premium-admin.php:1792
 msgid "Search products..."
 msgstr "Buscar productos... "
 
@@ -3247,7 +3313,7 @@ msgstr "Buscar productos... "
 msgid "Search products:"
 msgstr "Buscar productos: "
 
-#: code/class-a-w-f-admin.php:2989
+#: code/class-a-w-f-admin.php:2999
 msgid ""
 "Select \"Default\" to leave the default theme pagination, or set to the AJAX "
 "pagination style that suits your shop. AJAX pagination options may not work "
@@ -3260,26 +3326,26 @@ msgstr ""
 "puedes ponerse en contacto con nosotros si deseas agregar soporte para tu "
 "tema."
 
-#: code/class-a-w-f-admin.php:1868
+#: code/class-a-w-f-admin.php:1878
 msgid "Select date..."
 msgstr "Selecciona fecha..."
 
-#: code/class-a-w-f-premium-admin.php:2400
+#: code/class-a-w-f-premium-admin.php:2429
 msgid "Select filter"
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:1365
-#: code/class-a-w-f-premium-admin.php:1404
+#: code/class-a-w-f-premium-admin.php:1394
+#: code/class-a-w-f-premium-admin.php:1433
 msgid "Select image from media library"
 msgstr "Seleccionar imagen de la biblioteca de medios"
 
-#: code/class-a-w-f-admin.php:1856
+#: code/class-a-w-f-admin.php:1866
 msgid "Select the date format in which date values are stored in the database."
 msgstr ""
 "Selecciona el formato de fecha en el que se almacenan los valores de fecha "
 "en la base de datos."
 
-#: code/class-a-w-f-premium-admin.php:907
+#: code/class-a-w-f-premium-admin.php:936
 msgid ""
 "Select the filters and controls that you do not want to get effected by the "
 "\"Clear all\" button and reset filters."
@@ -3297,7 +3363,7 @@ msgstr ""
 msgid "SEO"
 msgstr "SEO"
 
-#: code/class-a-w-f-admin.php:3893 code/class-a-w-f-premium-admin.php:631
+#: code/class-a-w-f-admin.php:3903 code/class-a-w-f-premium-admin.php:660
 msgid "SEO Settings"
 msgstr "Configuraciones SEO"
 
@@ -3309,7 +3375,7 @@ msgstr "Ajustes de SEO"
 msgid "Set as hierarchical step-by-step level"
 msgstr "Establecer como nivel jerárquico paso a paso"
 
-#: code/class-a-w-f-admin.php:1895
+#: code/class-a-w-f-admin.php:1905
 msgid "Set icons"
 msgstr "Establecer iconos"
 
@@ -3321,7 +3387,7 @@ msgstr ""
 "Configura la sugerencia para que se muestre dentro de un cuadro de búsqueda "
 "vacío. Deja en blanco si no es necesario."
 
-#: code/class-a-w-f-admin.php:2965
+#: code/class-a-w-f-admin.php:2975
 msgid ""
 "Set this to the amount of product columns that you wish to be displayed by "
 "your shop. Leave blank for the Woocommerce default. WARNING: this option "
@@ -3336,7 +3402,7 @@ msgstr ""
 "responde a esta configuración, configúralo a través de tu personalizador de "
 "temas e ingresa el mismo valor aquí."
 
-#: code/class-a-w-f-admin.php:2974
+#: code/class-a-w-f-admin.php:2984
 msgid ""
 "Set your preferred products per page value here. It will be used unless user "
 "selects different value on a products per page control. Leave blank to use "
@@ -3361,36 +3427,36 @@ msgstr "Ajustes"
 msgid "Shop for "
 msgstr "Comprar"
 
-#: code/class-a-w-f-admin.php:1389 code/class-a-w-f-admin.php:1443
+#: code/class-a-w-f-admin.php:1390 code/class-a-w-f-admin.php:1444
 msgid "Shop pages"
 msgstr "Páginas de la tienda"
 
-#: code/class-a-w-f-admin.php:1405
+#: code/class-a-w-f-admin.php:1406
 #, php-format
 msgid "Shop pages with %s filters"
 msgstr "Páginas de la tienda con %s filtros"
 
-#: code/class-a-w-f-admin.php:1622
+#: code/class-a-w-f-admin.php:1632
 #, php-format
 msgid "Shop pages with enabled %s filter"
 msgstr "Páginas de la tienda con el filtro %s habilitado"
 
-#: code/class-a-w-f-admin.php:1464
+#: code/class-a-w-f-admin.php:1465
 #, php-format
 msgid "Shop pages with enabled %s filters"
 msgstr "Páginas de la tienda con %s filtros habilitados"
 
-#: code/class-a-w-f-admin.php:1423
+#: code/class-a-w-f-admin.php:1424
 #, php-format
 msgid "shop pages with enabled %s filters"
 msgstr "páginas de la tienda con filtros %s habilitados"
 
-#: code/class-a-w-f-admin.php:3089 code/class-a-w-f-admin.php:3273
-#: code/class-a-w-f-admin.php:3917 code/class-a-w-f-premium-admin.php:663
+#: code/class-a-w-f-admin.php:3099 code/class-a-w-f-admin.php:3283
+#: code/class-a-w-f-admin.php:3927 code/class-a-w-f-premium-admin.php:692
 msgid "Shop title"
 msgstr "Título de la tienda"
 
-#: code/class-a-w-f-admin.php:4437 templates/admin/presets-list.php:66
+#: code/class-a-w-f-admin.php:4443 templates/admin/presets-list.php:66
 msgid "Shortcode copied to clipboard"
 msgstr ""
 
@@ -3432,17 +3498,17 @@ msgstr "Mostrar el máximo de"
 msgid "Show title bar"
 msgstr "Mostrar barra de título"
 
-#: code/class-a-w-f-admin.php:2190
+#: code/class-a-w-f-admin.php:2200
 msgid ""
 "Siblings of an active filter belonging to the last hierarchical level will "
 "always be displayed."
 msgstr ""
 
-#: code/class-a-w-f-customizer.php:1354
+#: code/class-a-w-f-customizer.php:1358
 msgid "Sidebar position"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:1849
+#: code/class-a-w-f-admin.php:1859
 msgid "Single date picker"
 msgstr "Selector de fecha única"
 
@@ -3450,59 +3516,59 @@ msgstr "Selector de fecha única"
 msgid "Single item selection"
 msgstr "Selección de artículo individual"
 
-#: code/class-a-w-f-admin.php:3142
+#: code/class-a-w-f-admin.php:3152
 msgid "Single product selector"
 msgstr ""
 
-#: code/class-a-w-f-customizer.php:718
+#: code/class-a-w-f-customizer.php:722
 msgid "Slider color"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:2025
+#: code/class-a-w-f-admin.php:2035
 msgid "Slider step"
 msgstr "Paso deslizante"
 
-#: code/class-a-w-f-customizer.php:716
+#: code/class-a-w-f-customizer.php:720
 msgid "Slider width (%)"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3505 code/class-a-w-f-customizer.php:2173
+#: code/class-a-w-f-admin.php:3515 code/class-a-w-f-customizer.php:2177
 msgid "Sliders"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3554
+#: code/class-a-w-f-admin.php:3564
 msgid "Slow"
 msgstr ""
 
-#: code/class-a-w-f-customizer.php:2161 code/class-a-w-f-premium-admin.php:1424
-#: code/class-a-w-f-premium-admin.php:1426
-#: code/class-a-w-f-premium-admin.php:1428
-#: code/class-a-w-f-premium-admin.php:1430
+#: code/class-a-w-f-customizer.php:2165 code/class-a-w-f-premium-admin.php:1453
+#: code/class-a-w-f-premium-admin.php:1455
+#: code/class-a-w-f-premium-admin.php:1457
+#: code/class-a-w-f-premium-admin.php:1459
 msgid "Solid"
 msgstr "Sólido"
 
-#: code/class-a-w-f-admin.php:1904 code/class-a-w-f-admin.php:1913
-#: code/class-a-w-f-admin.php:1922 code/class-a-w-f-admin.php:1931
+#: code/class-a-w-f-admin.php:1914 code/class-a-w-f-admin.php:1923
+#: code/class-a-w-f-admin.php:1932 code/class-a-w-f-admin.php:1941
 msgid "Solid style"
 msgstr "Estilo sólido"
 
-#: code/class-a-w-f-admin.php:1963 code/class-a-w-f-premium-admin.php:1484
-#: code/class-a-w-f-premium-admin.php:1485
-#: code/class-a-w-f-premium-admin.php:1492
-#: code/class-a-w-f-premium-admin.php:1493
-#: code/class-a-w-f-premium-admin.php:1494
-#: code/class-a-w-f-premium-admin.php:1495
-#: code/class-a-w-f-premium-admin.php:1496
-#: code/class-a-w-f-premium-admin.php:1498
-#: code/class-a-w-f-premium-admin.php:1499
-#: code/class-a-w-f-premium-admin.php:1500
-#: code/class-a-w-f-premium-admin.php:1501
-#: code/class-a-w-f-premium-admin.php:1502
-#: code/class-a-w-f-premium-admin.php:1503
+#: code/class-a-w-f-admin.php:1973 code/class-a-w-f-premium-admin.php:1513
+#: code/class-a-w-f-premium-admin.php:1514
+#: code/class-a-w-f-premium-admin.php:1521
+#: code/class-a-w-f-premium-admin.php:1522
+#: code/class-a-w-f-premium-admin.php:1523
+#: code/class-a-w-f-premium-admin.php:1524
+#: code/class-a-w-f-premium-admin.php:1525
+#: code/class-a-w-f-premium-admin.php:1527
+#: code/class-a-w-f-premium-admin.php:1528
+#: code/class-a-w-f-premium-admin.php:1529
+#: code/class-a-w-f-premium-admin.php:1530
+#: code/class-a-w-f-premium-admin.php:1531
+#: code/class-a-w-f-premium-admin.php:1532
 msgid "Solid style only"
 msgstr "Solo estilo sólido"
 
-#: code/class-a-w-f-admin.php:1957 code/class-a-w-f-premium-admin.php:1475
+#: code/class-a-w-f-admin.php:1967 code/class-a-w-f-premium-admin.php:1504
 msgid ""
 "Some icons are available only in the solid version, so make sure to toggle "
 "the 'Solid style' checkbox if the icon doesn't display properly. Go to "
@@ -3513,7 +3579,7 @@ msgstr ""
 "no se muestra correctamente. ¡Ve a la galería de iconos de Fontawesome para "
 "obtener más iconos increíbles para tu tienda!"
 
-#: code/class-a-w-f-admin.php:3241
+#: code/class-a-w-f-admin.php:3251
 msgid ""
 "Some of the options offered by this section may not be supported by your "
 "theme. You are welcome to contact us if you wish us to look into it."
@@ -3521,7 +3587,7 @@ msgstr ""
 "Algunas de las opciones que ofrece esta sección pueden no ser compatibles "
 "con tu tema. Te invitamos a contactarnos si deseas que lo investiguemos."
 
-#: code/class-a-w-f-admin.php:3097
+#: code/class-a-w-f-admin.php:3107
 msgid "Sort by"
 msgstr "Ordenar por"
 
@@ -3529,7 +3595,7 @@ msgstr "Ordenar por"
 msgid "Sort by average rating"
 msgstr "Ordenar por calificación promedio"
 
-#: code/class-a-w-f-admin.php:3274
+#: code/class-a-w-f-admin.php:3284
 msgid "Sort by control"
 msgstr "Ordenar por control"
 
@@ -3549,7 +3615,7 @@ msgstr "Ordenar por precio: de mayor a menor"
 msgid "Sort by price: low to high"
 msgstr "Ordenar por precio: de menor a mayor"
 
-#: code/class-a-w-f-admin.php:3178
+#: code/class-a-w-f-admin.php:3188
 msgid "Sort by selector"
 msgstr ""
 
@@ -3557,7 +3623,7 @@ msgstr ""
 msgid "Sort filter items by"
 msgstr "Ordenar elementos de filtro por"
 
-#: code/class-a-w-f-premium-admin.php:1516
+#: code/class-a-w-f-premium-admin.php:1545
 #, fuzzy
 #| msgid ""
 #| "Sort the range items from the smallest (on top) to the largest (in the "
@@ -3570,15 +3636,15 @@ msgstr ""
 "hasta el más grande (en la parte inferior), y asigna etiquetas para los "
 "filtros de rango: "
 
-#: code/class-a-w-f-premium-admin.php:388
+#: code/class-a-w-f-premium-admin.php:417
 msgid "Space between columns"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3620
+#: code/class-a-w-f-admin.php:3630
 msgid "Speed"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3536 code/class-a-w-f-premium-admin.php:559
+#: code/class-a-w-f-admin.php:3546 code/class-a-w-f-premium-admin.php:588
 msgid "Square"
 msgstr "Cuadrado"
 
@@ -3586,55 +3652,55 @@ msgstr "Cuadrado"
 msgid "Stars"
 msgstr "Estrellas "
 
-#: code/class-a-w-f-premium-admin.php:1603
+#: code/class-a-w-f-premium-admin.php:1632
 msgid "Stars Preview"
 msgstr "Vista previa de estrellas"
 
-#: code/class-a-w-f-admin.php:2798
+#: code/class-a-w-f-admin.php:2808
 msgid "Step by step filters settings"
 msgstr "Configuración paso a paso de filtros"
 
-#: code/class-a-w-f-admin.php:2804
+#: code/class-a-w-f-admin.php:2814
 msgid "Step by step style"
 msgstr "Estilo paso a paso"
 
-#: code/class-a-w-f-admin.php:2788
+#: code/class-a-w-f-admin.php:2798
 msgid "Step-by-step filters"
 msgstr "Filtros paso a paso"
 
-#: code/class-a-w-f-admin.php:4330
+#: code/class-a-w-f-admin.php:4336
 msgid "Stock filter variations support"
 msgstr "Soporte de variaciones de filtro de stock"
 
-#: code/class-a-w-f-admin.php:3504
+#: code/class-a-w-f-admin.php:3514
 msgid "String search"
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:721
+#: code/class-a-w-f-premium-admin.php:750
 msgid "String to add after the active filters list."
 msgstr "Cadena para agregar después de la lista de filtros activos."
 
-#: code/class-a-w-f-admin.php:3966
+#: code/class-a-w-f-admin.php:3976
 msgid "String to add before the active filters list."
 msgstr "Cadena para agregar antes de la lista de filtros activos."
 
-#: code/class-a-w-f-premium-admin.php:712
+#: code/class-a-w-f-premium-admin.php:741
 msgid "String to add to title before the active filters list."
 msgstr "Cadena para agregar al título antes de la lista de filtros activos."
 
-#: code/class-a-w-f-premium-admin.php:803
+#: code/class-a-w-f-premium-admin.php:832
 msgid "String to display after filter values."
 msgstr "Cadena para mostrar después de los valores del filtro."
 
-#: code/class-a-w-f-premium-admin.php:801
+#: code/class-a-w-f-premium-admin.php:830
 msgid "String to display before filter values."
 msgstr "Cadena para mostrar antes de los valores de filtro."
 
-#: code/class-a-w-f-customizer.php:1333 code/class-a-w-f-customizer.php:1740
+#: code/class-a-w-f-customizer.php:1337 code/class-a-w-f-customizer.php:1744
 msgid "Style"
 msgstr "Estilo"
 
-#: code/class-a-w-f-admin.php:3430
+#: code/class-a-w-f-admin.php:3440
 msgid "Style Settings"
 msgstr "Configuraciones de estilo"
 
@@ -3646,23 +3712,23 @@ msgstr "Configuraciones de estilo"
 msgid "Styles"
 msgstr "Estilos"
 
-#: code/class-a-w-f-admin.php:3498
+#: code/class-a-w-f-admin.php:3508
 msgid "Submit Button"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:2822
+#: code/class-a-w-f-admin.php:2832
 #, fuzzy
 #| msgid "Filter button displayed after the last filter selection"
 msgid "Submit button displayed after the last filter selection"
 msgstr "Botón de filtro mostrado después de la última selección de filtro"
 
-#: code/class-a-w-f-admin.php:2821
+#: code/class-a-w-f-admin.php:2831
 #, fuzzy
 #| msgid "Filter button displayed for all the steps"
 msgid "Submit button displayed for all the steps"
 msgstr "Se muestra el botón de filtro para todos los pasos"
 
-#: code/class-a-w-f-admin.php:2773
+#: code/class-a-w-f-admin.php:2783
 #: templates/admin/filter-options/button_submission.php:13
 msgid "Submit button label"
 msgstr ""
@@ -3673,15 +3739,15 @@ msgctxt "Submit button label"
 msgid "Filter"
 msgstr "Filtro"
 
-#: code/class-a-w-f-admin.php:2074
+#: code/class-a-w-f-admin.php:2084
 msgid "Submit changes to refresh preview"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:1723
+#: code/class-a-w-f-admin.php:1733
 msgid "Symbol or word after the value (for currency symbols etc)"
 msgstr "Símbolo o palabra después del valor (para símbolos de moneda, etc.)"
 
-#: code/class-a-w-f-admin.php:1717
+#: code/class-a-w-f-admin.php:1727
 msgid "Symbol or word before the value (for currency symbols etc)"
 msgstr "Símbolo o palabra antes del valor (para símbolos de moneda, etc.)"
 
@@ -3701,17 +3767,16 @@ msgstr "Etiquetas"
 msgid "Tags header"
 msgstr ""
 
-#: code/class-a-w-f-customizer.php:2173
+#: code/class-a-w-f-customizer.php:2177
 msgid "Tasks"
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:2709
-#: code/class-a-w-f-premium-admin.php:3100
+#: code/class-a-w-f-premium-admin.php:3211
 msgid "Template"
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:2484
-#: code/class-a-w-f-premium-admin.php:2833
+#: code/class-a-w-f-premium-admin.php:2513
+#: code/class-a-w-f-premium-admin.php:2907
 msgid "Template name"
 msgstr ""
 
@@ -3719,15 +3784,15 @@ msgstr ""
 msgid "Templates"
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:618
+#: code/class-a-w-f-premium-admin.php:647
 msgid "Templates Manager"
 msgstr ""
 
-#: code/class-a-w-f-customizer.php:1665
+#: code/class-a-w-f-customizer.php:1669
 msgid "Text alignment"
 msgstr "Alineación del texto"
 
-#: code/class-a-w-f-admin.php:4236
+#: code/class-a-w-f-admin.php:4242
 msgid ""
 "The \"Filters\" toggle button gets enabled by the preset's Visibility "
 "setting."
@@ -3762,10 +3827,10 @@ msgstr ""
 msgid ""
 "The settings and filters of the current preset will be changed to reflect "
 "the chosen template. To ensure the proper template application the page "
-"needs to reload twice. Apply preset template and reload this page?"
+"needs to reload twice. Apply preset clone or template and reload this page?"
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:665
+#: code/class-a-w-f-premium-admin.php:694
 msgid ""
 "The shop page heading above the products list can be left as is, changed "
 "with the help of the \"annasta Default shop title\" setting below, or get "
@@ -3778,7 +3843,7 @@ msgstr ""
 "dinámicamente con cada aplicación de filtros, dependiendo de la combinación "
 "de filtros."
 
-#: code/class-a-w-f-admin.php:3919
+#: code/class-a-w-f-admin.php:3929
 msgid ""
 "The shop page heading above the products list can be left as is, changed "
 "with the help of the annasta Default title setting below, or get dynamically "
@@ -3789,39 +3854,33 @@ msgstr ""
 "predeterminada de annasta a continuación, o ajustarse dinámicamente con cada "
 "aplicación de filtros, dependiendo de la combinación de filtros."
 
-#: code/class-a-w-f-admin.php:3203
+#: code/class-a-w-f-admin.php:3213
 msgid ""
 "The wrapper detection algorithm relies on the products list and pagination "
 "selectors. If the detection fails, use the custom selector options above to "
 "assign theme-specific values."
 msgstr ""
 
-#: code/class-a-w-f-customizer.php:2186
+#: code/class-a-w-f-customizer.php:2190
 msgid "Theme default"
 msgstr "Tema predeterminado"
 
-#: code/class-a-w-f-admin.php:2955
+#: code/class-a-w-f-admin.php:2965
 msgid "Theme support"
 msgstr "Soporte del tema"
 
-#: code/class-a-w-f-admin.php:4192
+#: code/class-a-w-f-admin.php:4202
 #, php-format
 msgid "There are no incompatibility issues registered for the %1$s theme."
 msgstr "No hay problemas de incompatibilidad registrados para el tema %1$s."
 
-#: code/class-a-w-f-premium-admin.php:2428
+#: code/class-a-w-f-premium-admin.php:2457
 msgid ""
 "There are no preset templates yet. Please use the \"Create\" and \"Import\" "
 "buttons to add templates."
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:3090
-msgid ""
-"There are no templates registered for this filter. Please go to annasta "
-"Filters > Templates admin section to create or import templates."
-msgstr ""
-
-#: code/class-a-w-f-admin.php:2759
+#: code/class-a-w-f-admin.php:2769
 msgid ""
 "This controls the display of 'Clear all' buttons that will reset all the "
 "existing active filters."
@@ -3829,7 +3888,7 @@ msgstr ""
 "Esto controla la visualización de los botones 'Borrar todo' que "
 "restablecerán todos los filtros activos existentes."
 
-#: code/class-a-w-f-admin.php:2026
+#: code/class-a-w-f-admin.php:2036
 msgid ""
 "This controls the smallest step that a value in a range slider control can "
 "jump to."
@@ -3837,11 +3896,11 @@ msgstr ""
 "Esto controla el paso más pequeño al que puede saltar un valor en un control "
 "deslizante de rango."
 
-#: code/class-a-w-f-admin.php:2142
+#: code/class-a-w-f-admin.php:2152
 msgid "This filter has no terms"
 msgstr "Este filtro no tiene términos"
 
-#: code/class-a-w-f-admin.php:2264
+#: code/class-a-w-f-admin.php:2274
 msgid ""
 "This is the default products per page value for your shop. You can change it "
 "in the Plugin Settings tab."
@@ -3849,7 +3908,7 @@ msgstr ""
 "Este es el valor predeterminado de productos por página para tu tienda. "
 "Puedes cambiarlo en la pestaña Configuración del plugin."
 
-#: code/class-a-w-f-admin.php:2032
+#: code/class-a-w-f-admin.php:2042
 msgid ""
 "This option controls the display of tooltip labels for the current values of "
 "range slider."
@@ -3857,17 +3916,17 @@ msgstr ""
 "Esta opción controla la visualización de etiquetas de información sobre "
 "herramientas para los valores actuales del control deslizante de rango.\n"
 
-#: code/class-a-w-f-premium-admin.php:898
+#: code/class-a-w-f-premium-admin.php:927
 msgid ""
 "This option has been moved to the filter level, and is now available at the "
 "end of any taxonomy filter settings list, under the name of \"Hide filter\"."
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:963
+#: code/class-a-w-f-premium-admin.php:992
 msgid "This parameter appears on all the filtered archive pages."
 msgstr ""
 
-#: code/class-a-w-f-admin.php:1287
+#: code/class-a-w-f-admin.php:1288
 msgid ""
 "This range value can not be deleted, because a range needs at least 2 values "
 "to work. If you want to change this value, first add the new value, and then "
@@ -3877,7 +3936,7 @@ msgstr ""
 "2 valores para funcionar. Si deseas cambiar este valor, primero agrega el "
 "nuevo valor y luego elimina el innecesario."
 
-#: code/class-a-w-f-admin.php:1704
+#: code/class-a-w-f-admin.php:1714
 msgid ""
 "This setting controls the creation of radio-buttoned lists of ranges. With "
 "the default value of 0 a range with values 0, 10, 20, 30 will give you the "
@@ -3893,7 +3952,7 @@ msgstr ""
 "Establecer la precisión a 0.01 alterará la lista a 0-9.99, 10-19.99, 20-29."
 "99, etc. El valor más pequeño permitido es 0.01."
 
-#: code/class-a-w-f-admin.php:1739
+#: code/class-a-w-f-admin.php:1749
 msgid ""
 "This setting defines the left-most (lowest possible) value of the range "
 "control."
@@ -3901,7 +3960,7 @@ msgstr ""
 "Esta configuración define el valor más a la izquierda (más bajo posible) del "
 "control de rango."
 
-#: code/class-a-w-f-admin.php:1743
+#: code/class-a-w-f-admin.php:1753
 msgid ""
 "This setting defines the right-most (highest possible) value of the range "
 "control."
@@ -3909,7 +3968,7 @@ msgstr ""
 "Esta configuración define el valor más a la derecha (más alto posible) del "
 "control de rango."
 
-#: code/class-a-w-f-admin.php:4308
+#: code/class-a-w-f-admin.php:4314
 msgid ""
 "This setting will affect the work of the annasta Product Search controls and "
 "their autocompletes.<br><br>The selected 3d party search engine will be "
@@ -3918,13 +3977,13 @@ msgid ""
 "plugin is not found."
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:2344
+#: code/class-a-w-f-premium-admin.php:2373
 msgid ""
 "This template has been created in a different version of annasta Filters, "
 "and may be incompatible with some current plugin options."
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:2382
+#: code/class-a-w-f-premium-admin.php:2411
 msgid ""
 "This template has been created in the older version of annasta Filters, and "
 "may not support all current options."
@@ -3951,13 +4010,13 @@ msgstr ""
 "Esto hará que este filtro actúe como un botón de reinicio y restablecerá el "
 "resto de los filtros activos antes de aplicarlo."
 
-#: code/class-a-w-f-admin.php:2729
+#: code/class-a-w-f-admin.php:2739
 msgid "This will show as your filters' header. Leave blank if not needed."
 msgstr ""
 "Esto se mostrará como el encabezado de tus filtros. Deja en blanco si no es "
 "necesario."
 
-#: code/class-a-w-f-admin.php:2326
+#: code/class-a-w-f-admin.php:2336
 #, php-format
 msgid ""
 "To <strong>customize the \"Filters\" button</strong> go to annasta Filters > "
@@ -3985,7 +4044,7 @@ msgid ""
 "of preset settings."
 msgstr ""
 
-#: code/class-a-w-f-customizer.php:2125
+#: code/class-a-w-f-customizer.php:2129
 msgid ""
 "To enable filters customization please select \"Default\" or other supported "
 "style and press the Publish button."
@@ -3993,7 +4052,7 @@ msgstr ""
 "Para habilitar la personalización de filtros, selecciona \"Predeterminado\" "
 "u otro estilo compatible y presiona el botón Publicar."
 
-#: code/class-a-w-f-premium-admin.php:324
+#: code/class-a-w-f-premium-admin.php:353
 msgid ""
 "To make the columns spread to the width of their parent container, use the "
 "percentage units making sure that the sum of all column widths and spaces "
@@ -4013,36 +4072,36 @@ msgid ""
 "of -1 for the all products option."
 msgstr ""
 
-#: code/class-a-w-f-customizer.php:1117
+#: code/class-a-w-f-customizer.php:1121
 msgid "Toggle button label"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:1817
+#: code/class-a-w-f-admin.php:1827
 msgid "Toggle style options"
 msgstr "Alternar opciones de estilo"
 
-#: code/class-a-w-f-customizer.php:722
+#: code/class-a-w-f-customizer.php:726
 msgid "Tooltips background"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:2031
+#: code/class-a-w-f-admin.php:2041
 msgid "Tooltips display"
 msgstr "Visualización de información sobre herramientas"
 
-#: code/class-a-w-f-customizer.php:721
+#: code/class-a-w-f-customizer.php:725
 msgid "Tooltips font color"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:4391 code/class-a-w-f-customizer.php:1531
-#: code/class-a-w-f-customizer.php:1800 code/class-a-w-f-customizer.php:1888
+#: code/class-a-w-f-admin.php:4397 code/class-a-w-f-customizer.php:1535
+#: code/class-a-w-f-customizer.php:1804 code/class-a-w-f-customizer.php:1892
 msgid "Top"
 msgstr "Parte superior"
 
-#: code/class-a-w-f-customizer.php:1675
+#: code/class-a-w-f-customizer.php:1679
 msgid "Top border"
 msgstr "Borde superior"
 
-#: code/class-a-w-f-admin.php:2831
+#: code/class-a-w-f-admin.php:2841
 msgid ""
 "Trigger the moves to a next filter by a click on the \"Next\" button. By "
 "default the transitions from one filter to the next happen automatically "
@@ -4056,17 +4115,17 @@ msgstr ""
 "opción de filtro, lo que significa que <strong>necesitará</strong> usar el "
 "botón Siguiente para habilitar la selección múltiple con ciertos estilos."
 
-#: code/class-a-w-f-admin.php:3029
+#: code/class-a-w-f-admin.php:3039
 msgid ""
 "Tweak (in pixels) the point to which the page scrolls after AJAX updates. "
 "Use negative numbers for the downward scroll."
 msgstr ""
 
-#: code/class-a-w-f-admin.php:6042
+#: code/class-a-w-f-admin.php:6053
 msgid "Unable to detect the products and pagination selectors."
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3059
+#: code/class-a-w-f-admin.php:3069
 msgid "Uncheck to disable breadcrumbs adjustments on taxonomy archive pages."
 msgstr ""
 
@@ -4074,32 +4133,32 @@ msgstr ""
 msgid "Unix Time Stamp"
 msgstr "Sello de tiempo Unix"
 
-#: code/class-a-w-f-admin.php:3051
+#: code/class-a-w-f-admin.php:3061
 msgid "Update archive titles and descriptions to match activated filters."
 msgstr ""
 
-#: code/class-a-w-f-admin.php:2820
+#: code/class-a-w-f-admin.php:2830
 msgid "Update products list when the last filter is applied"
 msgstr "Actualizar la lista de productos cuando se aplica el último filtro"
 
-#: code/class-a-w-f-admin.php:2819
+#: code/class-a-w-f-admin.php:2829
 msgid "Update products list with each filter application"
 msgstr "Actualiza la lista de productos con cada aplicación de filtro"
 
-#: code/class-a-w-f-admin.php:2368
+#: code/class-a-w-f-admin.php:2378
 #, php-format
 msgid "Update Visibility setting for preset #%1$s"
 msgstr ""
 
-#: code/class-a-w-f-customizer.php:2169
+#: code/class-a-w-f-customizer.php:2173
 msgid "Uppercase"
 msgstr "Mayúsculas"
 
-#: code/class-a-w-f-admin.php:2786
+#: code/class-a-w-f-admin.php:2796
 msgid "URL filters"
 msgstr "Filtros de URL"
 
-#: code/class-a-w-f-admin.php:4348
+#: code/class-a-w-f-admin.php:4354
 msgid ""
 "Use hierarchical permalinks with paths of type \"category/subcatergory/sub-"
 "subcategory\" in same-taxonomy filters working on archive pages (for example,"
@@ -4116,7 +4175,7 @@ msgstr ""
 "taxonomía de sus respectivas páginas de archivo. En tales páginas, todos los "
 "filtros de selección múltiple se forzarán al modo de selección única."
 
-#: code/class-a-w-f-admin.php:2905
+#: code/class-a-w-f-admin.php:2915
 msgid ""
 "Use in combination with the \"Visibility\" setting: set the screen width "
 "enabling the responsive behaviour, in pixels."
@@ -4124,7 +4183,7 @@ msgstr ""
 "Úsalo en combinación con la configuración \"Visibilidad\": establece el "
 "ancho de pantalla que permite el comportamiento receptivo, en píxeles."
 
-#: code/class-a-w-f-admin.php:1527
+#: code/class-a-w-f-admin.php:1537
 #, php-format
 msgid ""
 "Use the <strong><a href=\"%1$s\">annasta Filters section of Wordpress "
@@ -4138,31 +4197,31 @@ msgid ""
 "to the page of type www.yoursite.com/product-category/shoes/."
 msgstr ""
 
-#: code/class-a-w-f-customizer.php:2173
+#: code/class-a-w-f-customizer.php:2177
 msgid "User Cog"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:1722
+#: code/class-a-w-f-admin.php:1732
 msgid "Value postfix"
 msgstr "Sufijo de valor"
 
-#: code/class-a-w-f-admin.php:1716
+#: code/class-a-w-f-admin.php:1726
 msgid "Value prefix"
 msgstr "Prefijo de valor"
 
-#: code/class-a-w-f-admin.php:3557
+#: code/class-a-w-f-admin.php:3567
 msgid "Very Fast"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3553
+#: code/class-a-w-f-admin.php:3563
 msgid "Very Slow"
 msgstr ""
 
-#: code/class-a-w-f-frontend.php:2152 code/class-a-w-f-premium-admin.php:1679
+#: code/class-a-w-f-frontend.php:2152 code/class-a-w-f-premium-admin.php:1708
 msgid "View all results"
 msgstr "Ver todos los resultados"
 
-#: code/class-a-w-f-premium-admin.php:1678
+#: code/class-a-w-f-premium-admin.php:1707
 msgid "View all results link text"
 msgstr "Ver todos los resultados del texto del enlace"
 
@@ -4174,24 +4233,24 @@ msgstr "Ver la documentación de annasta Filtros"
 msgid "View annasta Filters settings"
 msgstr "Ver la configuración de los filtros annasta"
 
-#: code/class-a-w-f-admin.php:2369 code/class-a-w-f-admin.php:2877
+#: code/class-a-w-f-admin.php:2379 code/class-a-w-f-admin.php:2887
 #: templates/admin/presets-list.php:14
 msgid "Visibility"
 msgstr "Visibilidad"
 
-#: code/class-a-w-f-admin.php:2914
+#: code/class-a-w-f-admin.php:2924
 msgid "Visible"
 msgstr "Visible"
 
-#: code/class-a-w-f-admin.php:2915
+#: code/class-a-w-f-admin.php:2925
 msgid "Visible on screens narrower than the Responsive width"
 msgstr "Visible en pantallas más estrechas que el ancho de respuesta"
 
-#: code/class-a-w-f-admin.php:2916
+#: code/class-a-w-f-admin.php:2926
 msgid "Visible on screens wider than the Responsive width"
 msgstr "Visible en pantallas más anchas que el ancho de respuesta"
 
-#: code/class-a-w-f-admin.php:2918
+#: code/class-a-w-f-admin.php:2928
 msgid ""
 "Visible on screens wider than the Responsive width, controlled by "
 "\"Filters\" button on narrower screens"
@@ -4199,8 +4258,8 @@ msgstr ""
 "Visible en pantallas más anchas que el ancho de respuesta, controlado por el "
 "botón \"Filtros\" en pantallas más estrechas"
 
-#: code/class-a-w-f-premium-admin.php:2642
-#: code/class-a-w-f-premium-admin.php:2991
+#: code/class-a-w-f-premium-admin.php:2675
+#: code/class-a-w-f-premium-admin.php:3068
 #, php-format
 msgid ""
 "Warning: The newly imported template was created in the version %2$s of "
@@ -4210,7 +4269,7 @@ msgid ""
 "version number: %1$s."
 msgstr ""
 
-#: code/class-a-w-f-admin.php:4324
+#: code/class-a-w-f-admin.php:4330
 msgid ""
 "When a parent term of a hierarchical taxonomy is selected, include products "
 "belonging to its children terms (for example, subcategories) in the filtered "
@@ -4220,12 +4279,12 @@ msgstr ""
 "incluye los productos que pertenecen a sus términos secundarios (por ejemplo,"
 " subcategorías) en los resultados filtrados."
 
-#: code/class-a-w-f-customizer.php:2073
+#: code/class-a-w-f-customizer.php:2077
 msgid "When resetting this field, push Publish button to see the changes."
 msgstr ""
 "Al restablecer este campo, presiona el botón Publicar para ver los cambios."
 
-#: code/class-a-w-f-customizer.php:2051
+#: code/class-a-w-f-customizer.php:2055
 msgid ""
 "When resetting this field, push Publish button to see the changes. For "
 "transparent background set to rgba(0,0,0,0)."
@@ -4241,60 +4300,60 @@ msgstr ""
 msgid "When there is 1 or no options to display"
 msgstr ""
 
-#: code/class-a-w-f-customizer.php:1316 code/class-a-w-f-customizer.php:1723
+#: code/class-a-w-f-customizer.php:1320 code/class-a-w-f-customizer.php:1727
 msgid "Width"
 msgstr "Anchura"
 
-#: code/class-a-w-f-customizer.php:2028
+#: code/class-a-w-f-customizer.php:2032
 #, php-format
 #| msgid "Width (%)"
 msgid "Width (%s)"
 msgstr "Ancho (%s)"
 
-#: code/class-a-w-f-admin.php:4302
+#: code/class-a-w-f-admin.php:4308
 msgid "WooCommerce default"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:3900 code/class-a-w-f-admin.php:3913
-#: code/class-a-w-f-premium-admin.php:638
-#: code/class-a-w-f-premium-admin.php:659
+#: code/class-a-w-f-admin.php:3910 code/class-a-w-f-admin.php:3923
+#: code/class-a-w-f-premium-admin.php:667
+#: code/class-a-w-f-premium-admin.php:688
 msgid "Woocommerce default"
 msgstr "Woocommerce por defecto"
 
-#: code/class-a-w-f-admin.php:2947
+#: code/class-a-w-f-admin.php:2957
 msgid "Woocommerce Product List Settings"
 msgstr "Configuración de la lista de productos de Woocommerce"
 
-#: code/class-a-w-f-admin.php:1472
+#: code/class-a-w-f-admin.php:1473
 msgid "WP page: "
 msgstr "Página de WP:"
 
-#: code/class-a-w-f-admin.php:578
+#: code/class-a-w-f-admin.php:579
 msgid "Wrapper auto-detection"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:5933
+#: code/class-a-w-f-admin.php:5944
 msgid ""
 "Wrapper detection aborted: couldn't find a unique products container. Set up "
 "the correct products list selector and try again."
 msgstr ""
 
-#: code/class-a-w-f-admin.php:5916
+#: code/class-a-w-f-admin.php:5927
 msgid "Wrapper detection aborted: couldn't load DOM"
 msgstr ""
 
-#: code/class-a-w-f-admin.php:4438
+#: code/class-a-w-f-admin.php:4444
 #, php-format
 msgid ""
 "You can also use the %1$s shortcode to customize the \"Filters\" button "
 "insertion point."
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:3143
+#: code/class-a-w-f-premium-admin.php:3282
 msgid "You don't have sufficient permissions to perform this action. "
 msgstr "No tienes permisos suficientes para realizar esta acción."
 
-#: code/class-a-w-f-admin.php:2305 code/class-a-w-f-settings.php:180
+#: code/class-a-w-f-admin.php:2315 code/class-a-w-f-settings.php:180
 msgid ""
 "You don't need to insert your preset via widget/shortcode when using the "
 "\"Controlled by \"Filters\" button\" visibility mode."
@@ -4309,7 +4368,7 @@ msgstr ""
 "activo y en los consejos de desplazamiento de la etiqueta del filtro. Deja "
 "en blanco si no es necesario."
 
-#: code/class-a-w-f-customizer.php:2124
+#: code/class-a-w-f-customizer.php:2128
 msgid ""
 "Your current annasta Filters style does not provide Customizer support. To "
 "enable customization, go to annasta Filters > General > Filters style and "
@@ -4319,7 +4378,7 @@ msgstr ""
 "personalizador. Para habilitar la personalización, ve a Annasta Filters> "
 "General> Filters style y selecciona un estilo compatible."
 
-#: code/class-a-w-f-admin.php:588
+#: code/class-a-w-f-admin.php:589
 msgid "Your session has expired. Please reload the page and try again."
 msgstr ""
 "Tu sesión ha caducado. Vuelve a cargar la página e inténtalo nuevamente."
@@ -4354,6 +4413,6 @@ msgstr "AA/MM/DD HH:MI:SS"
 msgid "YYYYMMDD"
 msgstr "AAMMDD"
 
-#: code/class-a-w-f-customizer.php:1437
+#: code/class-a-w-f-customizer.php:1441
 msgid "Z-index"
 msgstr ""

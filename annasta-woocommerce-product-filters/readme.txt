@@ -1,10 +1,10 @@
 === annasta Woocommerce Product Filters ===
 Contributors: annastaa
 Tags: product filter, ajax filter, woocommerce filter, woocommerce product filter, woocommerce products filter
-Requires at least: 4.7
-Tested up to: 6.5
-Stable tag: 1.7.3
-Requires PHP: 5.5
+Requires at least: 5.3
+Tested up to: 6.6
+Stable tag: 1.7.4
+Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -127,6 +127,22 @@ We do maintain the program of the new features introduction for the future plugi
 * [Google Fonts](https://fonts.google.com)
 
 == Changelog ==
+
+= 1.7.5 =
+
+* Added WooCommerce as the required plugin.
+* Added preset cloning option (premium).
+* Added settings import from one preset/filter to another (premium).
+* Added z-index Customizer option for the dropdown lists.
+* Added tips in the dashboard.
+* Fixed the work of the "Show more" / "Show less" buttons in button-controlled popups.
+* Minor fixes and enhancements.
+* Set the minimum PHP version requirement to 7.0
+* Freemius update to version 2.8.1
+* Upped the WooCommerce minimum version requirement to 4.5
+* Upped the WooCommerce version compliance to 9.3
+* Upped the WordPress minimum version requirement to 5.3
+* Upped the WordPress version compliance to 6.6
 
 = 1.7.4 =
 

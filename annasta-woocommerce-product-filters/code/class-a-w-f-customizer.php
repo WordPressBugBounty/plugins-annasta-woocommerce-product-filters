@@ -594,6 +594,10 @@ if( ! class_exists( 'A_W_F_customizer' ) ) {
               'settings'   => 'awf_customizer_options[awf_dropdown_filters_container_box_shadow_color]',
               'section'    => 'awf_dropdown_customizer',
         ) ) );
+
+      $this->add_section_settings( $wp_customizer, 'awf_dropdown', array(
+        'z_index' => 'Dropdown list z-index',
+      ) );
 				
 			}
 
@@ -1434,7 +1438,7 @@ if( ! class_exists( 'A_W_F_customizer' ) ) {
 								$wp_customizer,
 								$section . '_z_index',
 								array(
-									'label'          => __( 'Z-index', 'annasta-filters' ),
+									'label'          => ( empty( $label ) ) ? __( 'Z-index', 'annasta-filters' ) : $label,
 									'settings'   		 => 'awf_customizer_options[' . $section . '_z_index]',
 									'section'        => $section . '_customizer',
 									'type'           => 'number',

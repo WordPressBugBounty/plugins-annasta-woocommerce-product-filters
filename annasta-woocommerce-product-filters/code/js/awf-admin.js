@@ -401,7 +401,15 @@ jQuery( document ).ready( function( $ ) {
     } );
 		
     $container.find( '.awf-filter-header .awf-preset-filter-title' ).on( 'click', function() { awf_toggle_filter( $( this ), true ); } );
-    $container.find( '.awf-filter-header .awf-buttons-column' ).on( 'click', function() { awf_toggle_filter( $( this ), true ); } );
+    $container.find( '.awf-filter-header .awf-buttons-column' ).on( 'click', function( e ) {
+      var $t = $( e.target );
+      
+      if( $t.hasClass( 'awf-popup-filter-templates-btn' ) && ! $t.closest( '.awf-filter-wrapper' ).hasClass( 'awf-filter-collapsed' ) ) {
+        return true;
+      }
+
+      awf_toggle_filter( $( this ), true );
+    } );
     $container.find( '.awf-collapse-filter-btn' ).on( 'click', function() { awf_toggle_filter( $( this ), true ); } );
     $container.find( '.awf-is-collapsible' ).on( 'change', function() {
       if( $( this ).is(':checked') ) {
@@ -1414,7 +1422,7 @@ jQuery( document ).ready( function( $ ) {
         a_w_f.url_params.delete( 'awf-force-submit' );
         a_w_f.set_new_url();
         window.onbeforeunload = null;
-        $( '.woocommerce-save-button' ).first().trigger( 'click' );
+        $( '.woocommerce-save-button' ).first().removeAttr( 'disabled' ).trigger( 'click' );
 
       } else {
         if( a_w_f.url_params.has( 'awf-goto' ) ) {
@@ -1490,9 +1498,17 @@ jQuery( document ).ready( function( $ ) {
           $active_slide.fadeIn( 500 );
 
           if( 1 < $slides.length ) {
+            var slider_on = true;
+            
+            $slider.on( 'mouseenter', function() {
+              slider_on = false;
+            });
+            $slider.on( 'mouseleave', function() {
+              slider_on = true;
+            });
 
             window.setInterval( function() {
-              if( document.hasFocus() ) {
+              if( ! document.hidden && slider_on ) {
                 $active_slide.fadeOut( 500, function() {
                   $active_slide = $active_slide.next();
                   if( 0 === $active_slide.length ) {
@@ -1502,7 +1518,7 @@ jQuery( document ).ready( function( $ ) {
                 } );
               }
 
-            }, 6000);
+            }, 7000);
           }
 
         });

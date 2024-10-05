@@ -62,12 +62,35 @@
   display: flex;
 }
 
+.awf-overlay-popup-row.awf-valign {
+  flex-direction: column;
+}
+
+#awf-settings .awf-overlay-popup-row.awf-valign > label {
+  width: 100%;
+  padding-left: 3px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+#awf-settings .awf-overlay-popup-row.awf-valign > select {
+  margin: 10px 0;
+  width: 100%;
+  max-width: 100%;
+}
+
 .awf-overlay-popup-row.awf-overlay-popup-header-row {
   margin-top: 10px;
   margin-bottom: 50px;
   padding: 0;
   font-size: 30px;
   cursor: default;
+}
+
+.awf-overlay-popup-row.awf-overlay-popup-header-row .awf-overlay-popup-subcaption {
+  margin-top: 20px;
+  font-size: 13px;
+  color: #999;
 }
 
 .awf-overlay-popup-row.awf-overlay-popup-header-row .dashicons-arrow-right-alt2{
@@ -385,6 +408,9 @@
 }
 
 .awf-fa-icon::before {
+  display: flex;
+  align-items: center;
+  justify-content: center; 
   color: rgba(0, 0, 0, 0.4);
   text-shadow: #ffffff 1px 1px 0px, 0px -1px 0px rgba(0, 0, 0, 0.35);
   font-family: 'AWF FA', 'Font Awesome 5 Free';
@@ -477,6 +503,11 @@
 .awf-fa-add-btn::before {
   content: "\f067";
 }
+ 
+.awf-fa-clone-btn::before {
+  content: "\f24d";
+  padding-top: 1px;
+}
 
 #awf-settings a.button-secondary.awf-icon:hover,
 #awf-settings button.button-secondary.awf-icon:hover,
@@ -488,19 +519,23 @@
   box-shadow: 0 0px 5px #e2e2e2;
 }
 
-.awf-delete-btn::before {
-  content: "\f182";
-}
-
 .awf-add-btn::before {
   content: "\f132";
   position: relative;
   top: 1px;
 }
 
-.awf-popup-preset-templates-btn::before,
-.awf-popup-filter-templates-btn::before {
-  content: "\f5aa";
+#awf-settings button.button-secondary.awf-fa-icon.awf-popup-preset-templates-btn::before,
+#awf-settings button.button-secondary.awf-fa-icon.awf-popup-filter-templates-btn::before {
+  content: "\f574";
+}
+
+#awf-settings.awf-preset-settings .awf-fa-icon.awf-fa-delete-btn::before {
+  font-size: 13px;
+}
+
+#awf-settings.awf-preset-settings .awf-fa-icon.awf-fa-delete-btn:hover::before {
+  font-size: 12px;
 }
 
 #awf-settings button.awf-annasta-icon-btn {
@@ -816,16 +851,9 @@
 
 #awf-settings table.widefat.awf-presets-table > tbody > tr > td.awf-buttons-column {
   padding: 0 8px 10px;
-  width: 125px;
-  min-width: 125px;
+  width: 220px;
+  min-width: 220px;
   text-align: right;
-}
-
-@media( min-width: 900px ) {
-  #awf-settings table.widefat.awf-presets-table > tbody > tr > td.awf-buttons-column {
-    width: 200px;
-    min-width: 200px;
-  }
 }
 
 #awf-settings .awf-presets-table td.awf-buttons-column .button-secondary {
@@ -836,6 +864,29 @@
   text-align: center;
   color: rgba(0, 0, 0, 0.4);
   text-shadow: #ffffff 1px 1px 0px, 0px -1px 0px rgb(0 0 0 / 35%);
+}
+
+#awf-settings .awf-presets-table td.awf-buttons-column .button-secondary.awf-fa-delete-btn,
+#awf-settings .awf-presets-table td.awf-buttons-column .button-secondary.awf-fa-clone-btn {
+  margin-top: 20px;
+  width: 27px;
+  height: 25px;
+  min-height: 25px;
+  line-height: 25px;
+}
+
+#awf-settings .awf-presets-table td.awf-buttons-column .button-secondary.awf-fa-delete-btn::before,
+#awf-settings .awf-presets-table td.awf-buttons-column .button-secondary.awf-fa-clone-btn::before {
+  font-size: 11px;
+}
+
+#awf-settings .awf-presets-table td.awf-buttons-column .button-secondary.awf-fa-delete-btn:hover::before,
+#awf-settings .awf-presets-table td.awf-buttons-column .button-secondary.awf-fa-clone-btn:hover::before {
+  font-size: 10px;
+}
+
+#awf-settings .awf-presets-table td.awf-buttons-column .button-secondary.awf-fa-delete-btn:hover:before {
+  color: rgba(208, 9, 9, 0.6);
 }
 
 #awf-settings .awf-presets-table td.awf-buttons-column .button-secondary.awf-fa-edit-btn {
@@ -2350,12 +2401,19 @@
 /** Apply Preset & Filter Template Popup */
 
 .awf-apply-preset-template-container,
-.awf-apply-filter-template-container {
+.awf-apply-filter-template-container,
+.awf-apply-preset-clone-container,
+.awf-apply-filter-clone-container {
   display: flex;
   flex-wrap: wrap;
   width: 500px;
   min-width: 300px;
   max-width: 800px;
+}
+
+.awf-apply-preset-clone-container,
+.awf-apply-filter-clone-container {
+  margin-bottom: 50px;
 }
 
 @media screen and (max-width: 960px) {

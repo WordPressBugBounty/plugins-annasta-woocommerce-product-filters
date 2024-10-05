@@ -44,9 +44,9 @@ $filter_enabled = true;
 						?>
 					</td>
           <td class="awf-buttons-column">
-            <button class="button button-secondary awf-icon awf-delete-btn awf-delete-filter-btn" type="button" title="<?php esc_attr_e( 'Remove filter', 'annasta-filters' ); ?>"></button>
+            <button class="button button-secondary awf-fa-icon awf-fas-icon awf-fa-delete-btn awf-delete-filter-btn" type="button" title="<?php esc_attr_e( 'Remove filter', 'annasta-filters' ); ?>"></button>
 <?php if( A_W_F::$premium ) : ?>
-            <button class="button button-secondary awf-fa-icon awf-fas-icon awf-popup-filter-templates-btn" type="button" title="<?php esc_attr_e( 'Apply template', 'annasta-filters' ); ?>" data-filter-id="<?php echo esc_attr( $filter->id ); ?>"></button>
+            <button class="button button-secondary awf-fa-icon awf-fas-icon awf-popup-filter-templates-btn" type="button" title="<?php esc_attr_e( 'Import settings from another filter or template', 'annasta-filters' ); ?>" data-filter-id="<?php echo esc_attr( $filter->id ); ?>"></button>
 <?php endif; ?>
             <a class="button button-secondary awf-icon awf-filter-toggle-btn" title="<?php esc_attr_e( 'Show filter options', 'annasta-filters' ); ?>" data-toggle-title="<?php esc_attr_e( 'Hide filter options', 'annasta-filters' ); ?>"></a>
           </td>
