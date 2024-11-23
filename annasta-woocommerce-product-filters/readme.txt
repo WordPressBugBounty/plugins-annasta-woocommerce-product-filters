@@ -1,9 +1,9 @@
 === annasta Woocommerce Product Filters ===
 Contributors: annastaa
 Tags: product filter, ajax filter, woocommerce filter, woocommerce product filter, woocommerce products filter
-Requires at least: 5.3
-Tested up to: 6.6
-Stable tag: 1.7.4
+Requires at least: 5.7
+Tested up to: 6.7
+Stable tag: 1.7.5
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -41,7 +41,7 @@ Use the versatile controls of the filters' admin interface to fine-tune the plug
 = Filters =
 
 * **WooCommerce product taxonomy filters**: create filters out of any built-in WooCommerce taxonomy (product categories, tags), **WooCommerce product attributes** of your choice (size, color, gender), or a custom WooCommerce taxonomy (brands, countries of origin etc).
-* Our **Products price filter** can be styled as a range slider or a list of predefined price ranges.
+* Our **Products price filter** can be styled as a range slider or a list of predefined price ranges. Dynamic min/max price slider values can be enabled in plugin options.
 * The annasta **products string search** control will combine the results retrieved by the WooCommerce search engine with the currently selected filters. Relevanssi and Advanced Woo Search engines support can also be enabled for annasta search controls.
 * **Stock availability filter** will display WooCommerce products by their stock status: in stock, out of stock, or backordered. Stock status filtering for the variable products can be enabled with the help of the [Stock filter variations support](https://annasta.net/plugins/annasta-woocommerce-product-filters/documentation/plugin-settings/stock-filter-variations-support/) beta option.
 * **Products rating filter** will display WooCommerce products by rating ranges, e.g. 0 - 1, ..., 2 - 3, 4 - 5 stars.
@@ -127,6 +127,21 @@ We do maintain the program of the new features introduction for the future plugi
 * [Google Fonts](https://fonts.google.com)
 
 == Changelog ==
+
+= 1.7.6 =
+* Added the basic keyboard and accessibility support: Tab + Arrow keys navigation, Enter/Space submission, basic accessibility alerts for scren readers.
+* Optimization of the dropdowns scripts.
+* Optimization of the terms search scripts.
+* Changed loader and other scripts in togglable presets and URL filters.
+* Fix in the string search post__in query routine.
+* Fixed the daterangepicker z-index (in popup sidebars).
+* Fixed the import filter settings popup options list generation.
+* noUIslider update to version 15.8.1
+* Perfect Scrollbar update to version 1.5.6
+* Freemius update to version 2.9.0
+* Upped the WooCommerce version compliance to 9.4
+* Upped the WordPress minimum version requirement to 5.7
+* Upped the WordPress version compliance to 6.7
 
 = 1.7.5 =
 

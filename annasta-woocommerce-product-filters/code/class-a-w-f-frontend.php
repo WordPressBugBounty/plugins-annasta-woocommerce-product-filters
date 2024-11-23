@@ -88,6 +88,7 @@ if( ! class_exists('A_W_F_frontend') ) {
 				add_action( 'template_redirect', array( $this, 'redirect_archives' ), 20 );
 			}
 			
+			add_action( 'wp_footer', array( $this, 'add_to_wp_footer' ) );
 			add_action( 'wp_footer', array( $this, 'display_togglable_presets' ), 100 );
 			add_action( 'shutdown', array( $this, 'update_counts_cache' ) );
 			
@@ -1207,7 +1208,7 @@ if( ! class_exists('A_W_F_frontend') ) {
             }
 
             if( empty( $post__in ) ) { $post__in = $ss_posts;
-            } else { $post__in = array_intersect( $post__in, $ss_posts ); }
+            } else { $post__in = array_merge( array( 0 ), array_intersect( $post__in, $ss_posts ) ); }
 
           }
 
@@ -2360,16 +2361,23 @@ if( ! class_exists('A_W_F_frontend') ) {
 		public function enqueue_scripts( $hook ) {
 			
 			$google_fonts = array();
+			$js_dependencies = array( 'jquery', 'jquery-ui-core', 'jquery-ui-sortable', 'jquery-blockui', 'awf-nouislider' );
+
+			if( A_W_F::$premium ) {
+				$js_dependencies[] = 'awf-premium';
+			}
 			
 			wp_enqueue_style( 'awf-nouislider', A_W_F_PLUGIN_URL . '/styles/nouislider.min.css', array(), A_W_F::$plugin_version );
 			wp_enqueue_script( 'awf-wnumb', A_W_F_PLUGIN_URL . '/code/js/wNumb.js', array() );
 			
 			if ( 'yes' === get_option( 'awf_pretty_scrollbars' ) ) {
+				$js_dependencies[] = 'awf-pretty-scrollbars';
 				wp_enqueue_style( 'awf-pretty-scrollbars', A_W_F_PLUGIN_URL . '/styles/perfect-scrollbar.css' );
 				wp_enqueue_script( 'awf-pretty-scrollbars', A_W_F_PLUGIN_URL . '/code/js/perfect-scrollbar.min.js', array(), A_W_F::$plugin_version );
 			}
 			
 			if ( ! empty( get_option( 'awf_daterangepicker_enabled' ) ) ) {
+				$js_dependencies[] = 'awf-daterangepicker';
 				wp_enqueue_style( 'awf-daterangepicker', A_W_F_PLUGIN_URL . '/styles/daterangepicker.css' );
 				wp_enqueue_script( 'awf-moment', A_W_F_PLUGIN_URL . '/code/js/moment.min.js', array(), A_W_F::$plugin_version );
 				wp_enqueue_script( 'awf-daterangepicker', A_W_F_PLUGIN_URL . '/code/js/daterangepicker.js', array( 'jquery', 'awf-moment' ), A_W_F::$plugin_version );
@@ -2408,7 +2416,7 @@ if( ! class_exists('A_W_F_frontend') ) {
 			A_W_F::enqueue_style_options_css();
 
 			wp_enqueue_script( 'awf-nouislider', A_W_F_PLUGIN_URL . '/code/js/nouislider.min.js', array( 'awf-wnumb' ) );
-			wp_enqueue_script( 'awf', A_W_F_PLUGIN_URL . '/code/js/awf.js', array( 'jquery', 'jquery-ui-core', 'jquery-ui-sortable', 'awf-nouislider' ), A_W_F::$plugin_version );
+			wp_enqueue_script( 'awf', A_W_F_PLUGIN_URL . '/code/js/awf.js', $js_dependencies, A_W_F::$plugin_version );
 
 			wp_localize_script( 'awf', 'awf_data', $this->build_js_data() );
 		}
@@ -2424,6 +2432,7 @@ if( ! class_exists('A_W_F_frontend') ) {
 		protected function build_js_data() {
 			$current_url_pieces = explode( '?', $this->current_url );
 			$current_url_pieces[1] = isset( $current_url_pieces[1] ) ? wp_parse_args( $current_url_pieces[1] ) : array();
+			$selectors = get_option( 'awf_custom_selectors', array() );
 
 			$js_data = array( 
 				'filters_url' => $current_url_pieces[0],
@@ -2439,6 +2448,7 @@ if( ! class_exists('A_W_F_frontend') ) {
 				'i18n' => array(
 					'badge_reset_label' => esc_attr( get_option( 'awf_badge_reset_label', '' ) ),
 					'togglable_preset_btn_label' => esc_attr( get_option( 'awf_toggle_btn_label', __( 'Filters', 'annasta-filters' ) ) ),
+					'cc_button_label' => esc_attr( __( 'Toggle children collapse', 'annasta-filters' ) ),
 				)
 			);
 			
@@ -2465,9 +2475,6 @@ if( ! class_exists('A_W_F_frontend') ) {
 				$js_data['products_container'] = empty( $selectors['products'] ) ? '.products' : $selectors['products'];
 				
 			} else {
-
-				$selectors = get_option( 'awf_custom_selectors', array() );
-
 				$js_data['pagination_container'] = empty( $selectors['pagination'] ) ? '.woocommerce-pagination' : $selectors['pagination'];
 				/* $js_data['pagination_after'] - not set by default, can be used to control pagination insertion */
 				$js_data['orderby_container'] = empty( $selectors['orderby'] ) ? '.woocommerce-ordering' : $selectors['orderby'];
@@ -3067,6 +3074,12 @@ if( ! class_exists('A_W_F_frontend') ) {
 			return $crumbs;
 		}
 		
+    public function add_to_wp_footer() {
+      echo '<div id="awf-filters-listbox-describedby" style="display:none;">' . esc_html__( 'Use "Up" and "Down" arrows to move between options', 'annasta-filters' ) . '</div>';
+      echo '<div id="awf-cc-access-msg" style="display:none;">' . esc_html__( 'Click the right arrow to expand children, left arrow to collapse.', 'annasta-filters' ) . '</div>';
+      echo '<div id="awf-accessibility-alert" style="display:none;position:fixed;top:0;left:0;margin:0;margin-left:-9999px;padding:0;height:0px;width:0px;opacity:0;"></div>';
+    }
+
 		public function display_togglable_presets() {
 
 			$this->get_access_to['awf-togglable-call'] = true;

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: annasta WooCommerce Product Filters\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-10 14:22+0000\n"
-"PO-Revision-Date: 2024-10-04 15:01+0000\n"
+"PO-Revision-Date: 2024-11-22 12:41+0000\n"
 "Last-Translator: Cursos Mandala\n"
 "Language-Team: Spanish (Spain)\n"
 "Language: es_ES\n"
@@ -183,7 +183,7 @@ msgid ""
 "."
 msgstr ""
 
-#: code/class-a-w-f-frontend.php:2578
+#: code/class-a-w-f-frontend.php:2585
 msgid ""
 "<p><strong>You can remove this block! </strong>This preset is set to be "
 "controlled by \"Filters\" toggle button. In this <strong>Visibility</strong> "
@@ -191,7 +191,7 @@ msgid ""
 "the filterable pages allowed by the <strong>Display on</strong> section.</p>"
 msgstr ""
 
-#: code/class-a-w-f-frontend.php:2581
+#: code/class-a-w-f-frontend.php:2588
 msgid ""
 "<p>This preset is set to the hybrid <strong>Visibility</strong> mode, and "
 "will display regularly or get controlled by \"Filters\" toggle button "
@@ -582,12 +582,12 @@ msgid "Apply filters to autocomplete results"
 msgstr "Aplicar filtros para autocompletar resultados"
 
 #: code/class-a-w-f-premium-admin.php:2773
-#: code/class-a-w-f-premium-admin.php:3213
+#: code/class-a-w-f-premium-admin.php:3210
 #, php-format
 msgid "Apply to %1$s"
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:3213
+#: code/class-a-w-f-premium-admin.php:3210
 msgid "Apply to current filter"
 msgstr ""
 
@@ -914,11 +914,21 @@ msgstr "Limpiar todos los filtros"
 msgid "Clear filters cache"
 msgstr ""
 
+#: code/class-a-w-f-filter-frontend.php:225
+#: code/class-a-w-f-filter-frontend.php:289
+#: code/class-a-w-f-filter-frontend.php:299
+msgid "Clear search field"
+msgstr ""
+
 #: code/class-a-w-f-admin.php:1966 code/class-a-w-f-premium-admin.php:1503
 msgid "Click an icon to copy to clipboard, then paste to the chosen box"
 msgstr ""
 "Haz clic en un icono para copiar al portapapeles, luego pégalo en el cuadro "
 "elegido"
+
+#: code/class-a-w-f-frontend.php:3079
+msgid "Click the right arrow to expand children, left arrow to collapse."
+msgstr ""
 
 #: code/class-a-w-f-admin.php:4443 templates/admin/presets-list.php:66
 msgid "Click to copy shortcode to clipboard"
@@ -1151,7 +1161,7 @@ msgstr "Selector de fechas"
 msgid "Date picker type"
 msgstr "Tipo de selector de fecha"
 
-#: code/class-a-w-f-filter-frontend.php:438
+#: code/class-a-w-f-filter-frontend.php:437
 msgctxt "Datepicker \"Clear\" button label"
 msgid "Clear"
 msgstr "Limpiar"
@@ -1188,7 +1198,7 @@ msgid "Default page title"
 msgstr "Título de página predeterminado"
 
 #: code/class-a-w-f-admin.php:3936 code/class-a-w-f-admin.php:4053
-#: code/class-a-w-f-frontend.php:2941 code/class-a-w-f-frontend.php:2966
+#: code/class-a-w-f-frontend.php:2948 code/class-a-w-f-frontend.php:2973
 #: code/class-a-w-f.php:556
 msgctxt "Default page title"
 msgid "Shop"
@@ -1649,8 +1659,8 @@ msgstr ""
 "Error al crear el filtro: valor predeterminado, filtro o taxonomía no "
 "válidos."
 
-#: code/class-a-w-f-frontend.php:106 code/class-a-w-f-frontend.php:126
-#: code/class-a-w-f-frontend.php:132
+#: code/class-a-w-f-frontend.php:107 code/class-a-w-f-frontend.php:127
+#: code/class-a-w-f-frontend.php:133
 msgid "Error requesting paged URL"
 msgstr ""
 
@@ -1815,7 +1825,7 @@ msgid "Filtering style"
 msgstr "Estilo de filtrado"
 
 #: code/class-a-w-f-admin.php:4255 code/class-a-w-f-customizer.php:1112
-#: code/class-a-w-f-frontend.php:2441 templates/admin/presets-list.php:62
+#: code/class-a-w-f-frontend.php:2450 templates/admin/presets-list.php:62
 msgid "Filters"
 msgstr ""
 
@@ -1870,7 +1880,7 @@ msgstr ""
 msgid "Filters preset"
 msgstr ""
 
-#: code/class-a-w-f-frontend.php:2570
+#: code/class-a-w-f-frontend.php:2577
 #, php-format
 msgid "Filters Preset #%1$s"
 msgstr ""
@@ -2034,7 +2044,7 @@ msgstr "Forzar la recarga de la envoltura"
 msgid "Form with button submission"
 msgstr "Formulario con envío de botón"
 
-#: code/class-a-w-f-premium-admin.php:3198
+#: code/class-a-w-f-premium-admin.php:3195
 msgid "From another filter"
 msgstr ""
 
@@ -2222,12 +2232,12 @@ msgid "Import"
 msgstr ""
 
 #: code/class-a-w-f-premium-admin.php:2759
-#: code/class-a-w-f-premium-admin.php:3200
+#: code/class-a-w-f-premium-admin.php:3197
 #, php-format
 msgid "Import into %1$s"
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:3200
+#: code/class-a-w-f-premium-admin.php:3197
 msgid "Import into the current filter"
 msgstr ""
 
@@ -2477,7 +2487,7 @@ msgstr ""
 msgid "Line height (px)"
 msgstr "Altura de la línea (px)"
 
-#: code/class-a-w-f-frontend.php:2510
+#: code/class-a-w-f-frontend.php:2517
 msgid "Load more products"
 msgstr ""
 
@@ -2641,7 +2651,7 @@ msgstr ""
 msgid "No filter presets have been found!"
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:3187
+#: code/class-a-w-f-premium-admin.php:3184
 msgid ""
 "No matching filters or templates were found on this installation. Please "
 "create the same kind of filter in another preset or import a matching "
@@ -2931,7 +2941,7 @@ msgstr "Vista previa"
 msgid "Preview for a title with autogenerated filters list"
 msgstr "Vista previa de un título con la lista de filtros autogenerados"
 
-#: code/class-a-w-f-frontend.php:2574
+#: code/class-a-w-f-frontend.php:2581
 msgid "Preview unavailable."
 msgstr ""
 
@@ -3294,7 +3304,7 @@ msgstr ""
 msgid "Search"
 msgstr "Buscar"
 
-#: code/class-a-w-f-filter-frontend.php:219
+#: code/class-a-w-f-filter-frontend.php:218
 #, php-format
 msgid "Search %1$s"
 msgstr "Buscar %1$s"
@@ -3309,7 +3319,7 @@ msgstr ""
 msgid "Search products..."
 msgstr "Buscar productos... "
 
-#: code/class-a-w-f-filter-frontend.php:279
+#: code/class-a-w-f-filter-frontend.php:278
 msgid "Search products:"
 msgstr "Buscar productos: "
 
@@ -3474,11 +3484,11 @@ msgstr "Mostrar filtros activos"
 msgid "Show filter options"
 msgstr "Mostrar opciones de filtro"
 
-#: code/class-a-w-f-premium-filter-frontend.php:103
+#: code/class-a-w-f-premium-filter-frontend.php:101
 msgid "Show less"
 msgstr ""
 
-#: code/class-a-w-f-premium-filter-frontend.php:103
+#: code/class-a-w-f-premium-filter-frontend.php:101
 msgid "Show more"
 msgstr ""
 
@@ -3771,7 +3781,7 @@ msgstr ""
 msgid "Tasks"
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:3211
+#: code/class-a-w-f-premium-admin.php:3208
 msgid "Template"
 msgstr ""
 
@@ -4076,6 +4086,10 @@ msgstr ""
 msgid "Toggle button label"
 msgstr ""
 
+#: code/class-a-w-f-frontend.php:2451
+msgid "Toggle children collapse"
+msgstr ""
+
 #: code/class-a-w-f-admin.php:1827
 msgid "Toggle style options"
 msgstr "Alternar opciones de estilo"
@@ -4158,6 +4172,10 @@ msgstr "Mayúsculas"
 msgid "URL filters"
 msgstr "Filtros de URL"
 
+#: code/class-a-w-f-frontend.php:3078
+msgid "Use \"Up\" and \"Down\" arrows to move between options"
+msgstr ""
+
 #: code/class-a-w-f-admin.php:4354
 msgid ""
 "Use hierarchical permalinks with paths of type \"category/subcatergory/sub-"
@@ -4217,7 +4235,7 @@ msgstr ""
 msgid "Very Slow"
 msgstr ""
 
-#: code/class-a-w-f-frontend.php:2152 code/class-a-w-f-premium-admin.php:1708
+#: code/class-a-w-f-frontend.php:2153 code/class-a-w-f-premium-admin.php:1708
 msgid "View all results"
 msgstr "Ver todos los resultados"
 
@@ -4349,7 +4367,7 @@ msgid ""
 "insertion point."
 msgstr ""
 
-#: code/class-a-w-f-premium-admin.php:3282
+#: code/class-a-w-f-premium-admin.php:3279
 msgid "You don't have sufficient permissions to perform this action. "
 msgstr "No tienes permisos suficientes para realizar esta acción."
 

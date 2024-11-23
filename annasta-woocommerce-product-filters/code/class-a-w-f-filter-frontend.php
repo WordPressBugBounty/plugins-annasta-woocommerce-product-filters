@@ -12,6 +12,7 @@ if( ! class_exists( 'A_W_F_filter_frontend' ) ) {
     protected $max_var_name;
     protected $terms_by_parent = array();
     protected $active_values = array();
+    protected $cid = '';
     protected $input_classes;
     protected $hierarchical_level = 1;
 
@@ -125,6 +126,7 @@ if( ! class_exists( 'A_W_F_filter_frontend' ) ) {
 
       $this->terms_by_parent = $this->build_terms_by_parent( $this->terms );
       
+      $this->cid = A_W_F::$front->preset->caller_id . '-filter-' . $this->preset_id . '-' . $this->id;
       $this->input_classes = array( 'awf-filter' );
       if( in_array( $this->settings['style'], array( 'labels', 'icons', 'images', 'colours', 'tags', 'custom-terms', 'range-stars' ) ) ) {
         $this->input_classes[] = 'awf-hidden';
@@ -142,7 +144,7 @@ if( ! class_exists( 'A_W_F_filter_frontend' ) ) {
 
         $wrapper_classes[] = $this->input_classes[] = 'awf-button-filter';
 
-        if( empty( $this->settings['height_limit'] ) || ! empty( $this->settings['shrink_height_limit'] ) ) {
+        if( ! empty( $this->settings['is_dropdown'] ) && ( empty( $this->settings['height_limit'] ) || ! empty( $this->settings['shrink_height_limit'] ) ) ) {
           $wrapper_classes[] = 'awf-adjust-dd-footer';
         }
 
@@ -173,19 +175,17 @@ if( ! class_exists( 'A_W_F_filter_frontend' ) ) {
 
       $html = $this->edit_filter_wrapper( $wrapper_classes, $wrapper_options, $wrapper_append );
 
-      $html = '<div id="' . A_W_F::$front->preset->caller_id . '-filter-' . $this->preset_id . '-' . $this->id . '-wrapper"';
+      $html = '<div id="' . $this->cid . '-wrapper"';
       $html .= ' class="' . implode( ' ', $wrapper_classes ) . '" data-taxonomy="' . esc_attr( $this->var_name ) . '"' . $wrapper_options;
       if( isset( $this->active_values['max'] ) ) { $html .= ' data-taxonomy-max="' . esc_attr( $this->max_var_name ) . '"'; };
       $html .= '>';
 
       if( ! empty( $this->settings['show_title'] ) ) {
-        $html .= '<div class="awf-filter-title-container"><div class="awf-filter-title">' . esc_html( $this->settings['title'] ) . '</div>';
-        $html .= $this->collapse_btn_html();
-        $html .= '</div>';
+        $html .= $this->filter_title_html( ( ! empty( $this->settings['is_collapsible'] ) ), ( ! empty( $this->settings['collapsed_on'] ) ) );
       }
 
       if( ! empty( $this->settings['reset_active'] ) ) {
-        $html .= '<div class="awf-reset-active-container" data-taxonomy="' . esc_attr( $this->var_name ) . '"' . ( empty( $this->max_var_name ) ? '' : ' data-taxonomy-max="' . esc_attr( $this->max_var_name ) . '"' )  . ( empty( $this->active_values ) || ( isset( $this->active_values['min'] ) && ! isset( A_W_F::$front->query->range['min_' . $this->filter_name] ) ) ? ' style="display:none;"' : '' ) . '><span>' . esc_html( $this->settings['reset_active_label'] ) . '</span></div>';
+        $html .= '<div class="awf-reset-active-container" data-taxonomy="' . esc_attr( $this->var_name ) . '"' . ( empty( $this->max_var_name ) ? '' : ' data-taxonomy-max="' . esc_attr( $this->max_var_name ) . '"' )  . ( empty( $this->active_values ) || ( isset( $this->active_values['min'] ) && ! isset( A_W_F::$front->query->range['min_' . $this->filter_name] ) ) ? ' style="display:none;"' : '' ) . ' role="button" aria-label="' . esc_attr( $this->settings['reset_active_label'] ) . '" tabindex="0"><span>' . esc_html( $this->settings['reset_active_label'] ) . '</span></div>';
       }
 
       if( ! empty( $this->settings['show_active'] ) ) {
@@ -210,8 +210,7 @@ if( ! class_exists( 'A_W_F_filter_frontend' ) ) {
       }
       if( ! empty( $this->settings['block_deselection'] ) ) { $html .= ' awf-block-deselection-container'; }
       $html .= ' awf-hierarchical-level-' . $this->hierarchical_level;
-      $html .= '"';
-      $html .= '>';
+      $html .= '">';
 
       if( isset( $this->settings['show_search'] ) && ! empty( $this->settings['show_search'] ) ) {
         $placeholder = '';
@@ -222,8 +221,8 @@ if( ! class_exists( 'A_W_F_filter_frontend' ) ) {
         }
 
         $html .= '<div class="awf-terms-search-container">';
-        $html .= '<input type="text" placeholder="' . $placeholder . '" class="awf-terms-search">';
-        $html .= '<button type="button" class="awf-clear-terms-search-btn"><i class="fas fa-times awf-clear-search-input"></i></button>';
+        $html .= '<input type="text" id="' . $this->cid . '-terms-search" placeholder="' . $placeholder . '" class="awf-terms-search" tabindex="0">';
+        $html .= '<button type="button" class="awf-clear-terms-search-btn" title="' . esc_attr__( 'Clear search field', 'annasta-filters' ) . '" tabindex="-1"><i class="fas fa-times awf-clear-search-input"></i></button>';
         $html .= '</div>';
       }
 
@@ -248,7 +247,7 @@ if( ! class_exists( 'A_W_F_filter_frontend' ) ) {
 
       } else {
         if( isset( $this->terms_by_parent[0] ) ) {
-          $html .= '<ul>' . $this->terms_list_html() . '</ul>';
+          $html .= '<ul role="listbox"' . ( ( 'multi' === $this->settings['type'] ) ? ' aria-multiselectable="true"' : '' ) . ' aria-label="' . esc_attr( $this->settings['title'] ) . '" aria-describedby="awf-filters-listbox-describedby">' . $this->terms_list_html() . '</ul>';
         }
       }
 
@@ -287,7 +286,7 @@ if( ! class_exists( 'A_W_F_filter_frontend' ) ) {
       
       if( ! empty( $this->settings['autocomplete'] ) ) {
         $html .= ' autocomplete="off">';
-        $html .= '<button type="button" class="awf-clear-search-btn"><i class="fas fa-times awf-clear-search-input"></i></button>';
+        $html .= '<button type="button" class="awf-clear-search-btn" tabindex="-1" title="' . esc_attr__( 'Clear search field', 'annasta-filters' ) . '"><i class="fas fa-times awf-clear-search-input"></i></button>';
         $html .= '<div id="' . A_W_F::$front->preset->caller_id . '-' . $this->var_name . '-autocomplete-container" class="awf-product-search-autocomplete-container awf-collapsed';
         
         if( ! empty( $this->settings['style_options']['autocomplete_height_limit'] ) ) {
@@ -297,7 +296,7 @@ if( ! class_exists( 'A_W_F_filter_frontend' ) ) {
         $html .= '" data-after="' . $this->settings['type_options']['autocomplete_after'] . '"></div>';
 
       } else {
-        $html .= '><button type="button" class="awf-clear-search-btn"><i class="fas fa-times awf-clear-search-input"></i></button>';
+        $html .= '><button type="button" class="awf-clear-search-btn" tabindex="-1" title="' . esc_attr__( 'Clear search field', 'annasta-filters' ) . '"><i class="fas fa-times awf-clear-search-input"></i></button>';
       }
 
       $html .= '</div>';
@@ -426,7 +425,7 @@ if( ! class_exists( 'A_W_F_filter_frontend' ) ) {
       
       $html .= '">';
       
-      $html .= '<input id="' . A_W_F::$front->preset->caller_id . '-filter-' . $this->preset_id . '-' . $this->id . '-daterangepicker" type="text" class="awf-daterangepicker';
+      $html .= '<input id="' . $this->cid . '-daterangepicker" type="text" class="awf-daterangepicker';
       if( isset( $this->settings['style_options']['date_picker_type'] ) ) {
         $html .= ' awf-' . $this->settings['style_options']['date_picker_type'] . '-daterangepicker';
       }
@@ -439,7 +438,7 @@ if( ! class_exists( 'A_W_F_filter_frontend' ) ) {
       
       $html .= '>';
       
-      $html .= '<input type="hidden" id="' . A_W_F::$front->preset->caller_id . '-' . $this->var_name . '"';
+      $html .= '<input type="hidden" id="' . $this->cid . '-' . $this->var_name . '"';
       $html .= ' name="' . esc_attr( $this->var_name ) . '" value="' . esc_attr( implode( ',', $this->active_values ) ) . '" data-taxonomy="' . esc_attr( $this->var_name ) . '"';
       $html .= ' class="awf-filter"';
       $html .= ' data-label="' . esc_attr( empty( $this->settings['active_prefix'] ) ? '' : $this->settings['active_prefix'] ) . '"';
@@ -462,6 +461,7 @@ if( ! class_exists( 'A_W_F_filter_frontend' ) ) {
           
           $input_id = A_W_F::$front->preset->caller_id . '-' . $this->var_name . '-' . $slug_for_classes;
           $container_classes = array( 'awf-filter-container', 'awf-' . $this->var_name . '-' . $slug_for_classes . '-container' );
+          $label_props = array();
           $input_classes = $this->input_classes;
           $input_props = array();
           $product_count_html = '';
@@ -474,12 +474,18 @@ if( ! class_exists( 'A_W_F_filter_frontend' ) ) {
             if( $term->slug === $this->active_values['min'] && $term->next_value === $this->active_values['max'] ) {
               $container_classes[] = 'awf-active';
               $input_props[] = 'checked="checked"';
+              $label_props[] = 'aria-selected="true"';
+            } else {
+              $label_props[] = 'aria-selected="false"';
             }
             
           } else {
             if( in_array( $term->slug, $this->active_values ) ) {
               $container_classes[] = 'awf-active';
               $input_props[] = 'checked="checked"';
+              $label_props[] = 'aria-selected="true"';
+            } else {
+              $label_props[] = 'aria-selected="false"';
             }
           }
           
@@ -505,7 +511,7 @@ if( ! class_exists( 'A_W_F_filter_frontend' ) ) {
           $filter_html = '';
 
           if( 'single' === $this->settings['type'] ) {
-            $filter_html .= '<input type="radio" id="' . $input_id . '" name="' . esc_attr( $this->var_name ) . '"';
+            $filter_html .= '<input type="radio" id="' . $input_id . '" name="' . esc_attr( $this->var_name ) . '" tabindex="-1"';
 
             if( 'taxonomy' === $this->module && A_W_F::$front->is_archive === $this->settings['taxonomy'] && 'yes' === get_option( 'awf_hierarchical_archive_permalinks', 'no' ) && A_W_F::$front->permalinks_on ) {
               $archive_permalink = get_term_link( $term->slug, A_W_F::$front->is_archive );
@@ -515,10 +521,10 @@ if( ! class_exists( 'A_W_F_filter_frontend' ) ) {
             }
 
           } else if( 'multi' === $this->settings['type'] ) {
-            $filter_html .= '<input type="checkbox" id="' . $input_id . '" name="' . esc_attr( $this->var_name ) . '[]"';
+            $filter_html .= '<input type="checkbox" id="' . $input_id . '" name="' . esc_attr( $this->var_name ) . '[]" tabindex="-1"';
 
           } else if( 'range' === $this->settings['type'] ) {
-            $filter_html .= '<input type="radio" id="' . $input_id . '" name="' . esc_attr( $this->var_name ) . '"';
+            $filter_html .= '<input type="radio" id="' . $input_id . '" name="' . esc_attr( $this->var_name ) . '" tabindex="-1"';
             $filter_html .= ' data-filter-name="' . $this->filter_name . '"';
             $filter_html .= ' data-max-name="' . $this->max_var_name . '"';
             
@@ -539,9 +545,7 @@ if( ! class_exists( 'A_W_F_filter_frontend' ) ) {
 
           $filter_html .= ' class="' . implode( ' ', $input_classes ) . '" ' . implode( ' ', $input_props ) . '>';
 
-          $filter_html .= '<label';
-          if( true !== A_W_F::$front->preset->is_url_query ) { $filter_html .= ' for="' . $input_id . '"'; };
-
+          $filter_html .= '<label for="' . $input_id . '"';
           $filter_html .= ' class="';
           
           if( in_array( $this->settings['style'], array( 'images', 'colours', 'custom-terms' ) ) ) { 
@@ -560,7 +564,7 @@ if( ! class_exists( 'A_W_F_filter_frontend' ) ) {
           $title_attr = esc_attr( $title_attr );
           $filter_html .= ' title="' . $title_attr . '" data-badge-label="' . $title_attr . '"';
           
-          $filter_html .= '>';
+          $filter_html .= ' tabindex="0" role="option" ' . implode( ' ', $label_props ) . '>';
 
           if( isset( $this->settings['style_options']['hide_label'] ) ) {
             $filter_html .= '<span class="awf-count-wo-label">' . $product_count_html . '</span>';
@@ -587,7 +591,7 @@ if( ! class_exists( 'A_W_F_filter_frontend' ) ) {
             
             if( empty( $href ) ) { $href = 'javascript:void(0);'; } else { $href = esc_url( $href ); }
 
-            $html .= '<a href="' . $href . '">';
+            $html .= '<a href="' . $href . '" tabindex="-1">';
             $html .= $filter_html;
             $html .= '</a>';
 
@@ -790,8 +794,30 @@ if( ! class_exists( 'A_W_F_filter_frontend' ) ) {
       if( ! empty( $this->settings['is_collapsible'] ) ) {
         $classes[] = 'awf-collapsible';
         if( ! empty( $this->settings['collapsed_on'] ) ) { $classes[] = 'awf-collapsed'; }
-        $options .= ' tabindex="' . ( 100 + intval( A_W_F::$presets[A_W_F::$front->preset->id]['filters'][$this->id] ) ) . '"';
       }
+    }
+    
+    protected function filter_title_html( $is_collapsible, $collapsed_on ) {
+      $html = '';
+
+      if( $is_collapsible ) {
+        $html .= '<div class="awf-filter-title-container" role="button" aria-label="' . esc_attr( $this->settings['title'] ) . '" tabindex="0"';
+        
+        if( $collapsed_on ) {
+          $html .= ' aria-expanded="false"';
+        } else {
+          $html .= ' aria-expanded="true"';
+        }
+
+        $html .= '>';
+        $html .= '<div class="awf-filter-title">' . esc_html( $this->settings['title'] ) . '</div>';
+        $html .= '<div class="awf-collapse-btn"></div></div>';
+  
+      } else {
+        $html .= '<div class="awf-filter-title-container"><div class="awf-filter-title" role="heading" aria-level="3">' . esc_html( $this->settings['title'] ) . '</div></div>';
+      }
+      
+      return $html;
     }
     
     protected function collapse_btn_html() {

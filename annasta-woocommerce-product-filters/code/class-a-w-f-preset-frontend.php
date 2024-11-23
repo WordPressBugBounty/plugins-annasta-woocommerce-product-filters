@@ -99,7 +99,7 @@ if( ! class_exists( 'A_W_F_preset_frontend' ) ) {
       if( in_array( $this->display_mode, array( 'togglable', 'togglable-on-s' ) ) ) {
         $close_label = get_option( 'awf_popup_close_btn_label', __( 'Close filters', 'annasta-filters' ) );
 
-        $html .= '<div class="awf-togglable-preset-close-btn" title="' . esc_attr( $close_label ) . '"><i class="fas fa-times"></i><span>' . esc_html( $close_label ) . '</span></div>';
+        $html .= '<div class="awf-togglable-preset-close-btn" title="' . esc_attr( $close_label ) . '" role="button" aria-label="' . esc_attr( $close_label ) . '" tabindex="0"><i class="fas fa-times"></i><span>' . esc_html( $close_label ) . '</span></div>';
       }
       
       $html .= '<div class="awf-preset-title">' . esc_html( $this->title ) . '</div>';

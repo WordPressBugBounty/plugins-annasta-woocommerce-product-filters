@@ -371,7 +371,7 @@ input[type='text'].awf-terms-search {
 }
 
 .awf-dropdown.awf-button-filter .awf-submit-btn-container button.awf-apply-filter-btn {
-  margin: 0 2px;
+  margin: 0 5px;
 }
 
 /****** end of Button-submitted filters inside dropdown */
@@ -660,6 +660,7 @@ li.awf-filter-container {
   height: auto;
   line-height: inherit;
   vertical-align: inherit;
+  color: #555555;
   font-size: 1.1em;
   background: none;
   border: none;
@@ -1864,6 +1865,10 @@ li.awf-filter-container {
 
 /* Daterangepicker adjustments */
 
+.daterangepicker {
+  z-index: 1000000;
+}
+
 .daterangepicker .drp-calendar {
   max-width: 370px;
 }
@@ -2157,6 +2162,12 @@ ul.awf-product-categories.columns-6 li.product-category {
   width: 15%;
 }
 
+ul.awf-product-categories li.product-category a {
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
 ul.awf-product-categories li.product-category img {
   margin-right: auto;
   margin-left: auto;
@@ -2201,3 +2212,44 @@ ul.awf-product-categories li.product-category .woocommerce-loop-category__title 
 }
 
 /* end of Product Categories / Subcategories Support */
+
+/* Accessibility Adjustments */
+
+.awf-preset-wrapper,
+.awf-togglable-preset-btn,
+.awf-extra-badges,
+.awf-product-categories,
+.awf-extra-reset-btn-container {
+  --awf-fv-outline-color: #333;
+}
+
+.awf-product-categories li.product-category a:focus-visible,
+.noUi-handle:focus-visible,
+.awf-filter-title-container:focus-visible,
+.awf-active-badge:focus-visible,
+.awf-terms-search:focus-visible,
+.awf-togglable-preset-btn:focus-visible,
+.awf-togglable-preset-close-btn:focus-visible,
+button.awf-apply-filter-btn:focus-visible,
+button.awf-reset-btn:focus-visible {
+  outline: 2px solid var(--awf-fv-outline-color);
+  outline-offset: 3px;
+}
+
+.awf-dropdown .awf-filter-title-container:focus-visible,
+.awf-filter-container.awf-product-search-container .awf-filter:focus-visible,
+.awf-clear-search-btn:focus-visible,
+.awf-clear-terms-search-btn:focus-visible,
+.awf-thl-more-btn:focus-visible,
+.awf-thl-less-btn:focus-visible {
+  outline: 2px solid var(--awf-fv-outline-color);
+  outline-offset: -2px;
+}
+
+.awf-filter-container input[type='checkbox'] + label:focus-visible,
+.awf-filter-container input[type='radio'] + label:focus-visible {
+  outline: 2px solid var(--awf-fv-outline-color);
+  outline-offset: -1px;
+}
+
+/* end of Accessibility Adjustments */

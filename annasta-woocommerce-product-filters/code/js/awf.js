@@ -9,6 +9,10 @@ var awf_data = typeof( awf_data ) === 'undefined' ? { query: {} } : awf_data;
 jQuery( document ).ready( function( $ ){
   'use strict';
 
+  if( ! ( 'preset_wrappers' in a_w_f ) ) {
+    a_w_f.preset_wrappers = $( '.awf-preset-wrapper' );
+  }
+
   a_w_f.set_filter_events = function( $filter ) {
     
     var $preset_wrapper = $filter.closest( '.awf-preset-wrapper' );
@@ -29,6 +33,10 @@ jQuery( document ).ready( function( $ ){
   
       } else {
         $filter.on( 'click', function() {
+          if( $preset_wrapper.hasClass( 'awf-left-popup-sidebar-mode' ) ) {
+            a_w_f.close_togglable_preset();
+          }
+          $( 'body' ).block( $( '<div class="awf-loader"></div>' ) );
           window.location.href = $( this ).closest( 'a' ).attr( 'href' );
         });
       }
@@ -42,31 +50,61 @@ jQuery( document ).ready( function( $ ){
     }
       
     if( $filter_container.hasClass( 'awf-product-search-container' ) ) {
+      var $clear_btn = $filter.siblings( '.awf-clear-search-btn' ).first();
 
-      $filter.on( 'keydown', function( event ) {
-        if( event.keyCode === 13 ) {
-          if( $filter.hasClass( 'awf-button-filter' ) ) {
+      $filter.on( 'keydown', function( e ) {
+        if( e.keyCode === 13 ) {
+          e.preventDefault();
+
+          if( $filter.hasClass( 'awf-submit-on-change') ) {
+            $filter.removeClass( 'awf-cancel-product-search-update' ).trigger( 'change' );
+            $clear_btn.focus();
+            $( '#' + $filter.attr( 'id' ) + '-autocomplete-container' ).first().addClass( 'awf-collapsed' );
+
+          } else if( $filter.hasClass( 'awf-button-filter' ) ) {
             $filter.closest( '.awf-filter-wrapper' ).find( '.awf-apply-filter-btn, .awf-submit-btn' ).first().focus();
+            
           } else {
-            $filter.trigger( 'blur' );
+            $filter.addClass( 'awf-cancel-product-search-update' );
+            $clear_btn.focus();
           }
 
-          return false;
-        }
-      });
+        } else if( e.keyCode === 9 ) {
 
-      $filter.siblings( '.awf-clear-search-btn' ).on( 'focusin', function() {
-        $filter.addClass( 'awf-cancel-product-search-update' );
-        $( '#' + $filter.attr( 'id' ) + '-autocomplete-container' ).first().html( '' );
-        $filter.val( '' ).trigger( 'focus' );
-      } );
-      
-      $filter.on( 'blur', function() {
-        if( $filter.hasClass( 'awf-cancel-product-search-update' ) ) {
-          $filter.removeClass( 'awf-cancel-product-search-update' );
-          if( 0 === $filter.val().length ) { $filter.trigger( 'change' ); }
+          $filter.addClass( 'awf-cancel-product-search-update' );
+
+          if( ! e.shiftKey ) {
+            e.preventDefault();
+            $clear_btn.focus();
+          }
         }
-      });
+      } )
+      .on( 'blur', function( e ) {
+        if( ! $( e.relatedTarget ).is( $clear_btn ) ) {
+          $filter.removeClass( 'awf-cancel-product-search-update' ).trigger( 'change' );
+        }
+      })
+      ;
+
+      $clear_btn
+        .on( 'click', function() {
+          $( '#' + $filter.attr( 'id' ) + '-autocomplete-container' ).first().html( '' );
+          $filter.removeClass( 'awf-cancel-product-search-update' ).val( '' ).trigger( 'change' ).focus();
+        })
+        .on( 'keydown', function( e ) {
+          if( e.keyCode === 13 || e.keyCode === 32 ) {
+            e.preventDefault();
+
+            $( '#' + $filter.attr( 'id' ) + '-autocomplete-container' ).first().html( '' );
+            $filter.addClass( 'awf-cancel-product-search-update' ).val( '' ).focus();
+          }
+        })
+        .on( 'blur', function( e ) {
+          if( ! $( e.relatedTarget ).is( $filter ) ) {
+            $filter.removeClass( 'awf-cancel-product-search-update' ).trigger( 'change' );
+          }
+        });
+      ;
 
       if( $filter_container.hasClass( 'awf-search-autocomplete' ) ) {
         var $autocomplete = $( '#' + $filter.attr( 'id' ) + '-autocomplete-container' ).first();
@@ -75,14 +113,29 @@ jQuery( document ).ready( function( $ ){
           $autocomplete.removeClass( 'awf-collapsed' );
         });
 
-        $filter_container.on( 'focusout', function( e ) { 
-          if( $filter_container.has( e.relatedTarget ).length === 0 ) { $autocomplete.addClass( 'awf-collapsed' ); }
+        $filter.on( 'focusout', function( e ) {
+          if( 0 === $autocomplete.has( $( e.relatedTarget ) ).length && ! $( e.relatedTarget ).is( $clear_btn ) ) {
+            $autocomplete.addClass( 'awf-collapsed' );
+          }
+        });
+
+        $autocomplete.on( 'focusout', function( e ) {
+          if( 0 === $autocomplete.has( $( e.relatedTarget ) ).length && ! $( e.relatedTarget ).is( $filter ) && ! $( e.relatedTarget ).is( $clear_btn ) ) {
+            $autocomplete.addClass( 'awf-collapsed' );
+            $filter.removeClass( 'awf-cancel-product-search-update' ).trigger( 'change' );
+          }
+        });
+
+        $clear_btn.on( 'focusout', function( e ) { 
+          if( 0 === $autocomplete.has( $( e.relatedTarget ) ).length && ! $( e.relatedTarget ).is( $filter ) ) {
+            $autocomplete.addClass( 'awf-collapsed' );
+          }
         });
 
         a_w_f.autocomplete_cid = 0;
         var debounce_autocomplete = null;
 
-        $filter.on('input', function() {
+        $filter.on( 'input', function() {
           var cid = a_w_f.autocomplete_cid = ++a_w_f.autocomplete_cid;
           clearTimeout( debounce_autocomplete );
 
@@ -121,7 +174,6 @@ jQuery( document ).ready( function( $ ){
           var old_value = ( $filter.attr( 'data-taxonomy' ) in awf_data.query ) ? awf_data.query[$filter.attr( 'data-taxonomy' )] : '';
 
           if( $filter.val() !== old_value ) {
-
             setTimeout( function() {
               if( ! $filter.hasClass( 'awf-cancel-product-search-update' ) ) {
                 a_w_f.product_search_onchange( $filter );
@@ -173,7 +225,7 @@ jQuery( document ).ready( function( $ ){
 
       if( 0 === $( $searchbox ).val().length ) { $container.removeClass( 'awf-active' ); }
       else { $container.addClass( 'awf-active' ); }
-      
+
       if( el === $searchbox[0] ) { a_w_f.update_query( $searchbox, $container, true ); }
       else { $( el ).val( $( $searchbox ).val() ); }
       
@@ -211,6 +263,7 @@ jQuery( document ).ready( function( $ ){
             var $response = $( response );
             if( $response.hasClass( 'woocommerce' ) ) {
               $response.removeClass().addClass( 'awf-ac-container' ).find( awf_data.products_container ).removeClass().addClass( 'awf-ac-products-container' );
+              $response.find( 'a' ).attr( 'tabindex', '-1' );
               $autocompletes.empty().append( $response );
             }
 
@@ -333,22 +386,22 @@ jQuery( document ).ready( function( $ ){
             return;
           }
 
-          $filter_wrappers.filter( '.awf-range' ).find( 'input.awf-filter[value="' + $filter.val() + '"][data-next-value="' + $filter.attr( 'data-next-value' ) + '"]' ).prop( 'checked', false ).closest( '.awf-filter-container' ).removeClass( 'awf-active' );
+          $filter_wrappers.filter( '.awf-range' ).find( 'input.awf-filter[value="' + $filter.val() + '"][data-next-value="' + $filter.attr( 'data-next-value' ) + '"]' ).prop( 'checked', false ).siblings( 'label' ).attr( 'aria-selected', 'false' ).closest( '.awf-filter-container' ).removeClass( 'awf-active' );
 
         } else {
           $filter_wrappers.filter( '.awf-single' ).find( '.awf-filter-container.awf-active' ).removeClass( 'awf-active' ).find( 'input' ).prop( 'checked', false );
-          $filter_wrappers.filter( '.awf-multi' ).find( 'input.awf-filter[value="' + $filter.val() + '"]' ).prop( 'checked', false ).closest( '.awf-filter-container' ).removeClass( 'awf-active' );
+          $filter_wrappers.filter( '.awf-multi' ).find( 'input.awf-filter[value="' + $filter.val() + '"]' ).prop( 'checked', false ).siblings( 'label' ).attr( 'aria-selected', 'false' ).closest( '.awf-filter-container' ).removeClass( 'awf-active' );
           
           var $defaults = $filter_wrappers.find( '.awf-default' );
           if( 0 < $defaults.length ) {
             $filter = $defaults.first();
             $container = $filter.closest( '.awf-filter-container' );
-            $defaults.prop( 'checked', true ).closest( '.awf-filter-container' ).addClass( 'awf-active' );
+            $defaults.prop( 'checked', true ).siblings( 'label' ).attr( 'aria-selected', 'true' ).closest( '.awf-filter-container' ).addClass( 'awf-active' );
           }
         }
 
       } else {
-        $filter_wrappers.find( 'input.awf-filter[value="' + $filter.val() + '"]' ).prop( 'checked', false ).closest( '.awf-filter-container' ).removeClass( 'awf-active' );
+        $filter_wrappers.find( 'input.awf-filter[value="' + $filter.val() + '"]' ).prop( 'checked', false ).siblings( 'label' ).attr( 'aria-selected', 'false' ).closest( '.awf-filter-container' ).removeClass( 'awf-active' );
       }
       
     } else {
@@ -356,7 +409,7 @@ jQuery( document ).ready( function( $ ){
       if( $filter.is( ':radio' ) ) {
 
         var $filter_containers = $filter_wrappers.find( '.awf-filter-container' );
-        $filter_containers.removeClass( 'awf-active' ).find( 'input' ).prop( 'checked', false );
+        $filter_containers.removeClass( 'awf-active' ).find( 'input' ).prop( 'checked', false ).siblings( 'label' ).attr( 'aria-selected', 'false' );
         
         if( $container.hasClass( 'awf-range-filter-container' ) ) {
           var $slider = $filter_wrappers.find( '.awf-style-range-slider .awf-filter-container' ).first();
@@ -369,15 +422,15 @@ jQuery( document ).ready( function( $ ){
             return;
           }
 
-          $filter_containers.find( 'input.awf-filter[value="' + $filter.val() + '"][data-next-value="' + $filter.attr( 'data-next-value' ) + '"]' ).prop( 'checked', true ).closest( '.awf-filter-container' ).addClass( 'awf-active' );
+          $filter_containers.find( 'input.awf-filter[value="' + $filter.val() + '"][data-next-value="' + $filter.attr( 'data-next-value' ) + '"]' ).prop( 'checked', true ).siblings( 'label' ).attr( 'aria-selected', 'true' ).closest( '.awf-filter-container' ).addClass( 'awf-active' );
 
         } else {
-          $filter_containers.find( 'input.awf-filter[value="' + $filter.val() + '"]' ).prop( 'checked', true ).closest( '.awf-filter-container' ).addClass( 'awf-active' );
+          $filter_containers.find( 'input.awf-filter[value="' + $filter.val() + '"]' ).prop( 'checked', true ).siblings( 'label' ).attr( 'aria-selected', 'true' ).closest( '.awf-filter-container' ).addClass( 'awf-active' );
         }
                 
       } else {
-        $filter_wrappers.filter( '.awf-single' ).find( '.awf-filter-container.awf-active' ).removeClass( 'awf-active' ).find( 'input' ).prop( 'checked', false );
-        $filter_wrappers.find( 'input.awf-filter[value="' + $filter.val() + '"]' ).prop( 'checked', true ).closest( '.awf-filter-container' ).addClass( 'awf-active' );
+        $filter_wrappers.filter( '.awf-single' ).find( '.awf-filter-container.awf-active' ).removeClass( 'awf-active' ).find( 'input' ).prop( 'checked', false ).siblings( 'label' ).attr( 'aria-selected', 'false' );
+        $filter_wrappers.find( 'input.awf-filter[value="' + $filter.val() + '"]' ).prop( 'checked', true ).siblings( 'label' ).attr( 'aria-selected', 'true' ).closest( '.awf-filter-container' ).addClass( 'awf-active' );
         $filter_wrappers.filter( '.awf-multi' ).find( 'input.awf-filter[value="' + $filter.val() + '"]' ).each( function() {
           a_w_f.uncheck_parents_and_children( this );
         });
@@ -396,14 +449,14 @@ jQuery( document ).ready( function( $ ){
   a_w_f.uncheck_parents_and_children = function( checkbox ) {
     $( checkbox ).parents( 'ul' ).prev( 'li.awf-filter-container.awf-active' ).each( function( i, container ) {
       $( container ).removeClass( 'awf-active' ).find( '.awf-filter' ).each( function( ii, filter ) {
-        $( filter ).prop( 'checked', false );
+        $( filter ).prop( 'checked', false ).siblings( 'label' ).attr( 'aria-selected', 'false' );
         a_w_f.update_query( $( filter ), $( container ), false );
       });
     });
     
     $( checkbox ).parents( 'li.awf-filter-container' ).next( 'ul' ).find( '.awf-filter-container.awf-active' ).each( function( i, container ) {
       $( container ).removeClass( 'awf-active' ).find( '.awf-filter' ).each( function( ii, filter ) {
-        $( filter ).prop( 'checked', false );
+        $( filter ).prop( 'checked', false ).siblings( 'label' ).attr( 'aria-selected', 'false' );
         a_w_f.update_query( $( filter ), $( container ), false );
       });
     });
@@ -614,7 +667,10 @@ jQuery( document ).ready( function( $ ){
     var $badge = $( '<div>', {
       class: classes.join( ' ' ),
 			title: awf_data.i18n.badge_reset_label,
-			'data-taxonomy': badge_taxonomy
+			'data-taxonomy': badge_taxonomy,
+      'tabindex': '0',
+      'role': 'button',
+      'aria-label': label
     }).append( 
       $( '<i class="fas fa-times"></i>' ),
       '<span>' + label + '</span>'
@@ -673,6 +729,10 @@ jQuery( document ).ready( function( $ ){
       if( $filter instanceof jQuery ) {
         a_w_f.update_url();
       } else {
+        if( $preset_wrapper.hasClass( 'awf-left-popup-sidebar-mode' ) ) {
+          a_w_f.close_togglable_preset();
+        }
+        $( 'body' ).block( $( '<div class="awf-loader"></div>' ) );
         window.location.href = a_w_f.build_url( $.extend( true, {}, awf_data.query ) );
       }
       
@@ -1047,7 +1107,7 @@ jQuery( document ).ready( function( $ ){
     
     var callers = [];
 
-    $( '.awf-preset-wrapper' ).each( function( i, el ) {
+    a_w_f.preset_wrappers.each( function( i, el ) {
       callers.push( $( el ).attr( 'id' ) );
     });
 
@@ -1951,7 +2011,9 @@ jQuery( document ).ready( function( $ ){
           }
         }
         
-        if( awf_data.togglable_preset.close_preset_on_ajax_update ) { a_w_f.close_togglable_preset(); }
+        if( awf_data.togglable_preset.close_preset_on_ajax_update ) {
+          a_w_f.close_togglable_preset();
+        }
       } );
       
       $( document ).on( 'awf_after_ajax_products_update', function() {
@@ -2030,7 +2092,7 @@ jQuery( document ).ready( function( $ ){
   
   a_w_f.insert_togglable_preset_btn = function() {
 
-    var $togglable_preset_btn = $( '<div class="awf-togglable-preset-btn"><i class="fas fa-bars awf-togglable-preset-btn-icon"></i><span>' + awf_data.i18n.togglable_preset_btn_label + '</span></div>' );
+    var $togglable_preset_btn = $( '<div class="awf-togglable-preset-btn" role="button" aria-label="' + awf_data.i18n.togglable_preset_btn_label + '" tabindex="0"><i class="fas fa-bars awf-togglable-preset-btn-icon"></i><span>' + awf_data.i18n.togglable_preset_btn_label + '</span></div>' );
 
     var $position = $( '.annasta-toggle-filters-button' ).first();
     
@@ -2070,13 +2132,17 @@ jQuery( document ).ready( function( $ ){
       $togglable_preset_btn.addClass( 'awf-show-togglable-preset-btn' );
     }
     
-    $togglable_preset_btn.off( 'click' ).on( 'click', function() {
-      
+    $togglable_preset_btn
+    .off( 'click' )
+    .on( 'click', function() {
+    
       if( a_w_f.togglable_preset.hasClass( 'awf-left-popup-sidebar-mode' ) ) {
         $( 'body' ).addClass( 'awf-togglable-preset-on' );
         
         a_w_f.togglable_preset.before( '<div class="awf-togglable-preset-overlay"></div>' );
         $( '.awf-togglable-preset-overlay' ).on( 'click', a_w_f.close_togglable_preset );
+
+        $( '.awf-togglable-preset-close-btn' ).focus();
         
       } else if( a_w_f.togglable_preset.hasClass( 'awf-above-products-mode' ) ) {
         $( 'body' ).toggleClass( 'awf-togglable-preset-on' );
@@ -2087,21 +2153,38 @@ jQuery( document ).ready( function( $ ){
           if( a_w_f.togglable_preset.has( $( ps.element ) ) ) { ps.update(); }
         });
       }
-      
-    });
+    
+    })
+    .off( 'keydown' )
+    .on( 'keydown', function( event ) {
+      if( event.keyCode === 13 || event.keyCode === 32 ) {
+        event.preventDefault();
+
+        $( this ).trigger( 'click' );
+      }
+    })
   };
   
   a_w_f.close_togglable_preset = function() {
     $( 'body' ).removeClass( 'awf-togglable-preset-on' );
     $( '.awf-togglable-preset-overlay' ).remove();
+    $( '.awf-togglable-preset-btn' ).focus();
   };
   
   a_w_f.toggle_collapsible = function( $filter_title_container ) {
 
+    if( 0 === $filter_title_container.length ) { return; }
+
     var $fw = $filter_title_container.closest( '.awf-filter-wrapper' );
     $fw.toggleClass( 'awf-collapsed' );
 
-    if( ! $fw.hasClass( 'awf-collapsed' ) ) {
+    if( $fw.hasClass( 'awf-collapsed' ) ) {
+      $filter_title_container.attr( 'aria-expanded', 'false' );
+
+    } else {
+      $filter_title_container.attr( 'aria-expanded', 'true' );
+      $fw.find( '.awf-filters-container :focusable' ).first().focus();
+
       var $has_ps = $fw.find( '.awf-pretty-scrollbars' ).first();
 
       if( 0 < $has_ps.length ) {
@@ -2285,12 +2368,6 @@ jQuery( document ).ready( function( $ ){
     }
   }
   
-  if( 'undefined' !== typeof PerfectScrollbar ) {
-    $( '.awf-pretty-scrollbars' ).each( function( i, container ) {
-      a_w_f.pretty_scrollbars.push( new PerfectScrollbar( container, { suppressScrollX: true } ) );
-    });
-  }
-  
   $( '.awf-filter' ).each( function( i, filter ) {
     a_w_f.set_filter_events( $( filter ) );
   });
@@ -2410,7 +2487,7 @@ jQuery( document ).ready( function( $ ){
     a_w_f.cc_filters.each( function( i, filter ) {
       var $fsc = $( filter );
 
-      $fsc.on( 'click', '.awf-parent-container:not(.awf-hide-collapse-button)', function( event ) {
+      $fsc.children( 'ul').first().on( 'click', '.awf-parent-container:not(.awf-hide-collapse-button)', function( event ) {
         
         if( ( 'target' in event ) && ! $( event.target ).hasClass( 'awf-filter-container' ) ) { return; }
 
@@ -2418,7 +2495,15 @@ jQuery( document ).ready( function( $ ){
         var $filter_wrapper = $filter_container.closest( '.awf-filter-wrapper' );
         $filter_container.toggleClass( 'awf-collapsed-on' );
         $filter_container.next( '.awf-children-container' ).toggleClass( 'awf-collapsed' );
-        
+
+        if( $filter_container.hasClass( 'awf-collapsed-on' ) ) {
+          $filter_container.attr( 'aria-expanded', 'false' );
+        } else {
+          $filter_container.attr( 'aria-expanded', 'true' );
+        }
+
+        $filter_container.find( 'label' ).first().focus(); // Talkback fix
+
         var $a_filter = $filter_container.find( '.awf-filter' ).first();
         if( $a_filter.length > 0 ) {
           $.each( a_w_f.pretty_scrollbars, function( i, ps ) {
@@ -2427,9 +2512,8 @@ jQuery( document ).ready( function( $ ){
             }
           });
 
-          if( $filter_wrapper.hasClass( 'awf-thl' ) ) { a_w_f.update_thl( $filter_wrapper ); }
-          if( $filter_wrapper.hasClass( 'awf-thl' ) || $filter_wrapper.hasClass( 'awf-adjust-dd-footer' ) ) {
-            a_w_f.adjust_dropdown_footer( $filter_wrapper );
+          if( $filter_wrapper.hasClass( 'awf-thl' ) ) {
+            a_w_f.update_thl( $filter_wrapper );
           }
         }
       });
@@ -2443,17 +2527,17 @@ jQuery( document ).ready( function( $ ){
       }
     } );
   }
-  
-  $( document ).on( 'input', '.awf-terms-search', function() {
-    awf_search_filter_terms( $( this ) );
-  });
-  
-  $( document ).on( 'keyup', '.awf-terms-search', function( event ) {
-    if( event.keyCode === 8 || event.keyCode === 46 ) { awf_search_filter_terms( $( this ) ); }
-  });
-  
-  $( document ).on( 'click', '.awf-clear-terms-search-btn', function() {
-    awf_search_filter_terms( $( this ).siblings( '.awf-terms-search' ).val( '' ) );
+
+  a_w_f.preset_wrappers.find( '.awf-terms-search' ).each( function() {
+    var $ts = $( this );
+
+    $ts.on( 'input', function() {
+      awf_search_filter_terms( $( this ) );
+    });
+
+    $ts.siblings( '.awf-clear-terms-search-btn' ).on( 'click', function() {
+      awf_search_filter_terms( $( this ).siblings( '.awf-terms-search' ).val( '' ).focus() );
+    });
   });
   
   awf_register_reset_btns();
@@ -2494,26 +2578,351 @@ jQuery( document ).ready( function( $ ){
     } );
   }
 
+  a_w_f.accessibility_alert = function( text ) {
+
+    if( 'disable_accessibility_support' in awf_data ) { return; }
+
+    setTimeout( function() {
+      $( '#awf-accessibility-alert' ).css( 'display', 'block' ).attr( 'role', 'alert' ).attr( 'aria-live', 'assertive' ).text( text );
+      setTimeout( function() {
+        $( '#awf-accessibility-alert' ).css( 'display', 'none' ).attr( 'role', '' ).attr( 'aria-live', '' );
+      }, 2000);
+    }, 500);
+
+  }
+  
+  if( ! ( 'disable_accessibility_support' in awf_data ) ) {
+
+    $( document ).on( 'keydown', '.awf-active-badge', function( event ) {
+      if( event.keyCode === 13 || event.keyCode === 32 ) {
+        event.preventDefault();
+        this.click();
+      }
+    });
+
+    $( document ).on( 'focusout', '.awf-extra-badges, .awf-extra-reset-btn-container', function( e ) {
+      delete a_w_f.blockui_focus_backup;
+    } );
+
+    $( document ).on( 'awf_after_ajax_products_update', function( event, $response ) {
+      if( 'blockui_focus_backup' in a_w_f ) {
+        if( a_w_f.blockui_focus_backup.is( ':focusable' ) ) {
+          a_w_f.blockui_focus_backup.focus();
+
+        } else {
+          var $bfb = a_w_f.blockui_focus_backup.find( ':focusable' ).first();
+
+          if( 1 === $bfb.length ) {
+            $bfb.focus();
+          } else {
+            $bfb = a_w_f.blockui_focus_backup.closest( '.awf-filter-wrapper' ).find( ':focusable' ).first();
+            if( 1 === $bfb.length ) {
+              $bfb.focus();
+            } else {
+              $( awf_data.products_container ).find( ':focusable' ).first().focus().trigger( 'blur' );
+            }
+          }
+        }
+
+        delete a_w_f.blockui_focus_backup;
+
+      } else {
+        $( awf_data.products_container ).find( ':focusable' ).first().focus().trigger( 'blur' );
+      }
+
+      var alert = $( '.woocommerce-result-count' ).first().text();
+
+      if( 0 < alert.length ) {
+        a_w_f.accessibility_alert( alert );
+      } else {
+        alert = $( awf_data.no_result_container ).first().text();
+        if( 0 < alert.length ) {
+          a_w_f.accessibility_alert( alert );
+        } 
+      }
+
+    } );
+
+    a_w_f.preset_wrappers.each( function() {
+      var $pw = $( this );
+     
+      $pw.on( 'focusout', function( e ) {
+        if( 0 === $pw.has( $( e.relatedTarget ) ).length ) {
+          if( $pw.hasClass( 'awf-togglable-preset' ) && awf_data.togglable_preset.close_preset_on_ajax_update ) {
+            a_w_f.blockui_focus_backup = $( '.awf-togglable-preset-btn' );
+
+          } else {
+            a_w_f.blockui_focus_backup = $( e.target );
+
+            if( a_w_f.blockui_focus_backup.hasClass( 'awf-reset-active-container' ) ) {
+              a_w_f.blockui_focus_backup = a_w_f.blockui_focus_backup.closest( '.awf-filter-wrapper' ).first();
+            } else if( a_w_f.blockui_focus_backup.hasClass( 'awf-reset-btn' ) ) {
+              a_w_f.blockui_focus_backup = a_w_f.blockui_focus_backup.closest( '.awf-preset-wrapper' ).first()
+            } else if( a_w_f.blockui_focus_backup.hasClass( 'awf-active-badge' ) ) {
+                a_w_f.blockui_focus_backup = a_w_f.blockui_focus_backup.closest( '.awf-filter-wrapper, .awf-preset-wrapper' ).first();
+            }
+          }
+        }
+      } );
+    
+      $pw.find( '.awf-filter-wrapper' ).each( function() {
+        var $fw = $( this );
+        var fw_is;
+        var $cont;
+
+        if( $fw.hasClass( 'awf-date' ) ) {
+          fw_is = 'date';
+        } else if( 0 < $fw.find( '.awf-product-search' ).first().length ) {
+          $cont = $fw.find( '.awf-search-autocomplete' ).first();
+          if( 0 < $cont.length ) {
+            fw_is = 'search_ac';
+          } else {
+            fw_is = 'search';
+          }
+        } else if( $fw.hasClass( 'awf-range' ) && 0 < $fw.find( '.awf-style-range-slider' ).first().length ) {
+          fw_is = 'slider';
+        } else {
+          fw_is = 'list';
+          $cont = $fw.find( '.awf-filters-container' ).first();
+          
+          $( document ).on( 'awf_after_setup', function() {
+            $fw.children( '.awf-pretty-scrollbars' ).find( '.ps__thumb-y' ).attr( 'tabindex', '' );
+          } );
+        }
+                
+        $fw.on( 'keydown', function( e ) {
+
+          switch( e.keyCode ) {
+            case 40:
+              e.preventDefault();
+
+              var $active = $( e.target );
+
+              if( 'search_ac' === fw_is && $cont.has( $active ) ) {
+                if( $active.is( 'a' ) ) {
+                  var f = false;
+
+                  $cont.find( 'a' ).each( function( i, a ) {
+                    if( f ) {
+                      $( a ).focus();
+                      return false;
+                    } else {
+                      if( $active.is( $( a ) ) ) { f = true; }
+                    }
+                  });
+                } else {
+                  $cont.find( 'a' ).first().focus();
+                }
+
+              } else if( 'list' === fw_is ) {
+                if( ! $active.is( 'label' ) ) {
+                  $active = $active.find( 'label:focusable' ).first();
+                }
+    
+                if( 0 === $active.length ) {
+                  $active = $fw.find( 'label:focusable' ).first();
+    
+                } else {
+                  var f = false;
+
+                  $fw.find( 'label:focusable' ).each( function( i, label ) {
+                    if( f ) {
+                      $active = $( label );
+                      return false;
+                    } else {
+                      if( $active.is( $( label ) ) ) { f = true; }
+                    }
+                  });                  
+                }
+    
+                $active.focus();
+              }
+  
+              break;
+            case 38:            
+              e.preventDefault();
+              var $active = $( e.target );
+
+              if( 'search_ac' === fw_is && $cont.has( $active ) ) {
+                if( $active.is( 'a' ) ) {
+                  var all = $cont.find( 'a' ).get().reverse();
+                  var f = false;
+
+                  $( all ).each( function( i, a ) {
+                    if( f ) {
+                      $( a ).focus();
+                      return false;
+                    } else {
+                      if( $active.is( $( a ) ) ) { f = true; }
+                    }
+                  });
+                } else {
+                  $cont.find( 'a' ).last().focus();
+                }
+
+              } else if( 'list' === fw_is ) {
+
+                if( ! $active.is( 'label' ) ) {
+                  $active = $active.find( 'label:focusable' ).first();
+                }
+    
+                if( 0 === $active.length ) {
+                  $active = $fw.find( 'label:focusable' ).last();
+    
+                } else {
+                  var $all = $fw.find( 'label:focusable' ).get().reverse();
+                  var f = false;
+
+                  $( $all ).each( function( i, label ) {
+                    if( f ) {
+                      $active = $( label );
+                      return false;
+                    } else {
+                      if( $active.is( $( label ) ) ) { f = true; }
+                    }
+                  });
+                }
+    
+                $active.focus();                
+              }
+  
+              break;
+            case 39:
+              e.preventDefault();
+              var $active = $( e.target ).closest( '.awf-parent-container.awf-collapsed-on' );
+
+              if( 1 === $active.length ) {
+                $active.trigger( 'click' );
+              }
+  
+              break;
+            case 37:
+              e.preventDefault();
+              var $active = $( e.target ).closest( '.awf-filter-container:not(.awf-collapsed-on)' );
+
+              if( 1 === $active.length ) {
+                $active.trigger( 'click' );
+              }
+  
+              break;
+            case 27:
+              var $active = $( e.target );
+  
+              if( ! $active.hasClass( 'awf-dropdown' ) ) {
+                $active = $active.closest( '.awf-dropdown' );
+              }
+  
+              if( 0 < $active.length && ! $active.hasClass( 'awf-collapsed' ) ) {
+                $active.find( '.awf-filter-title-container').focus().trigger( 'click' );
+              }
+  
+              break;
+
+            case 9:
+              if( 'list' === fw_is ) {
+
+                if( ! e.shiftKey ) {
+                  var $active = $( e.target );
+
+                  if( $active.hasClass( 'awf-terms-search' ) ) {
+                    e.preventDefault();
+                    $( e.target ).siblings( '.awf-clear-terms-search-btn' ).focus();
+
+                  } else if( $active.hasClass( 'awf-clear-terms-search-btn' ) ) {
+                    e.preventDefault();
+                    $active.closest( '.awf-filters-container' ).find( 'label:focusable' ).first().focus();
+                  }
+                }
+              }
+
+              break;
+  
+            defaut: break;
+          }
+        } );
+
+        $fw.find( '.awf-filters-container > ul' ).first()
+          .on( 'focusin', function( e ) {
+            if( 0 === $( this ).has( $( e.relatedTarget ) ).length ) {
+              var $ul = $( this );
+
+              if( 'list' === fw_is ) {
+                $ul.find( 'label' ).attr( 'tabindex', '-1');
+
+                if( ! $( e.target ).is( 'label:focusable' ) && ! $( e.target ).is( '.awf-terms-search' ) ) {
+                  $ul.find( 'label:focusable' ).first().focus();
+                }
+              }
+            }
+          } )
+          .on( 'focusout', function( e ) {
+            if( 0 === $( this ).has( $( e.relatedTarget ) ).length ) {
+              var $fsc = $( this );
+
+              if( 'list' === fw_is ) {
+                $fsc.find( 'label[tabindex="-1"]' ).attr( 'tabindex', '0' );
+              }
+            }
+          } )
+        ;
+          
+        if( $pw.hasClass( 'awf-url' ) ) {
+          $fw.on( 'keydown', 'label', function( event ) {
+            if( event.keyCode === 13 || event.keyCode === 32 ) {
+              event.preventDefault();
+              event.stopPropagation();
+
+              $( this ).siblings( '.awf-filter' ).first().trigger( 'click' );
+            }
+          });
+
+        } else {
+          $fw.on( 'keydown', 'label', function( event ) {
+            if( event.keyCode === 13 || event.keyCode === 32 ) {
+              event.preventDefault();
+              event.stopPropagation();
+
+              $( this ).siblings( '.awf-filter' ).first().trigger( 'click' );
+            }
+          });
+        }
+
+      });
+  
+      var $parent_cs = $pw.find( '.awf-collapsible-children .awf-filter-container.awf-parent-container:not(.awf-hide-collapse-button)' ).attr( 'role', 'button' ).attr( 'aria-label', awf_data.i18n.cc_button_label ).attr( 'tabindex', '-1' ).attr( 'aria-expanded', 'false' );
+      $parent_cs.not( '.awf-collapsed' ).attr( 'aria-expanded', 'true' );
+  
+      $pw.on( 'keydown', '.awf-filter-title-container, .awf-reset-btn, .awf-reset-active-container, .awf-togglable-preset-close-btn, .awf-thl-more-btn, .awf-thl-less-btn, .awf-apply-filter-btn, .awf-submit-btn', function( event ) {
+        if( event.keyCode === 13 || event.keyCode === 32 ) {
+          event.preventDefault();
+          this.click();
+        }
+      });
+    });
+  
+    $( '.awf-product-search-autocomplete-container' ).on( 'keydown', 'a', function( e ) {
+      if( e.keyCode === 13 || e.keyCode === 32 ) {
+        e.preventDefault();
+        this.click();
+      }
+    });
+  }
+    
+  if( 'undefined' !== typeof PerfectScrollbar ) {
+    $( '.awf-pretty-scrollbars' ).each( function( i, container ) {
+      var ps = new PerfectScrollbar( container, { suppressScrollX: true, suppressScrollY: false, wheelPropagation: true } );
+      a_w_f.pretty_scrollbars.push( ps );
+    });
+  }
+
   $( document ).trigger( 'awf_after_setup' );
   
   function awf_search_filter_terms( $input ) {
 
-    var $filter_containers = $input.closest( '.awf-filters-container' ).find( '.awf-filter-container' ).filter( function( i, el ) {
-      var hidden = $( el ).hasClass( 'awf-empty-hidden' ) && $( el ).hasClass( 'awf-empty' );
-
-      if( hidden && $( el ).hasClass( 'awf-unhide-active' ) && $( el ).hasClass( 'awf-active' ) ) {
-        hidden = false;
-      }
-      
-      return ! hidden;
-    });
-    
+    var $filter_containers = $input.closest( '.awf-filters-container' ).find( '.awf-filter-container' ).removeClass( 'awf-hidden' ).filter( ':visible' );
     var search = $input.val().toLowerCase();
     
-    if ( '' === search ) {
-      $filter_containers.removeClass( 'awf-hidden' );
-      
-    } else {
+    if ( 0 < search.length ) {
       for( var i = ( $filter_containers.length - 1 ); i >= 0; i-- ) {
         var $row = $( $filter_containers[i] );
         var $label = $row.find( ' > label, > a > label' ).first();
@@ -2524,7 +2933,7 @@ jQuery( document ).ready( function( $ ){
           if( typeof( label ) === 'undefined' ) { label = ''; }
         }
         
-        if( label.toLowerCase().indexOf( search ) > -1 ) { $row.removeClass( 'awf-hidden' ); } else { $row.addClass( 'awf-hidden' ); }
+        if( label.toLowerCase().indexOf( search ) === -1 ) { $row.addClass( 'awf-hidden' ); }
       }
     }
   }
@@ -2535,8 +2944,8 @@ jQuery( document ).ready( function( $ ){
       var $preset_wrapper;
 
       if( $reset_btn.hasClass( 'awf-extra-reset-btn' ) ) {
-        $preset_wrapper = $( '.awf-preset-wrapper.awf-ajax' ).first();
-        if( 0 === $preset_wrapper.length ) { $preset_wrapper = $( '.awf-preset-wrapper' ).first(); }
+        $preset_wrapper = a_w_f.preset_wrappers.filter( '.awf-ajax' ).first();
+        if( 0 === $preset_wrapper.length ) { $preset_wrapper = a_w_f.preset_wrappers.first(); }
 
       } else {
         $preset_wrapper = $reset_btn.closest( '.awf-preset-wrapper' );
@@ -2546,5 +2955,4 @@ jQuery( document ).ready( function( $ ){
       a_w_f.apply_filters_reset( $preset_wrapper );
     });
   }
-  
 });
