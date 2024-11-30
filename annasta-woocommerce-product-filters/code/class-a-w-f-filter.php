@@ -126,7 +126,7 @@ if( ! class_exists( 'A_W_F_filter' ) ) {
             $terms[] = ( object ) array(
               'parent' => 0,
               'term_id' => $term_id,
-              'slug' => is_numeric( $mv ) ? (float) $mv : sanitize_title( $mv ),
+              'slug' => is_numeric( $mv ) ? (float) $mv : sanitize_text_field( $mv ),
               'name' => $mv,
             );
             

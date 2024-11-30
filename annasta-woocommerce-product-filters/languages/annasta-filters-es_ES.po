@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: annasta WooCommerce Product Filters\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-10 14:22+0000\n"
-"PO-Revision-Date: 2024-11-22 12:41+0000\n"
+"PO-Revision-Date: 2024-11-30 08:47+0000\n"
 "Last-Translator: Cursos Mandala\n"
 "Language-Team: Spanish (Spain)\n"
 "Language: es_ES\n"
@@ -2267,6 +2267,22 @@ msgstr ""
 msgid "Import template from JSON file"
 msgstr ""
 
+#: code/class-a-w-f-admin.php:2975
+msgid ""
+"In compatible themes, will set the WooCommerce product columns value. If "
+"your shop page doesn't respond to this setting, use the corresponding theme "
+"option and set the same amount here if you need to adjust the columns of the "
+"dedicated AJAX returns."
+msgstr ""
+
+#: code/class-a-w-f-admin.php:2984
+msgid ""
+"In compatible themes, will set the WooCommerce products per page value. If "
+"your shop page doesn't respond to this setting, use the corresponding theme "
+"option and set the same amount here if you need to adjust the pagination of "
+"the dedicated AJAX returns."
+msgstr ""
+
 #: code/class-a-w-f-admin.php:3456 code/class-a-w-f-customizer.php:175
 msgid ""
 "In filters with limited height replace the standard browser scrollbars with "
@@ -2778,6 +2794,14 @@ msgstr ""
 msgid "Please create annasta Filters Preset"
 msgstr "Por favor, crea los filtros preestablecidos de annasta"
 
+#: code/class-a-w-f-admin.php:4208 code/class-a-w-f-admin.php:4213
+msgid ""
+"Please customize the amount of product columns and products per page with "
+"the help of theme settings. If you notice discrepancy in the amount of "
+"products per page displayed by the filters' AJAX returns, use the \"Products "
+"per page\" setting of the current page."
+msgstr ""
+
 #: code/class-a-w-f-customizer.php:2127
 msgid ""
 "Please edit only the options that you need changed. Leave the rest blank or "
@@ -2800,33 +2824,9 @@ msgid ""
 "least one filters preset."
 msgstr ""
 
-#: code/class-a-w-f-admin.php:4208
-msgid ""
-"Please use the Astra theme Customizer (and not the \"Product columns\" and "
-"\"Products per page\" settings of the current page) to adjust the amount of "
-"shop columns and products per page. annasta Filters will use the theme "
-"settings."
-msgstr ""
-"Utiliza el Personalizador de temas de Astra (y no las configuraciones de "
-"\"Columnas de productos\" y \"Productos por página\" de la página actual) "
-"para ajustar la cantidad de columnas y productos de la tienda por página. "
-"annasta Filtros usará la configuración del tema."
-
 #: code/class-a-w-f-gutenberg.php:94
 msgid "Please use the block settings to select filters preset."
 msgstr ""
-
-#: code/class-a-w-f-admin.php:4213
-msgid ""
-"Please use the eCommerce Gem theme Customizer (and not the \"Product "
-"columns\" and \"Products per page\" settings of the current page) to adjust "
-"the amount of shop columns and products per page. annasta Filters will use "
-"the theme settings."
-msgstr ""
-"Utiliza el Personalizador de temas de Gemas de comercio electrónico (y no la "
-"configuración de \"Columnas de productos\" y \"Productos por página\" de la "
-"página actual) para ajustar la cantidad de columnas de la tienda y productos "
-"por página. annasta Filtros usará la configuración del tema."
 
 #: code/class-a-w-f-admin.php:4237 code/class-a-w-f-settings.php:74
 msgid "Plugin Settings"
@@ -3396,38 +3396,6 @@ msgid ""
 msgstr ""
 "Configura la sugerencia para que se muestre dentro de un cuadro de búsqueda "
 "vacío. Deja en blanco si no es necesario."
-
-#: code/class-a-w-f-admin.php:2975
-msgid ""
-"Set this to the amount of product columns that you wish to be displayed by "
-"your shop. Leave blank for the Woocommerce default. WARNING: this option "
-"will only work with themes that support the relevant Woocommerce built-in "
-"setting. If your theme doesn't respond to this setting, set it through your "
-"theme customizer, and enter the same value here."
-msgstr ""
-"Establece esto en la cantidad de columnas de productos que deseas que se "
-"muestren en tu tienda. Déjalo en blanco para el valor predeterminado de "
-"Woocommerce. ADVERTENCIA: esta opción solo funcionará con temas que admitan "
-"la configuración incorporada de Woocommerce relevante. Si tu tema no "
-"responde a esta configuración, configúralo a través de tu personalizador de "
-"temas e ingresa el mismo valor aquí."
-
-#: code/class-a-w-f-admin.php:2984
-msgid ""
-"Set your preferred products per page value here. It will be used unless user "
-"selects different value on a products per page control. Leave blank to use "
-"the Woocommerce default. WARNING: this option will only work with themes "
-"that support the built-in Woocommerce products per page setting. If your "
-"theme doesn't respond to this setting, set it to the amount of products "
-"displayed when you first load your shop page."
-msgstr ""
-"Establece tus productos preferidos por valor de página aquí. Se utilizará a "
-"menos que el usuario seleccione un valor diferente en un control de "
-"productos por página. Déjalo en blanco para usar el valor predeterminado de "
-"Woocommerce. ADVERTENCIA: esta opción solo funcionará con temas que admitan "
-"los productos integrados de Woocommerce por configuración de página. Si tu "
-"tema no responde a esta configuración, configúralo en la cantidad de "
-"productos que se muestran la primera vez que carga tu página de tienda."
 
 #: code/class-a-w-f-admin.php:489
 msgid "Settings"

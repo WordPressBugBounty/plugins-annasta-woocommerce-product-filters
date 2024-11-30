@@ -2972,7 +2972,7 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
           'type'     => 'text',
           'name'     => __( 'Product columns', 'annasta-filters' ),
           'default'  => get_option( 'awf_shop_columns', '' ),
-          'desc_tip' => __( 'Set this to the amount of product columns that you wish to be displayed by your shop. Leave blank for the Woocommerce default. WARNING: this option will only work with themes that support the relevant Woocommerce built-in setting. If your theme doesn\'t respond to this setting, set it through your theme customizer, and enter the same value here.', 'annasta-filters' ),
+          'desc_tip' => __( 'In compatible themes, will set the WooCommerce product columns value. If your shop page doesn\'t respond to this setting, use the corresponding theme option and set the same amount here if you need to adjust the columns of the dedicated AJAX returns.', 'annasta-filters' ),
           'css'      => 'width: 50px;'
         ),
 
@@ -2981,7 +2981,7 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
           'type'     => 'text',
           'name'     => __( 'Products per page', 'annasta-filters' ),
           'default'  => get_option( 'awf_ppp_default', '' ),
-          'desc_tip' => __( 'Set your preferred products per page value here. It will be used unless user selects different value on a products per page control. Leave blank to use the Woocommerce default. WARNING: this option will only work with themes that support the built-in Woocommerce products per page setting. If your theme doesn\'t respond to this setting, set it to the amount of products displayed when you first load your shop page.', 'annasta-filters' ),
+          'desc_tip' => __( 'In compatible themes, will set the WooCommerce products per page value. If your shop page doesn\'t respond to this setting, use the corresponding theme option and set the same amount here if you need to adjust the pagination of the dedicated AJAX returns.', 'annasta-filters' ),
           'css'      => 'width: 50px;'
         ),
 				
@@ -4205,12 +4205,12 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
       switch( $current_template ) {
         case( 'astra' ):
           $msg .= '<br><br><span class="awf-theme-support-notice">';
-          $msg .= __( 'Please use the Astra theme Customizer (and not the "Product columns" and "Products per page" settings of the current page) to adjust the amount of shop columns and products per page. annasta Filters will use the theme settings.', 'annasta-filters' );
+          $msg .= __( 'Please customize the amount of product columns and products per page with the help of theme settings. If you notice discrepancy in the amount of products per page displayed by the filters\' AJAX returns, use the "Products per page" setting of the current page.', 'annasta-filters' );
           $msg .= '</span>';
           break;
         case( 'ecommerce-gem' ):
           $msg .= '<br><br><span class="awf-theme-support-notice">';
-          $msg .= __( 'Please use the eCommerce Gem theme Customizer (and not the "Product columns" and "Products per page" settings of the current page) to adjust the amount of shop columns and products per page. annasta Filters will use the theme settings.', 'annasta-filters' );
+          $msg .= __( 'Please customize the amount of product columns and products per page with the help of theme settings. If you notice discrepancy in the amount of products per page displayed by the filters\' AJAX returns, use the "Products per page" setting of the current page.', 'annasta-filters' );
           $msg .= '</span>';
           break;
         default: break;

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: annasta WooCommerce Product Filters\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-21 13:00+0000\n"
-"PO-Revision-Date: 2024-11-22 12:42+0000\n"
+"PO-Revision-Date: 2024-11-30 08:47+0000\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
@@ -2115,6 +2115,22 @@ msgstr ""
 msgid "Import template from JSON file"
 msgstr ""
 
+#: code/class-a-w-f-admin.php:2975
+msgid ""
+"In compatible themes, will set the WooCommerce product columns value. If "
+"your shop page doesn't respond to this setting, use the corresponding theme "
+"option and set the same amount here if you need to adjust the columns of the "
+"dedicated AJAX returns."
+msgstr ""
+
+#: code/class-a-w-f-admin.php:2984
+msgid ""
+"In compatible themes, will set the WooCommerce products per page value. If "
+"your shop page doesn't respond to this setting, use the corresponding theme "
+"option and set the same amount here if you need to adjust the pagination of "
+"the dedicated AJAX returns."
+msgstr ""
+
 #: code/class-a-w-f-admin.php:3456 code/class-a-w-f-customizer.php:175
 msgid ""
 "In filters with limited height replace the standard browser scrollbars with "
@@ -2604,6 +2620,14 @@ msgstr ""
 msgid "Please create annasta Filters Preset"
 msgstr ""
 
+#: code/class-a-w-f-admin.php:4208 code/class-a-w-f-admin.php:4213
+msgid ""
+"Please customize the amount of product columns and products per page with "
+"the help of theme settings. If you notice discrepancy in the amount of "
+"products per page displayed by the filters' AJAX returns, use the \"Products "
+"per page\" setting of the current page."
+msgstr ""
+
 #: code/class-a-w-f-customizer.php:2127
 msgid ""
 "Please edit only the options that you need changed. Leave the rest blank or "
@@ -2624,24 +2648,8 @@ msgid ""
 "least one filters preset."
 msgstr ""
 
-#: code/class-a-w-f-admin.php:4208
-msgid ""
-"Please use the Astra theme Customizer (and not the \"Product columns\" and "
-"\"Products per page\" settings of the current page) to adjust the amount of "
-"shop columns and products per page. annasta Filters will use the theme "
-"settings."
-msgstr ""
-
 #: code/class-a-w-f-gutenberg.php:94
 msgid "Please use the block settings to select filters preset."
-msgstr ""
-
-#: code/class-a-w-f-admin.php:4213
-msgid ""
-"Please use the eCommerce Gem theme Customizer (and not the \"Product "
-"columns\" and \"Products per page\" settings of the current page) to adjust "
-"the amount of shop columns and products per page. annasta Filters will use "
-"the theme settings."
 msgstr ""
 
 #: code/class-a-w-f-admin.php:4237 code/class-a-w-f-settings.php:74
@@ -3184,25 +3192,6 @@ msgstr ""
 msgid ""
 "Set the hint to display inside of an empty search box. Leave blank if not "
 "needed."
-msgstr ""
-
-#: code/class-a-w-f-admin.php:2975
-msgid ""
-"Set this to the amount of product columns that you wish to be displayed by "
-"your shop. Leave blank for the Woocommerce default. WARNING: this option "
-"will only work with themes that support the relevant Woocommerce built-in "
-"setting. If your theme doesn't respond to this setting, set it through your "
-"theme customizer, and enter the same value here."
-msgstr ""
-
-#: code/class-a-w-f-admin.php:2984
-msgid ""
-"Set your preferred products per page value here. It will be used unless user "
-"selects different value on a products per page control. Leave blank to use "
-"the Woocommerce default. WARNING: this option will only work with themes "
-"that support the built-in Woocommerce products per page setting. If your "
-"theme doesn't respond to this setting, set it to the amount of products "
-"displayed when you first load your shop page."
 msgstr ""
 
 #: code/class-a-w-f-admin.php:489

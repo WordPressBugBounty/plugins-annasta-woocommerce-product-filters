@@ -3,7 +3,7 @@ Contributors: annastaa
 Tags: product filter, ajax filter, woocommerce filter, woocommerce product filter, woocommerce products filter
 Requires at least: 5.7
 Tested up to: 6.7
-Stable tag: 1.7.5
+Stable tag: 1.7.6
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -128,8 +128,13 @@ We do maintain the program of the new features introduction for the future plugi
 
 == Changelog ==
 
+= 1.7.7 =
+* Added support for non-Latin characters and spaces in values of meta data filters.
+* Fixed the infinite scroll rolling to the top of page bug and other minor conflicts of infinite scroll scripts.
+* CSS changes.
+
 = 1.7.6 =
-* Added the basic keyboard and accessibility support: Tab + Arrow keys navigation, Enter/Space submission, basic accessibility alerts for scren readers.
+* Added the basic keyboard and accessibility support: Tab + Arrow keys navigation, Enter/Space submission, basic accessibility alerts for screen readers.
 * Optimization of the dropdowns scripts.
 * Optimization of the terms search scripts.
 * Changed loader and other scripts in togglable presets and URL filters.

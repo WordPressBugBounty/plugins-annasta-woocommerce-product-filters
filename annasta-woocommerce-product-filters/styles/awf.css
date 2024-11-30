@@ -524,6 +524,7 @@ li.awf-filter-container {
 .awf-filter-container input[type='checkbox'] + label,
 .awf-filter-container input[type='radio'] + label {
 	display: inline-flex;
+  align-items: flex-start;
   margin: 0;
 	padding: 0;
 }
@@ -2231,7 +2232,8 @@ ul.awf-product-categories li.product-category .woocommerce-loop-category__title 
 .awf-togglable-preset-btn:focus-visible,
 .awf-togglable-preset-close-btn:focus-visible,
 button.awf-apply-filter-btn:focus-visible,
-button.awf-reset-btn:focus-visible {
+button.awf-reset-btn:focus-visible,
+.awf-reset-active-container:focus-visible {
   outline: 2px solid var(--awf-fv-outline-color);
   outline-offset: 3px;
 }
