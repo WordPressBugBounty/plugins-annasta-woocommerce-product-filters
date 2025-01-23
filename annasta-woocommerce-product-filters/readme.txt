@@ -3,7 +3,7 @@ Contributors: annastaa
 Tags: product filter, ajax filter, woocommerce filter, woocommerce product filter, woocommerce products filter
 Requires at least: 5.7
 Tested up to: 6.7
-Stable tag: 1.7.6
+Stable tag: 1.7.7
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -74,7 +74,7 @@ Use the versatile controls of the filters' admin interface to fine-tune the plug
 * Caching is used to increase the speed of page loads.
 * Our plugin is translations-ready. Please, let us know if you wish to share a translation to your language with the community!
 
-This plugin has been tested up to the PHP version 8.1
+This plugin has been tested up to the PHP version 8.3
 
 We are committed to further improving the users' experience with our filters for WooCommerce shops, so any feedback, or bugs / problems reports are very much welcome and will receive our careful consideration!
 
@@ -127,6 +127,16 @@ We do maintain the program of the new features introduction for the future plugi
 * [Google Fonts](https://fonts.google.com)
 
 == Changelog ==
+
+= 1.7.8 =
+* Removed the @font-face declaration for the non-served Font Awesome Brands font.
+* Fix in the togglable preset interaction with infinite scroll pagination.
+* Admin option change from "AJAX loader" to "Loader style" to reflect the wider coverage.
+* JS adjustments in limited height filters.
+* Added one more style of 4-column preset layout
+* CSS changes and optimizations.
+* Freemius update to version 2.10.1
+* Upped the WooCommerce version compliance to 9.6
 
 = 1.7.7 =
 * Added support for non-Latin characters and spaces in values of meta data filters.

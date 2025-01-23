@@ -2874,7 +2874,8 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
             '1-column'        => __( '1 column', 'annasta-filters' ),
             '2-column'        => __( '2 columns', 'annasta-filters' ),
             '3-column'        => __( '3 columns', 'annasta-filters' ),
-            '4-column'       => __( '4 columns', 'annasta-filters' )
+            '4-column-flex'   => __( '4 columns', 'annasta-filters' ),
+            '4-column'        => __( '4 columns with wide dropdowns', 'annasta-filters' )
           ),
           'desc'    => __( 'Choose multicolumn layouts for headers and footers. 1-column layout is good for sidebars.', 'annasta-filters' ),
           'desc_tip' =>  true,
@@ -3587,7 +3588,7 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
       echo
       '<tr>',
         '<th scope="row" class="titledesc">',
-          '<label for="awf_loader_style">', esc_html__( 'AJAX loader', 'annasta-filters' ), '</label>',
+          '<label for="awf_loader_style">', esc_html__( 'Loader style', 'annasta-filters' ), '</label>',
         '</th>',
         '<td class="forminp forminp-radio">',
           '<style id="awf-loader-css">',  A_W_F_admin::get_loader_css( $customizer_options ), '</style>',

@@ -2041,6 +2041,11 @@ jQuery( document ).ready( function( $ ){
             a_w_f.togglable_preset.hide();
             setTimeout( function() {
               a_w_f.togglable_preset.show();
+
+              var $thl = a_w_f.togglable_preset.find( '.awf-filter-wrapper.awf-thl' );
+              if( 0 < $thl.length && ( 'update_thl' in a_w_f ) ) {
+                a_w_f.update_thl( $thl );
+              }
             }, 1000);
           }
 
@@ -2170,9 +2175,17 @@ jQuery( document ).ready( function( $ ){
   };
   
   a_w_f.close_togglable_preset = function() {
-    $( 'body' ).removeClass( 'awf-togglable-preset-on' );
-    $( '.awf-togglable-preset-overlay' ).remove();
-    $( '.awf-togglable-preset-btn' ).trigger( 'focus' );
+
+    var $b = $( 'body' );
+    
+    if( $b.hasClass( 'awf-togglable-preset-on' ) ) {
+      $b.removeClass( 'awf-togglable-preset-on' );
+      $( '.awf-togglable-preset-overlay' ).remove();
+
+      if( ! ( 'disable_accessibility_support' in awf_data ) ) {
+        $( '.awf-togglable-preset-btn' ).trigger( 'focus' );
+      }
+    }
   };
   
   a_w_f.toggle_collapsible = function( $filter_title_container ) {

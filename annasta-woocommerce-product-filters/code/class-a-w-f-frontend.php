@@ -2459,7 +2459,6 @@ if( ! class_exists('A_W_F_frontend') ) {
 				unset( $js_data['query'][$this->is_archive] );
 
 				if( $this->permalinks_on ) {
-					$js_data['filters_url'] = $js_data['filters_url'];
 					$js_data['archive_page_switch'] = user_trailingslashit( '/' . $js_data['query'][$this->vars->tax[$this->is_archive]] );
 					$js_data['archive_page_trailingslash'] = user_trailingslashit( '' );
 
