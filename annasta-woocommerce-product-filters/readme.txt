@@ -3,7 +3,7 @@ Contributors: annastaa
 Tags: product filter, ajax filter, woocommerce filter, woocommerce product filter, woocommerce products filter
 Requires at least: 5.7
 Tested up to: 6.7
-Stable tag: 1.7.8
+Stable tag: 1.7.7
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -127,10 +127,6 @@ We do maintain the program of the new features introduction for the future plugi
 * [Google Fonts](https://fonts.google.com)
 
 == Changelog ==
-
-= 1.7.9 =
-* Minor CSS changes
-* Freemius update to version 2.11.0
 
 = 1.7.8 =
 * Removed the @font-face declaration for the non-served Font Awesome Brands font.

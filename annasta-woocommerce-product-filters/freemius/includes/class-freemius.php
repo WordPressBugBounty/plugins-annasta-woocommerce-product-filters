@@ -24000,15 +24000,13 @@
 
             // Start trial button.
             $button = ' ' . sprintf(
-                    '<div><a class="button button-primary" href="%s">%s &nbsp;&#10140;</a></div>',
+                    '<a style="margin-left: 10px; vertical-align: super;" href="%s"><button class="button button-primary">%s &nbsp;&#10140;</button></a>',
                     $trial_url,
                     $this->get_text_x_inline( 'Start free trial', 'call to action', 'start-free-trial' )
                 );
 
-            $message_text = $this->apply_filters( 'trial_promotion_message', "{$message} {$cc_string}" );
-
             $this->_admin_notices->add_sticky(
-                "<div class=\"fs-trial-message-container\"><div>{$message_text}</div> {$button}</div>",
+                $this->apply_filters( 'trial_promotion_message', "{$message} {$cc_string} {$button}" ),
                 'trial_promotion',
                 '',
                 'promotion'
@@ -25478,7 +25476,7 @@
                 $img_dir = WP_FS__DIR_IMG;
 
                 // Locate the main assets folder.
-                if ( ! empty( $fs_active_plugins->plugins ) ) {
+                if ( 1 < count( $fs_active_plugins->plugins ) ) {
                     $plugin_or_theme_img_dir = ( $this->is_plugin() ? WP_PLUGIN_DIR : get_theme_root( get_stylesheet() ) );
 
                     foreach ( $fs_active_plugins->plugins as $sdk_path => &$data ) {
