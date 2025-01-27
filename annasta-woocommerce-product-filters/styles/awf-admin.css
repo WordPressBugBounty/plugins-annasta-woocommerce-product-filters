@@ -2690,6 +2690,10 @@
   display: none;
 }
 
+#awf-settings.awf-tab-product-list-settings tr.awf-custom-selector-row {
+  background-color: rgba(255, 255, 255, 0.98);
+}
+
 #awf-settings.awf-tab-product-list-settings .awf-custom-selector-row th,
 #awf-settings.awf-tab-product-list-settings .awf-custom-selector-row td {
   padding: 8px;
@@ -3275,6 +3279,10 @@
 
 #awf-settings .awf-ts th label .woocommerce-help-tip {
   margin: -7px -12px 0 0;
+}
+
+#awf-settings .awf-ts tr {
+  background: #fbfbfb;
 }
 
 #awf-settings .awf-ts th,
