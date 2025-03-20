@@ -1866,6 +1866,11 @@ li.awf-filter-container {
   z-index: 999998;
 }
 
+.awf-loading-ajax .awf-togglable-preset-btn {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
 .awf-togglable-preset-btn.awf-show-togglable-preset-btn,
 .awf-togglable-preset-mode-on .awf-togglable-preset-btn {
   display: inline-block;

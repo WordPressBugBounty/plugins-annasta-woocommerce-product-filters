@@ -4,7 +4,7 @@ defined( 'ABSPATH' ) or die( 'Access denied' );
 /*
 * Plugin Name:  annasta Woocommerce Product Filters
 * Description:  Filter the products of your Woocommerce shop by category, custom taxonomies, attributes, price, stock, on sale products and more!
-* Version:      1.7.9
+* Version:      1.8.0
 *
 * Author:       annasta.net
 * Author URI:   https://www.annasta.net
@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) or die( 'Access denied' );
 *
 * Requires Plugins: woocommerce
 * WC requires at least: 4.5
-* WC tested up to: 9.6
+* WC tested up to: 9.7
 *
 */
 if ( !defined( 'A_W_F_PLUGIN_PATH' ) ) {
@@ -29,18 +29,17 @@ if ( !defined( 'A_W_F_PLUGIN_URL' ) ) {
     define( 'A_W_F_PLUGIN_URL', plugins_url( '', __FILE__ ) );
 }
 if ( !defined( 'A_W_F_VERSION' ) ) {
-    define( 'A_W_F_VERSION', '1.7.9' );
+    define( 'A_W_F_VERSION', '1.8.0' );
 }
 if ( function_exists( 'a_w_f_fs' ) ) {
     a_w_f_fs()->set_basename( false, __FILE__ );
 } else {
     if ( !function_exists( 'a_w_f_fs' ) ) {
-        // Create a helper function for easy SDK access.
         function a_w_f_fs() {
             global $a_w_f_fs;
             if ( !isset( $a_w_f_fs ) ) {
                 // Include Freemius SDK.
-                require_once dirname( __FILE__ ) . '/freemius/start.php';
+                require_once dirname( __FILE__ ) . '/vendor/freemius/start.php';
                 $a_w_f_fs = fs_dynamic_init( array(
                     'id'             => '3789',
                     'slug'           => 'annasta-woocommerce-product-filters',
@@ -51,9 +50,7 @@ if ( function_exists( 'a_w_f_fs' ) ) {
                     'has_addons'     => false,
                     'has_paid_plans' => true,
                     'menu'           => array(
-                        'slug'    => 'annasta-filters',
-                        'contact' => false,
-                        'support' => false,
+                        'slug' => 'annasta-filters',
                     ),
                     'is_live'        => true,
                 ) );

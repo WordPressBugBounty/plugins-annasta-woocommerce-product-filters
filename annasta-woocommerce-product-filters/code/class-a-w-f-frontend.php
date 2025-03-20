@@ -355,8 +355,6 @@ if( ! class_exists('A_W_F_frontend') ) {
 
 			} else if( 'update_filters' === $_GET['awf_action'] ) {
 
-// $microtime = microtime();
-
 				$response = array();
 				$this->awf_settings['include_children'] = ( 'yes' === get_option( 'awf_include_children_on', 'yes' ) );
 				$this->set_query_vars();
@@ -398,7 +396,6 @@ if( ! class_exists('A_W_F_frontend') ) {
 					$response['price_filter_min_max'] = $this->get_price_filter_min_max();
 				}
 				
-// $response['time'] = microtime() - $microtime ;
 				echo( json_encode( $response ) );
 			}
 
@@ -556,6 +553,22 @@ if( ! class_exists('A_W_F_frontend') ) {
 
 				wp_redirect( esc_url_raw( $url ) );
 				exit();
+			}
+
+			if( isset( $_REQUEST['awf_cm_v2'] ) ) {
+				add_filter( 'get_pagenum_link', function( $url ) {
+					return remove_query_arg( 'awf_cm_v2', $url );
+				}, 10, 1 );
+
+				switch( get_option( 'awf_ajax_pagination', 'none' ) ) {
+					case 'infinite_scroll':
+					case 'more_button':
+						add_action( 'woocommerce_before_shop_loop', array( $this, 'display_ajax_pagination_resut_count' ), 1000 );
+						break;
+					default:
+						$this->add_ajax_compatibility_mode_support();
+						break;
+				}
 			}
 		}
 
@@ -767,6 +780,14 @@ if( ! class_exists('A_W_F_frontend') ) {
             add_filter( 'woocommerce_product_query_tax_query', array( $this, 'unhide_outofstock' ) );
           }
 				}
+
+				if( 'yes' === get_option( 'awf_force_published_status', 'yes' ) ) {
+					$query->set( 'post_status', 'publish' );
+				} else {
+					if( ! current_user_can( 'manage_woocommerce' ) ) {
+						$query->set( 'post_status', 'publish' );
+					}
+				}
 			}
 			
 			$this->url_query = $this->get_url_query();
@@ -899,6 +920,17 @@ if( ! class_exists('A_W_F_frontend') ) {
 					$args['meta_key']       = $ordering_args['meta_key'];
 				}
 			}
+
+      if( 'yes' === get_option( 'awf_force_published_status', 'yes' ) ) {
+        $args['post_status'] = 'publish';
+
+      } else {
+        if( current_user_can( 'manage_woocommerce' ) ) {
+          $args['post_status'] = array( 'publish', 'private' );
+        } else {
+          $args['post_status'] = 'publish';
+        }
+      }
 
 			return $args;
 		}
@@ -2059,6 +2091,17 @@ if( ! class_exists('A_W_F_frontend') ) {
 
         $query_args['tax_query'] = $this->set_wc_tax_query( array() );
         $this->set_default_visibility( $query_args['tax_query'] );
+
+        if( 'yes' === get_option( 'awf_force_published_status', 'yes' ) ) {
+          $query_args['post_status'] = 'publish';
+          
+        } else {
+          if( current_user_can( 'manage_woocommerce' ) ) {
+            $query_args['post_status'] = array( 'publish', 'private' );
+          } else {
+            $query_args['post_status'] = 'publish';
+          }
+        }
 				
 				$query_args = apply_filters( 'awf_product_counts_query', $query_args );
 
@@ -2438,6 +2481,7 @@ if( ! class_exists('A_W_F_frontend') ) {
 				'filters_url' => $current_url_pieces[0],
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
 				'ajax_mode' => get_option( 'awf_ajax_mode', 'compatibility_mode' ),
+				'cm_v2' => get_option( 'awf_cm_v2', 'no' ),
 				'query' => array_merge( (array) $this->url_query, $current_url_pieces[1] ),
 				'wrapper_reload' => get_option( 'awf_force_wrapper_reload', 'no' ),
 				'reset_all_exceptions' => $this->get_reset_all_exceptions( array_keys( $current_url_pieces[1] ) ),
@@ -2524,6 +2568,22 @@ if( ! class_exists('A_W_F_frontend') ) {
           $js_data['products_wrapper'] = 'body';
 				}
 
+			}
+
+			if( function_exists( 'wc_current_theme_is_fse_theme' ) && wc_current_theme_is_fse_theme() ) {
+				$js_data['cm_v2'] = 'yes';
+
+				if( isset( $js_data['products_container'] ) ) {
+					$js_data['products_container'] .= ', .wp-block-woocommerce-product-template';
+				}
+
+				if( isset( $js_data['pagination_container'] ) ) {
+					$js_data['pagination_container'] .= ', .wp-block-query-pagination';
+				}
+
+				if( isset( $js_data['next'] ) ) {
+					$js_data['next'] .= ', .wp-block-query-pagination-next';
+				}
 			}
 			
 			$js_data = apply_filters( 'awf_js_data', $js_data );

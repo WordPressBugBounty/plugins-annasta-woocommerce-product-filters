@@ -1848,6 +1848,22 @@ jQuery( document ).ready( function( $ ) {
         $awf_overlay_preview[0].style.setProperty( '--awf-overlay-opacity', $( this ).val() );
       });
 
+      $( '#awf_regenerate_css_btn' ).on( 'click', function() {
+        $('.awf-spinner-overlay').show();
+        
+        $.ajax({
+          type:     "post",
+          url:      "admin-ajax.php",
+          data:     { 
+            action: 'awf_admin',
+            awf_action: 'regenerate_custom_css',
+            awf_ajax_referer: awf_js_data.awf_ajax_referer,
+          },
+          success: function() { $('.awf-spinner-overlay').hide(); },
+          error: function( response ) { a_w_f.ajax_error_response( response ); }
+        } );
+      } );
+
     } else if( a_w_f.settings_wrapper.hasClass( 'awf-tab-seo-settings' ) ) {
       $( '#awf_seo_meta_description' ).after(
         $( '<button type="button" id="awf_add_seo_filters_btn" class="button button-secondary"><i class="fas fa-plus-circle"></i><span>' + awf_js_data.l10n.add_seo_filters_btn_label + '</span></button>' ).on( 'click', function() {

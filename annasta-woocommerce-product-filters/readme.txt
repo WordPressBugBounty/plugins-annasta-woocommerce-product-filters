@@ -3,7 +3,7 @@ Contributors: annastaa
 Tags: product filter, ajax filter, woocommerce filter, woocommerce product filter, woocommerce products filter
 Requires at least: 5.7
 Tested up to: 6.7
-Stable tag: 1.7.8
+Stable tag: 1.7.9
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -127,6 +127,15 @@ We do maintain the program of the new features introduction for the future plugi
 * [Google Fonts](https://fonts.google.com)
 
 == Changelog ==
+
+= 1.8.0 =
+* Added support for the shop and product taxonomy archive elements of block themes.
+* Added the "Regenerate filters CSS" button in the annasta Filters > Style settings tab.
+* Added the "Always hide private products" option in annasta Filters > Plugin settings.
+* Added thumbnail autoload option for the "Images" style (premium).
+* Introduced improvements and optimizations in the plugin JS and CSS files.
+* Moved Freemius code to the vendor folder.
+* Upped the WooCommerce version compliance to 9.7
 
 = 1.7.9 =
 * Minor CSS changes

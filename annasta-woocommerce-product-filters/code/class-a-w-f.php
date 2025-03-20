@@ -363,7 +363,8 @@ if ( !class_exists( 'A_W_F' ) ) {
                 'awf_popup_fix_close_btn',
                 'awf_ss_engine',
                 'awf_multilingual_support',
-                'awf_excluded_customizer_sections'
+                'awf_excluded_customizer_sections',
+                'awf_force_published_status'
             );
             foreach ( $all_options as $name => $value ) {
                 if ( 0 !== strpos( $name, 'awf_' ) ) {

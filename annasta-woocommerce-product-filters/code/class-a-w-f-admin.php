@@ -155,6 +155,7 @@ if(! class_exists('A_W_F_admin') ) {
         update_option( 'awf_global_wrapper', 'yes' );
         update_option( 'awf_use_wc_orderby', 'yes' );
         update_option( 'awf_range_slider_style', 'bars' );
+        update_option( 'awf_cm_v2', 'yes' );
 				
 			} else {
         /* Updates */
@@ -194,6 +195,10 @@ if(! class_exists('A_W_F_admin') ) {
         
         if( version_compare( get_option( 'awf_version', '0.0.0' ), '1.6.0', '<' ) ) {
 					update_option( 'awf_ajax_mode', 'dedicated_ajax' );
+        }
+        
+        if( version_compare( get_option( 'awf_version', '0.0.0' ), '1.8.0', '<' ) ) {
+          update_option( 'awf_force_published_status', 'no' );
         }
 
         /* Presets and Filters updates */
@@ -613,6 +618,9 @@ if(! class_exists('A_W_F_admin') ) {
         
       } elseif( 'update_seo_filters_positions' === $_POST['awf_action'] ) {
         if( $this instanceof A_W_F_premium_admin ) { $this->update_seo_filters_positions(); }
+        
+      } elseif( 'regenerate_custom_css' === $_POST['awf_action'] ) {
+        $this->generate_styles_css();
         
       } elseif( 'clear_awf_cache' === $_POST['awf_action'] ) {
         $this->clear_awf_cache();
@@ -3880,14 +3888,22 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
       echo
         '<table class="form-table">',
         '<tbody>',
-				
+
         '<tr>',
-        '<th scope="row" class="titledesc">' , '<label for="awf_user_css">', esc_html__( 'Custom CSS', 'annasta-filters' ), '</label></th>',
+        '<th scope="row" class="titledesc">' , '<label for="awf_user_css">', esc_html__( 'Custom CSS', 'annasta-filters' ), '</label>',
+        '</th>',
         '<td class="forminp forminp-textarea">',
         '<textarea name="awf_user_css" id="awf_user_css" class="awf-code-textarea" placeholder="">',
         stripcslashes( get_option( 'awf_user_css', '' ) ), 
         '</textarea>',
         '</td>',
+        '</tr>',
+
+        '<tr>',
+        '<th scope="row" class="titledesc">',
+        '<button type="button" id="awf_regenerate_css_btn" class="button button-secondary awf-fa-icon-text-btn awf-s-btn awf-fa-sync-alt-btn" title="' . esc_attr__( 'Regenerate filters CSS', 'annasta-filters' ) . '">' . esc_html__( 'Regenerate filters CSS', 'annasta-filters' ) . '</button>',
+        '</th>',
+        '<td></td>',
         '</tr>',
 
         '</tbody>',
@@ -4369,6 +4385,14 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
           'name'     => __( 'Force products display', 'annasta-filters' ),
           'default'  => get_option( 'awf_force_products_display_on', 'yes' ),
           'desc_tip' => __( 'Disable the built-in WooCommerce categories and subcategories display. This display is not supported by the filters AJAX mode. Go to annasta Filters > Product lists > <strong>Add elements</strong> to add the categories/subcategories block supported by the filters.', 'annasta-filters' )
+        ),
+
+        152 => array(
+          'id'       => 'awf_force_published_status',
+          'type'     => 'checkbox',
+          'name'     => __( 'Always hide private products', 'annasta-filters' ),
+          'default'  => get_option( 'awf_force_published_status', 'yes' ),
+          'desc_tip' => __( 'Products marked as private are only visible to the users with administrative priviledges. Please note that some discrepancies may appear in the filtered results of private browser tabs when the private products display is enabled.', 'annasta-filters' )
         ),
         
 				190 => array( 'type' => 'awf_custom_awf_plugin_settings', 'id' => 'awf_custom_awf_plugin_settings' ),

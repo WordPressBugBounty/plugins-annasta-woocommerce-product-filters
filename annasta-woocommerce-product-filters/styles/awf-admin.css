@@ -509,6 +509,10 @@
   padding-top: 1px;
 }
 
+.awf-fa-sync-alt-btn::before {
+  content: "\f2f1";
+}
+
 #awf-settings a.button-secondary.awf-icon:hover,
 #awf-settings button.button-secondary.awf-icon:hover,
 #awf-settings .button-secondary:hover {
@@ -2702,6 +2706,7 @@
 
 #awf-settings.awf-tab-product-list-settings .awf-custom-selector-row th {
   padding-left: 30px;
+  padding-right: 10px;
 }
 
 #awf-settings.awf-tab-product-list-settings .awf-custom-selector-row td {

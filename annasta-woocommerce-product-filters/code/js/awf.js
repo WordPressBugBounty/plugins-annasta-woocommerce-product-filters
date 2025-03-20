@@ -886,10 +886,19 @@ jQuery( document ).ready( function( $ ){
     }
   };
   
-  a_w_f.update_products = function( ajax_data, $sc_wrapper ) {
-    
-    var $wrapper = ( false === $sc_wrapper ) ? a_w_f.products_wrappers : $sc_wrapper;
+  a_w_f.update_products = function( ajax_data, is_sc ) {
+
+    var $wrapper;
     var $loader = $( '<div class="awf-loader"></div>' );
+    var is_cm_v2 = false;
+
+    if( false === is_sc ) {
+      $wrapper = a_w_f.products_wrappers;
+
+    } else {
+      $wrapper = is_sc;
+      is_sc = true;
+    }
     
     if( 0 === $wrapper.length ) { return; }
     
@@ -904,14 +913,6 @@ jQuery( document ).ready( function( $ ){
       
     } else {
       $wrapper.block({ message: $loader });
-    }
-
-    var url = window.location.href;
-
-    if( 'dedicated_ajax' === awf_data.ajax_mode ) {
-      url = awf_data.ajax_url;
-    } else {
-      delete ajax_data.action;
     }
 
     if( ! ( 'skip_loader_adjustment' in awf_data ) ) {
@@ -931,14 +932,88 @@ jQuery( document ).ready( function( $ ){
       }
     }
     
+    var url = window.location.href;
+    var $response;
+
+    if( 'dedicated_ajax' === awf_data.ajax_mode ) {
+      url = awf_data.ajax_url;
+
+    } else {
+      delete ajax_data.action;
+
+      if( 'yes' === awf_data.cm_v2 ) {
+        is_cm_v2 = true;
+      }
+    }
+
+    if( is_cm_v2 ) {
+      a_w_f.get_products_cm_v2( ajax_data, $wrapper, is_sc );
+
+    } else {
+
+      $.ajax({
+        type:       'get',
+        url:         url,
+        dataType:   'html',
+        data:        ajax_data,
+        success:  function( response ) {
+          if( response ) {
+
+            if( 'ajax_pagination' in awf_data
+              && 'infinite_scroll' === awf_data.ajax_pagination.type
+              && JSON.stringify( ajax_data.awf_query ) !== awf_data.ajax_pagination_loading_query
+              )
+            {
+              $( document ).trigger( 'awf_ajax_products_update_cancellation' );
+              return;
+            }
+
+            $response = $( response );
+
+            if( $response instanceof jQuery && 0 < $response.length ) {
+              a_w_f.parse_ajax_response( $response, ajax_data, $wrapper, is_sc );
+            } else {
+              a_w_f.get_products_cm_v2( ajax_data, $wrapper, is_sc );
+            }
+
+          }
+        },
+        error: function( error_msg ) {
+          if( 'debug' in awf_data ) {
+            console.log( error_msg );
+          } else {
+            a_w_f.get_products_cm_v2( ajax_data, $wrapper, is_sc );
+          }
+        }
+      });
+
+    }
+
+  };
+  
+  a_w_f.get_products_cm_v2 = function( ajax_data, $wrapper, is_sc ) {
+
+    var url = window.location.href;
+    var url_parts = url.split('?');
+    var params = 'awf_cm_v2=1';
+
+    if( ( 'ajax_pagination' in awf_data ) && awf_data.ajax_pagination_loading && 'page_number' in ajax_data ) {
+      params += '&paged=' + ajax_data.page_number;
+    }
+
+    if( 2 === url_parts.length ) {
+      url = url + '&' + params;
+    } else if( 1 === url_parts.length ) {
+      url = url + '?' + params;
+    }
+
     $.ajax({
       type:       'get',
-      url:        url,
+      url:         url,
       dataType:   'html',
-      data:       ajax_data,
       success:  function( response ) {
-        if( response ) {
 
+        if( response ) {
           if( 'ajax_pagination' in awf_data
              && 'infinite_scroll' === awf_data.ajax_pagination.type
              && JSON.stringify( ajax_data.awf_query ) !== awf_data.ajax_pagination_loading_query
@@ -947,156 +1022,170 @@ jQuery( document ).ready( function( $ ){
             $( document ).trigger( 'awf_ajax_products_update_cancellation' );
             return;
           }
-          
-          var $response;
 
-          try {
-            $response = $( response );
-            
-          } catch( error ) {
+          var $response = $( response );
+
+          if( $response instanceof jQuery && 0 < $response.length ) {
+            a_w_f.parse_ajax_response( $response, ajax_data, $wrapper, is_sc );
+
+          } else {
             if( 'debug' in awf_data ) {
-              $response = $( '' );
-              console.log( 'Error retrieving filtered products: ' + error );
+              console.log( 'Filters AJAX call has returned invalid response.' );
             } else {
               window.location.reload();
             }
+            
           }
-
-          if( ( 'ajax_pagination' in awf_data ) && awf_data.ajax_pagination_loading && 'page_number' in ajax_data ) {
-
-            if( ( 'ajax_scroll' in awf_data ) && 'more_button' === awf_data.ajax_pagination.type ) {
-              $( [document.documentElement, document.body] ).animate( { scrollTop: awf_data.ajax_pagination.last_product.offset().top + awf_data.ajax_pagination.last_product.height() - parseInt( awf_data.ajax_scroll, 10 ) }, 500, 'swing' );
-            }
-            
-            $wrapper.find( awf_data.ajax_pagination.product_container ).last().after( $response.find( awf_data.ajax_pagination.product_container ) );
-            a_w_f.setup_ajax_pagination( $wrapper );
-            
-            var $awf_result_count = $response.find( '.awf-ajax-pagination-result-count' ).first();
-            if( 0 < $awf_result_count.length ) {
-              $wrapper.find( awf_data.result_count_container ).text( $awf_result_count.text() );
-            } else {
-              $wrapper.find( awf_data.result_count_container ).text( '' );
-            }
-
-            $( '.awf-infinite-scroll-loader' ).remove();
-
-          } else {
-            
-            if( 'yes' === awf_data.wrapper_reload ) {
-              if( 'dedicated_ajax' === awf_data.ajax_mode ) {
-                $wrapper.html( $response.html() );
-              } else {
-                $wrapper.html( a_w_f.extract_products_wrappers( $response ).html() );
-                a_w_f.update_breadcrumbs( $response );
-              }
-
-            } else {
-
-              var $pagination_containers = $wrapper.find( awf_data.pagination_container );
-              var $new_pagination = $response.find( awf_data.pagination_container ).first();
-
-              if( 0 === $new_pagination.length ) {
-                $pagination_containers.html( '' );
-
-              } else {
-                if( 0 === $pagination_containers.length ) {
-                  if( ! ( 'pagination_after' in awf_data ) ) {
-                    a_w_f.setup_pagination_after( $response );
-                  }
-
-                  $wrapper.find( awf_data.pagination_after ).after( $new_pagination );
-
-                } else {
-                  $pagination_containers.replaceWith( $new_pagination );
-                }
-              }
-
-              $( '.awf-pagination-more-btn-container' ).remove();
-
-              var $result_count = $response.find( awf_data.result_count_container ).first();
-              if( 0 === $result_count.length ) {
-                $wrapper.find( awf_data.result_count_container ).html( '' );
-              } else {
-                $wrapper.find( awf_data.result_count_container ).replaceWith( $result_count );
-              }
-                  
-              var $new_products = $response.find( awf_data.products_container ).first();
-              var $no_result_container = $wrapper.find( awf_data.no_result_container ).first();
-
-              $no_result_container.html( '' ).hide();
-
-              if( 0 === $new_products.length ) {
-                if( 0 === $no_result_container.length ) {
-                  a_w_f.products_wrappers.find( awf_data.products_container ).before( $response.find( awf_data.no_result_container ).first() );
-                } else {
-                  $no_result_container.replaceWith( $response.find( awf_data.no_result_container ).first() );
-                }
-
-                $no_result_container.show();
-                $wrapper.find( awf_data.products_container ).html( '' );
-
-              } else {
-                $wrapper.find( awf_data.products_container ).html( $new_products.html() );
-              }
-
-              $wrapper.unblock();
-            }
-            
-            if( 'ajax_scroll' in awf_data ) {
-              $( [document.documentElement, document.body] ).animate( { scrollTop: a_w_f.products_wrappers.offset().top - parseInt( awf_data.ajax_scroll, 10 ) }, 500, 'swing' );
-            }
-            
-            if( 'ajax_pagination' in awf_data ) {
-              if( 'infinite_scroll' === awf_data.ajax_pagination.type || 'more_button' === awf_data.ajax_pagination.type ) {
-                awf_data.ajax_pagination_number = 1;
-              }
-        
-              a_w_f.setup_ajax_pagination( $wrapper );
-            }
-
-            a_w_f.update_orderby( $wrapper );
-          }
-          
-          if( false === $sc_wrapper ) {
-            a_w_f.update_breadcrumbs( $response );
-
-            var $document_title = $response.find( '.awf-document-title' ).first();
-            if( 0 < $document_title.length ) { document.title = $("<div/>").html( $document_title.first().html() ).text(); }
-
-            var $shop_title = $response.find( '.awf-wc-shop-title' ).first();
-
-            if( 'archive_page' in awf_data ) {
-              if( 'archive_components_support' in awf_data ) {
-                if( 0 < $shop_title.length ) { $( 'h1.woocommerce-products-header__title' ).html( $shop_title.html() ); }
-
-                var $archive_description = $response.find( '.term-description' ).first();
-                if( 0 < $archive_description.length ) { $( '.term-description' ).html( $archive_description.html() ); }
-              }
-
-            } else {
-              if( 0 < $shop_title.length ) { $( 'h1.woocommerce-products-header__title' ).html( $shop_title.html() ); }
-            }
-
-            var $meta_description = $response.find( '.awf-meta-description' ).first();
-            if( 0 < $meta_description.length && 0 < document.querySelectorAll( 'meta[name="description"]' ).length ) {
-              document.querySelector( 'meta[name="description"]' ).setAttribute( 'content', $meta_description.text() );
-            }
-          }
-          
-          a_w_f.build_products_wrappers();
-          $( 'body' ).removeClass( 'awf-loading-ajax' );
-          
-          $( document ).trigger( 'awf_after_ajax_products_update', [ $response ] );
         }
       },
-      error: function( response ) {
+      error: function( error_msg ) {
         if( 'debug' in awf_data ) {
-          console.log( response );
+          console.log( error_msg );
         } else {
           window.location.reload();
         }
       }
     });
+
+  };
+  
+  a_w_f.parse_ajax_response = function( $response, ajax_data, $wrapper, is_sc ) {
+
+    if( ( 'ajax_pagination' in awf_data ) && awf_data.ajax_pagination_loading && 'page_number' in ajax_data ) {
+
+      if( ( 'ajax_scroll' in awf_data ) && 'more_button' === awf_data.ajax_pagination.type ) {
+        $( [document.documentElement, document.body] ).animate( { scrollTop: awf_data.ajax_pagination.last_product.offset().top + awf_data.ajax_pagination.last_product.height() - parseInt( awf_data.ajax_scroll, 10 ) }, 500, 'swing' );
+      }
+      
+      $wrapper.find( awf_data.ajax_pagination.product_container ).last().after( $response.find( awf_data.ajax_pagination.product_container ) );
+      a_w_f.setup_ajax_pagination( $wrapper );
+      
+      var $awf_result_count = $response.find( '.awf-ajax-pagination-result-count' ).first();
+      if( 0 < $awf_result_count.length ) {
+        $wrapper.find( awf_data.result_count_container ).text( $awf_result_count.text() );
+      } else {
+        $wrapper.find( awf_data.result_count_container ).text( '' );
+      }
+
+      $( '.awf-infinite-scroll-loader' ).remove();
+
+    } else {
+      
+      if( 'yes' === awf_data.wrapper_reload ) {
+        if( 'dedicated_ajax' === awf_data.ajax_mode ) {
+          $wrapper.html( $response.html() );
+        } else {
+          $wrapper.html( a_w_f.extract_products_wrappers( $response ).html() );
+          a_w_f.update_breadcrumbs( $response );
+        }
+
+      } else {
+
+        var $pagination_containers = $wrapper.find( awf_data.pagination_container );
+        var $new_pagination = $response.find( awf_data.pagination_container ).first();
+
+        if( 0 === $new_pagination.length ) {
+          $pagination_containers.html( '' );
+
+        } else {
+          if( 0 === $pagination_containers.length ) {
+            if( ! ( 'pagination_after' in awf_data ) ) {
+              a_w_f.setup_pagination_after( $response );
+            }
+
+            var $pagination_after = '';
+
+            if( 'pagination_after' in awf_data ) {
+              $pagination_after = $wrapper.find( awf_data.pagination_after );
+            }
+
+            if( 0 < $pagination_after.length ) {
+              $pagination_after.after( $new_pagination );
+            } else {
+              $wrapper.find( awf_data.products_container ).after( $new_pagination );
+            }
+
+          } else {
+            $pagination_containers.replaceWith( $new_pagination );
+          }
+        }
+
+        $( '.awf-pagination-more-btn-container' ).remove();
+
+        var $result_count = $response.find( awf_data.result_count_container ).first();
+        if( 0 === $result_count.length ) {
+          $wrapper.find( awf_data.result_count_container ).html( '' );
+        } else {
+          $wrapper.find( awf_data.result_count_container ).replaceWith( $result_count );
+        }
+            
+        var $new_products = $response.find( awf_data.products_container ).first();
+        var $no_result_container = $wrapper.find( awf_data.no_result_container ).first();
+
+        $no_result_container.html( '' ).hide();
+
+        if( 0 === $new_products.length ) {
+          if( 0 === $no_result_container.length ) {
+            a_w_f.products_wrappers.find( awf_data.products_container ).before( $response.find( awf_data.no_result_container ).first() );
+          } else {
+            $no_result_container.replaceWith( $response.find( awf_data.no_result_container ).first() );
+          }
+
+          $no_result_container.show();
+          $wrapper.find( awf_data.products_container ).html( '' );
+
+        } else {
+          $wrapper.find( awf_data.products_container ).html( $new_products.html() );
+        }
+
+        $wrapper.unblock();
+      }
+      
+      if( 'ajax_scroll' in awf_data ) {
+        $( [document.documentElement, document.body] ).animate( { scrollTop: a_w_f.products_wrappers.offset().top - parseInt( awf_data.ajax_scroll, 10 ) }, 500, 'swing' );
+      }
+      
+      if( 'ajax_pagination' in awf_data ) {
+        if( 'infinite_scroll' === awf_data.ajax_pagination.type || 'more_button' === awf_data.ajax_pagination.type ) {
+          awf_data.ajax_pagination_number = 1;
+        }
+  
+        a_w_f.setup_ajax_pagination( $wrapper );
+      }
+
+      a_w_f.update_orderby( $wrapper );
+    }
+    
+    if( ! is_sc ) {
+      a_w_f.update_breadcrumbs( $response );
+
+      var $document_title = $response.find( '.awf-document-title' ).first();
+      if( 0 < $document_title.length ) { document.title = $("<div/>").html( $document_title.first().html() ).text(); }
+
+      var $shop_title = $response.find( '.awf-wc-shop-title' ).first();
+
+      if( 'archive_page' in awf_data ) {
+        if( 'archive_components_support' in awf_data ) {
+          if( 0 < $shop_title.length ) { $( 'h1.woocommerce-products-header__title' ).html( $shop_title.html() ); }
+
+          var $archive_description = $response.find( '.term-description' ).first();
+          if( 0 < $archive_description.length ) { $( '.term-description' ).html( $archive_description.html() ); }
+        }
+
+      } else {
+        if( 0 < $shop_title.length ) { $( 'h1.woocommerce-products-header__title' ).html( $shop_title.html() ); }
+      }
+
+      var $meta_description = $response.find( '.awf-meta-description' ).first();
+      if( 0 < $meta_description.length && 0 < document.querySelectorAll( 'meta[name="description"]' ).length ) {
+        document.querySelector( 'meta[name="description"]' ).setAttribute( 'content', $meta_description.text() );
+      }
+    }
+    
+    a_w_f.build_products_wrappers();
+    $( 'body' ).removeClass( 'awf-loading-ajax' );
+    
+    $( document ).trigger( 'awf_after_ajax_products_update', [ $response ] );
   };
   
   a_w_f.update_counts = function( data ) {
@@ -1839,9 +1928,7 @@ jQuery( document ).ready( function( $ ){
       }
     } );
 
-    if( 0 === classes_array.length ) {
-      awf_data.pagination_after = awf_data.products_container;
-    } else {
+    if( 0 < classes_array.length ) {
       awf_data.pagination_after = classes_array.join( ',' );
     }
   }
