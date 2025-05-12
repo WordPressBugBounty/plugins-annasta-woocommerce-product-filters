@@ -2,8 +2,8 @@
 Contributors: annastaa
 Tags: product filter, ajax filter, woocommerce filter, woocommerce product filter, woocommerce products filter
 Requires at least: 5.7
-Tested up to: 6.7
-Stable tag: 1.7.9
+Tested up to: 6.8
+Stable tag: 1.8.0
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -127,6 +127,16 @@ We do maintain the program of the new features introduction for the future plugi
 * [Google Fonts](https://fonts.google.com)
 
 == Changelog ==
+
+= 1.8.1 =
+* Added the "Layout" filter setting (the old "Display in row" setting has been moved to its options).
+* Astra theme compatibility revision.
+* Adjustments in the image save / image CSS creation routines.
+* CSS, JS and strings optimizations.
+* Fixed the _load_textdomain_just_in_time notice.
+* Freemius update to version 2.12.0
+* Upped the WooCommerce version compliance to 9.8
+* Upped the WordPress version compliance to 6.8
 
 = 1.8.0 =
 * Added support for the shop and product taxonomy archive elements of block themes.

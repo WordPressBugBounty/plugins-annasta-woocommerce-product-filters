@@ -883,7 +883,7 @@ li.awf-filter-container {
 .awf-filters-container.awf-style-images li.awf-filter-container, 
 .awf-filters-container.awf-style-colours li.awf-filter-container {
   margin: 0 0 10px 0;
-	line-height: 40px;
+  align-items: center;
 	border: none;
 }
 
@@ -897,7 +897,7 @@ li.awf-filter-container {
 .awf-style-images .awf-filter-container input[type='checkbox'] + label,
 .awf-style-images .awf-filter-container input[type='radio'] + label {
   position: relative;
-  height: 40px;
+  min-height: 40px;
   padding: 0 0 0 50px;
 }
 
@@ -1222,9 +1222,10 @@ li.awf-filter-container {
   width: 70px;
 }
 
-/**** In-row Display */
+/**** Row Layout */
 
-.awf-show-in-row ul {
+.awf-show-in-row ul,
+.awf-show-in-row-left ul {
 	display: flex;
 	flex-flow: row wrap;
 	margin: 0;
@@ -1232,45 +1233,71 @@ li.awf-filter-container {
 	justify-content: space-around;
 }
 
-.awf-show-in-row > ul > ul > * {
+.awf-show-in-row-left ul {
+	justify-content: left;
+}
+
+.awf-show-in-row > ul > ul > *,
+.awf-show-in-row-left > ul > ul > * {
 	margin-bottom: 0;
 }
 
-.awf-show-in-row ul ul {
+.awf-show-in-row ul ul,
+.awf-show-in-row-left ul ul {
 	flex-grow: 1;
 }
 
-.awf-filters-container.awf-show-in-row ul li.awf-filter-container {
+.awf-filters-container.awf-show-in-row ul li.awf-filter-container,
+.awf-filters-container.awf-show-in-row-left ul li.awf-filter-container {
 	flex-grow: 1;
 	margin: 0 5px 5px 0;
 }
 
-.awf-show-in-row.awf-collapsible-children ul li.awf-parent-container {
+.awf-show-in-row.awf-collapsible-children ul li.awf-parent-container,
+.awf-show-in-row-left.awf-collapsible-children ul li.awf-parent-container {
 	width: 100%;
 }
 
-.awf-show-in-row.awf-collapsible-children > ul > li.awf-parent-container {
+.awf-show-in-row.awf-collapsible-children > ul > li.awf-parent-container,
+.awf-show-in-row-left.awf-collapsible-children > ul > li.awf-parent-container {
 	margin-top: 5px;
 }
 
-.awf-show-in-row.awf-collapsible-children ul ul.awf-children-container {
+.awf-show-in-row.awf-collapsible-children ul ul.awf-children-container,
+.awf-show-in-row-left.awf-collapsible-children ul ul.awf-children-container {
 	margin-left: 15px;
 	width: 100%;
 }
 
-/*
-.awf-show-in-row.awf-style-images.awf-hide-label ul,
-.awf-show-in-row.awf-style-colours.awf-hide-label ul {
-	justify-content: space-around;
-}
-*/
-
 .awf-show-in-row.awf-style-images.awf-hide-label li.awf-filter-container,
-.awf-show-in-row.awf-style-colours.awf-hide-label li.awf-filter-container {
+.awf-show-in-row.awf-style-colours.awf-hide-label li.awf-filter-container,
+.awf-show-in-row-left.awf-style-images.awf-hide-label li.awf-filter-container,
+.awf-show-in-row-left.awf-style-colours.awf-hide-label li.awf-filter-container {
 	flex-grow: unset;
 }
 
-/**** end of In-row Display */
+/**** end of Row Layout */
+/**** 2-column & 3-column Filter Layouts */
+
+.awf-filters-container.awf-2-column > ul {
+  column-count: 2;
+}
+
+.awf-filters-container.awf-3-column > ul {
+  column-count: 3;
+}
+
+.awf-filters-container.awf-2-column li.awf-parent-container,
+.awf-filters-container.awf-3-column li.awf-parent-container {
+  break-after: avoid-column;
+}
+
+.awf-filters-container.awf-2-column ul.awf-children-container,
+.awf-filters-container.awf-3-column ul.awf-children-container {
+  break-inside: avoid-column;
+}
+
+/**** end of 2-column & 3-column Filter Layouts */
 
 .awf-overlay-container {
   position: relative;

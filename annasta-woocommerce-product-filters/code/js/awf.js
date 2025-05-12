@@ -3022,6 +3022,47 @@ jQuery( document ).ready( function( $ ){
     });
   }
 
+  a_w_f.resize_cid = 0;
+
+  a_w_f.preset_wrappers.each( function() {
+    var $ss_layouts = $( this ).find( '.awf-ss-layout' );
+
+    if( 0 < $ss_layouts.length ) {
+
+      var rw = this.getAttribute( 'data-responsive-width' );
+
+      $ss_layouts.each( function() {
+        var $ssl = $( this );
+
+        if( window.innerWidth <= rw ) {
+          $ssl.removeClass( $ssl.attr( 'data-layout' ) ).addClass( $ssl.attr( 'data-ss-layout' ) );
+        } else {
+          $ssl.removeClass( $ssl.attr( 'data-ss-layout' ) ).addClass( $ssl.attr( 'data-layout' ) );
+        }    
+      });
+
+      var debounce_resize = null;
+
+      $( window ).resize( function() {
+        var cid = a_w_f.resize_cid = ++a_w_f.resize_cid;
+        clearTimeout( debounce_resize );
+
+        debounce_resize = setTimeout( function() {
+          if( cid === a_w_f.resize_cid ) {
+            $ss_layouts.each( function() {
+              var $ssl = $( this );
+              if( window.innerWidth <= rw ) {
+                $ssl.removeClass( $ssl.attr( 'data-layout' ) ).addClass( $ssl.attr( 'data-ss-layout' ) );
+              } else {
+                $ssl.removeClass( $ssl.attr( 'data-ss-layout' ) ).addClass( $ssl.attr( 'data-layout' ) );
+              }    
+            });
+          }
+        }, 200);
+      } );
+    }
+  });
+
   $( document ).trigger( 'awf_after_setup' );
   
   function awf_search_filter_terms( $input ) {

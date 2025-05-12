@@ -52,39 +52,6 @@ if(! class_exists('A_W_F_admin') ) {
       add_action( 'woocommerce_update_product', array( $this, 'on_product_update' ) );
       add_action( 'created_product_cat', array( $this, 'on_product_cat_created' ), 10, 2 );
       add_action( 'delete_product_cat', array( $this, 'on_product_cat_deleted' ), 10, 4 );
-      
-      $this->filter_types = array(
-        'single' => array(
-          'label' => __( 'Single item selection', 'annasta-filters' ),
-          'styles' => array( 'radios', 'icons', 'labels', 'colours', 'tags' )
-        ),
-        'multi' => array(
-          'label' => __( 'Multiple items selection', 'annasta-filters' ),
-          'styles' => array( 'checkboxes', 'icons', 'colours', 'tags' )
-        ),
-        'range' => array(
-          'label' => __( 'Range selection', 'annasta-filters' ),
-          'styles' => array( 'range-slider', 'radios', 'icons', 'labels', 'range-stars' )
-        ),
-        'date' => array(
-          'label' => __( 'Dates selection', 'annasta-filters' ),
-          'styles' => array( 'daterangepicker' )
-        )
-      );
-
-      $this->filter_styles = array(
-        'checkboxes' => __( 'System checkboxes', 'annasta-filters' ),
-        'radios' => __( 'System radio buttons', 'annasta-filters' ),
-        'range-slider' => __( 'Range slider', 'annasta-filters' ),
-        'range-stars' => __( 'Stars', 'annasta-filters' ),
-        'labels' => __( 'Labels', 'annasta-filters' ),
-        'icons' => __( 'Custom icons', 'annasta-filters' ),
-        'images' => __( 'Images', 'annasta-filters' ),
-        'colours' => __( 'Color boxes', 'annasta-filters' ),
-        'custom-terms' => __( 'Custom term icons and labels', 'annasta-filters' ),
-        'tags' => __( 'Tags', 'annasta-filters' ),
-        'daterangepicker' => __( 'Date picker', 'annasta-filters' ),
-      );
 
       $this->filter_style_limitations = array(
         'taxonomy' => array(
@@ -118,6 +85,41 @@ if(! class_exists('A_W_F_admin') ) {
           'range' => array( 'range-slider', 'radios', 'icons', 'labels', 'images', 'custom-terms' ),
           'date' => array( 'daterangepicker' ),
         ),
+      );
+    }
+
+    public function define_filter_options() {
+      $this->filter_types = array(
+        'single' => array(
+          'label' => __( 'Single item selection', 'annasta-filters' ),
+          'styles' => array( 'radios', 'icons', 'labels', 'colours', 'tags' )
+        ),
+        'multi' => array(
+          'label' => __( 'Multiple items selection', 'annasta-filters' ),
+          'styles' => array( 'checkboxes', 'icons', 'colours', 'tags' )
+        ),
+        'range' => array(
+          'label' => __( 'Range selection', 'annasta-filters' ),
+          'styles' => array( 'range-slider', 'radios', 'icons', 'labels', 'range-stars' )
+        ),
+        'date' => array(
+          'label' => __( 'Dates selection', 'annasta-filters' ),
+          'styles' => array( 'daterangepicker' )
+        )
+      );
+
+      $this->filter_styles = array(
+        'checkboxes' => __( 'System checkboxes', 'annasta-filters' ),
+        'radios' => __( 'System radio buttons', 'annasta-filters' ),
+        'range-slider' => __( 'Range slider', 'annasta-filters' ),
+        'range-stars' => __( 'Stars', 'annasta-filters' ),
+        'labels' => __( 'Labels', 'annasta-filters' ),
+        'icons' => __( 'Custom icons', 'annasta-filters' ),
+        'images' => __( 'Images', 'annasta-filters' ),
+        'colours' => __( 'Color boxes', 'annasta-filters' ),
+        'custom-terms' => __( 'Custom term icons and labels', 'annasta-filters' ),
+        'tags' => __( 'Tags', 'annasta-filters' ),
+        'daterangepicker' => __( 'Date picker', 'annasta-filters' ),
       );
     }
     
@@ -453,6 +455,28 @@ if(! class_exists('A_W_F_admin') ) {
               }
             }
 
+            if( version_compare( get_option( 'awf_version', '0.0.0' ), '1.8.1', '<' ) ) {
+              if( isset( $filter->settings['show_in_row'] ) && ! isset( $filter->settings['layout'] ) ) {
+                $position = intval( array_search( 'show_in_row', array_keys( $filter->settings ) ) );
+                
+                if( ! empty( $position ) ) {
+                  ++$position;
+
+                  if( empty( $filter->settings['show_in_row'] ) ) {
+                    $value = '1-column';
+                  } else {
+                    $value = 'row';
+                  }
+        
+                  $filter->settings = array_merge(
+                    array_slice( $filter->settings, 0, $position, true),
+                    array( 'layout' => $value, 'sslayout' => '' ),
+                    array_slice( $filter->settings, $position, count( $filter->settings ) - 1, true)
+                  );
+                }
+              }
+            }
+
             update_option( $filter->prefix. 'settings', $filter->settings );
           }
         }
@@ -598,6 +622,8 @@ if(! class_exists('A_W_F_admin') ) {
         wp_send_json_error( array( 'awf_error_message' => __( 'Error: permission denied.', 'annasta-filters' ) ), 403 );
       }
 
+      A_W_F::$admin->define_filter_options();
+
       if( 'regenerate_customizer_css' === $_POST['awf_action'] ) {
         echo $this->generate_customizer_css( $_POST['awf_customizer_settings'] );
 				
@@ -676,7 +702,7 @@ if(! class_exists('A_W_F_admin') ) {
             }
             
             $filter = new A_W_F_filter( $preset_id, $filter_id );
-
+            
             if( 'delete-filter' === $_POST['awf_action'] ) {
               echo $this->delete_filter( $filter );
 
@@ -1098,7 +1124,6 @@ if(! class_exists('A_W_F_admin') ) {
           case 'show_search':
           case 'shrink_height_limit':
           case 'autocomplete':
-          case 'show_in_row':
             $filter->settings[$setting] = $this->get_sanitized_checkbox_setting( $filter, $setting );
             break;
           case 'show_count':
@@ -1120,6 +1145,12 @@ if(! class_exists('A_W_F_admin') ) {
             $filter->settings[$setting] = sanitize_key( $_POST[$filter->prefix . $setting] );
             break;
           case 'hide_filter':
+            $filter->settings[$setting] = empty( $_POST[$filter->prefix . $setting] ) ? '' : sanitize_key( $_POST[$filter->prefix . $setting] );
+            break;
+          case 'layout':
+            $filter->settings[$setting] = empty( $_POST[$filter->prefix . $setting] ) ? '1-column' : sanitize_key( $_POST[$filter->prefix . $setting] );
+            break;
+          case 'sslayout':
             $filter->settings[$setting] = empty( $_POST[$filter->prefix . $setting] ) ? '' : sanitize_key( $_POST[$filter->prefix . $setting] );
             break;
           default: break;
@@ -1224,7 +1255,15 @@ if(! class_exists('A_W_F_admin') ) {
       } elseif( 'range-slider' === $filter->settings['style'] ) {
         
         if( isset( $old_settings->settings['children_collapsible'] ) ) { $filter->settings['children_collapsible'] = $filter->settings['children_collapsible_on'] = false; }
-        if( isset( $old_settings->settings['show_in_row'] ) ) { $filter->settings['show_in_row'] = false; }
+        if( isset( $old_settings->settings['layout'] ) ) {
+          $filter->settings['layout'] = '1-column';
+          $filter->settings['sslayout'] = '';
+        } else {
+          if( isset( $old_settings->settings['show_in_row'] ) ) {
+            $filter->settings['layout'] = '1-column';
+            $filter->settings['sslayout'] = '';
+          }
+        }
         if( isset( $old_settings->settings['show_search'] ) ) { $filter->settings['show_search'] = false; }
         
         $filter->settings['height_limit'] = (int) 0;
@@ -1408,7 +1447,7 @@ if(! class_exists('A_W_F_admin') ) {
             if( ! is_object( $association_taxonomy ) ) { continue; }
             
             if( 'archive-pages' === $association_data[1] ) {
-              $preset_associations[] = ucfirst( sprintf( __( '%s taxonomy archive pages', 'annasta-filters' ), $association_taxonomy->label) );
+              $preset_associations[] = ucfirst( sprintf( __( '%s archive pages', 'annasta-filters' ), $association_taxonomy->label) );
               
             } elseif( 'shop-pages' === $association_data[1] ) {
               $preset_associations[] = ucfirst( sprintf( __( 'Shop pages with %s filters', 'annasta-filters' ), $association_taxonomy->label) );
@@ -1466,7 +1505,7 @@ if(! class_exists('A_W_F_admin') ) {
         $terms = get_terms( array( 'taxonomy' => $t->name, 'parent' => 0, 'hide_empty' => false, 'orderby' => 'name' ) );
         
         if( $t->public && $t->publicly_queryable ) {
-          $all_associations[$prefix . $t->name . '--archive-pages'] = $arrow . sprintf( __( '%s taxonomy archive pages', 'annasta-filters' ), $t->label);
+          $all_associations[$prefix . $t->name . '--archive-pages'] = $arrow . sprintf( __( '%s archive pages', 'annasta-filters' ), $t->label);
           if( $include_taxonomies ) { $all_associations += $this->build_associations_taxonomy_terms( $terms, 0, true ); }
         }
         
@@ -2439,7 +2478,8 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
         'type_options'            => array(),
         'style'                   => 'icons',
         'style_options'           => array(),
-        'show_in_row'             => false,
+        'layout'                  => '1-column',
+        'sslayout'                 => '',
         'show_search'             => false,
         'show_search_placeholder' => '',
         'terms_limitation_mode'   => 'exclude',
@@ -2508,7 +2548,8 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
         ),
         'style'                   => 'range-slider',
         'style_options'           => array( 'step' => floatval( 1 ), 'value_prefix' => '', 'value_postfix' => '' ),
-        'show_in_row'             => false,
+        'layout'                  => '1-column',
+        'sslayout'                 => '',
         'height_limit'            => '0',
         'shrink_height_limit'     => true,
       ) );
@@ -2526,7 +2567,8 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
         'type'                    => 'single',
         'style'                   => 'radios',
         'style_options'           => array(),
-        'show_in_row'             => false,
+        'layout'                  => '1-column',
+        'sslayout'                 => '',
         'show_search'             => false,
         'show_search_placeholder' => '',
         'terms_limitation_mode'   => 'exclude',
@@ -2585,7 +2627,8 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
         ),
         'style'                   => 'radios',
         'style_options'           => array( 'step' => floatval( 1 ), 'value_prefix' => '', 'value_postfix' => '' ),
-        'show_in_row'             => false,
+        'layout'                  => '1-column',
+        'sslayout'                 => '',
         'show_search'             => false,
         'show_search_placeholder' => '',
         'height_limit'            => '0',
@@ -2605,7 +2648,8 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
         'style'                   => 'radios',
         'style_options'           => array(),
         'ppp_values'              => array( 12 => __( 'products per page', 'annasta-filters' ) ),
-        'show_in_row'             => false,
+        'layout'                  => '1-column',
+        'sslayout'                 => '',
         'show_search'             => false,
         'show_search_placeholder' => '',
         'height_limit'            => '0',
@@ -2625,7 +2669,8 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
         'type'                    => 'single',
         'style'                   => 'radios',
         'style_options'           => array(),
-        'show_in_row'             => false,
+        'layout'                  => '1-column',
+        'sslayout'                 => '',
         'show_search'             => false,
         'show_search_placeholder' => '',
         'terms_limitation_mode'   => 'exclude',
@@ -2650,7 +2695,8 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
         'type_options'            => array(),
         'style'                   => 'radios',
         'style_options'           => array(),
-        'show_in_row'             => false,
+        'layout'                  => '1-column',
+        'sslayout'                 => '',
         'show_search'             => false,
         'show_search_placeholder' => '',
         'terms_limitation_mode'   => 'exclude',
@@ -3075,7 +3121,7 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
           'type'     => 'checkbox',
           'name'     => __( 'Breadcrumbs support', 'annasta-filters' ),
           'default'  => get_option( 'awf_breadcrumbs_support', 'yes' ),
-          'desc_tip' => __( 'Uncheck to disable breadcrumbs adjustments on taxonomy archive pages.', 'annasta-filters' ),
+          'desc_tip' => __( 'Uncheck to disable breadcrumbs adjustments on archive pages.', 'annasta-filters' ),
         ),
 
         240 => array( 'type' => 'sectionend', 'id' => 'awf_product_list_settings_archive_options_section' ),
@@ -4541,16 +4587,16 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
       foreach( A_W_F::$presets as $preset_id => $preset ) {
         
         $display_mode = get_option( 'awf_preset_' . $preset_id . '_display_mode', 'visible' );
+        $responsive_width = (int) get_option( 'awf_preset_' . $preset_id . '_responsive_width', '768' );
+
         switch( $display_mode ) {
           case 'visible-on-s':
-            $responsive_width = (int) get_option( 'awf_preset_' . $preset_id . '_responsive_width', '768' );
             if( ! empty( $responsive_width ) ) {
               $css .= '@media(min-width:' . $responsive_width . 'px){.awf-preset-wrapper.awf-preset-' . $preset_id . '-wrapper{display:none;}}';
             }
             
             break;
           case 'visible-on-l':
-            $responsive_width = (int) get_option( 'awf_preset_' . $preset_id . '_responsive_width', '768' );
             if( ! empty( $responsive_width ) ) {
               $css .= '@media(max-width:' . $responsive_width . 'px){.awf-preset-wrapper.awf-preset-' . $preset_id . '-wrapper{display:none;}}';
             }
@@ -4561,7 +4607,6 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
 
             break;
           case 'togglable-on-s':
-            $responsive_width = (int) get_option( 'awf_preset_' . $preset_id . '_responsive_width', '768' );
             $css .= '@media(max-width:' . $responsive_width . 'px){.awf-preset-wrapper.awf-preset-' . $preset_id . '-wrapper{opacity:0;}body:not(.awf-filterable) .awf-preset-wrapper.awf-preset-' . $preset_id . '-wrapper{display:none;}}';
 
             break;

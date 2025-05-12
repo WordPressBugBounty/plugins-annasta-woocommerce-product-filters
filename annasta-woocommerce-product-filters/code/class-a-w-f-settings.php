@@ -61,6 +61,8 @@ if( ! class_exists( 'A_W_F_settings' ) ) {
       if( A_W_F::$premium ) {
         add_action( 'woocommerce_settings_save_' . $this->id, array( A_W_F::$admin, 'save_premium_settings' ), 20 );
       }
+
+      A_W_F::$admin->define_filter_options();
       
       parent::__construct();
     }

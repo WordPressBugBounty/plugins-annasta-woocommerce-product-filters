@@ -33,7 +33,7 @@ if( ! class_exists( 'A_W_F_preset_frontend' ) ) {
         'awf-' . $this->layout . '-preset'
       );
       
-      $wrapper_options = ' data-preset-id="' . $this->id . '"';;
+      $wrapper_options = ' data-preset-id="' . $this->id . '" data-responsive-width="' . intval( $this->responsive_width ) . '"';
 
       switch( $this->type ) {
         case 'url':
@@ -78,7 +78,6 @@ if( ! class_exists( 'A_W_F_preset_frontend' ) ) {
           $wrapper_classes[] = 'awf-' . $this->display_mode . '-preset';
           $wrapper_classes[] = 'awf-' . $this->togglable_mode . '-mode';
           if( 'yes' === get_option( 'awf_popup_fix_close_btn', 'no' ) ) { $wrapper_classes[] = 'awf-fix-popup-close-btn'; }
-          $wrapper_options .= ' data-responsive-width="' . $this->responsive_width . '"';
 
           break;
 
