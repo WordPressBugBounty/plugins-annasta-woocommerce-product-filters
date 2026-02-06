@@ -39,6 +39,9 @@ if( ! class_exists( 'A_W_F_settings' ) ) {
 
 					} elseif( 'styles-settings' === $_GET['section'] ) {
 						add_action( 'woocommerce_admin_field_awf_styles_settings_custom_options_1', array( A_W_F::$admin, 'display_styles_settings_custom_options_1' ) );
+
+					} elseif( 'seo-settings' === $_GET['section'] ) {
+						add_action( 'woocommerce_admin_field_awf_seo_settings_rewrite_rules_options', array( A_W_F::$admin, 'display_seo_settings_rewrite_rules_options' ) );
 					}
           
         } elseif( isset( $_GET['awf-preset'] ) ) {
@@ -318,6 +321,10 @@ if( ! class_exists( 'A_W_F_settings' ) ) {
         
       } elseif( 'seo-settings' == $current_section ) {
         A_W_F::$admin->update_seo_settings();
+
+        if( get_transient( 'awf_rewrite_rules_changed' ) ) {
+          set_transient( 'awf_flush_rewrite_rules', 1 );
+        }
         
       } elseif( 'plugin-settings' == $current_section ) {
         

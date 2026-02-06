@@ -2954,6 +2954,108 @@
 
 /* SEO Tab */
 
+#awf-settings.awf-tab-seo-settings .awf-rewrite-rule-table {
+  width: 100%;
+}
+
+#awf-settings.awf-tab-seo-settings .awf-rewrite-rule-table th {
+  width: 20%;
+  padding-top: 25px;
+  vertical-align: top;
+}
+
+#awf-settings.awf-tab-seo-settings .awf-rewrite-rule-table .awf-rewrite-pages-row th label{
+  display: flex;
+  justify-content: space-between;
+}
+
+#awf-settings.awf-tab-seo-settings .awf-rewrite-pages-row th .woocommerce-help-tip {
+  margin: 0;
+}
+
+#awf-settings.awf-tab-seo-settings .awf-rewrite-rule-table td.forminp-checkbox {
+  padding-top: 25px;
+}
+
+#awf-settings.awf-tab-seo-settings .awf-rewrite-pages-row .select2-container {
+  width: 100% !important;
+}
+
+#awf-settings.awf-tab-seo-settings .awf-rewrite-rule-example {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-top: 25px;
+  padding: 10px;
+  background: linear-gradient(0deg, #f2f2f2 0%, #f7f7f7 35%);
+  border: 1px solid #ddd;
+  border-bottom-color: #fdfdfd;
+  box-shadow: 0 2px 2px #e2e2e2;
+}
+
+#awf-settings.awf-tab-seo-settings .awf-rewrite-rule-example .dashicons {
+    height: auto;
+    min-height: auto;
+    width: auto;
+    line-height: 0;
+}
+
+#awf-settings.awf-tab-seo-settings .awf-rewrite-rule-example .dashicons::before {
+  line-height: 15px;
+  vertical-align: middle;
+  font-size: 15px;
+}
+
+#awf-settings.awf-tab-seo-settings .awf-rewrite-parameters-row .awf-rewrite-rule-parameters-container {
+  display: flex;
+  flex-wrap: wrap;
+  /* gap: 10px; */
+  align-items: flex-start;
+}
+
+#awf-settings.awf-tab-seo-settings .awf-rewrite-parameters-row button#awf-add-rewrite-parameter-btn {
+  margin: 0;
+}
+
+#awf-settings.awf-tab-seo-settings .awf-rewrite-parameters-row ul {
+  display: flex;
+  flex-wrap: wrap;
+  /* gap: 10px; */
+  align-items: center;
+  margin: 0;
+}
+
+#awf-settings.awf-tab-seo-settings .awf-rewrite-parameters-row li {
+  margin: 0 10px 0 0;
+}
+
+#awf-settings.awf-tab-seo-settings .awf-rewrite-parameters-row .awf-rewrite-parameter-example {
+  margin-top: 10px;
+  margin-left: 27px;
+  color: #666;
+  font-style: italic;
+}
+
+#awf-settings.awf-tab-seo-settings .awf-rewrite-parameters-row .awf-rewrite-parameter-container::before {
+  content: "/";
+  display: inline-block;
+  padding-right: 10px;
+  font-weight: 900;
+}
+
+#awf-settings.awf-tab-seo-settings .awf-rewrite-parameters-row button.awf-remove-rewrite-parameter-btn {
+  width: 32px;
+  height: 32px;
+  min-height: 32px;
+  line-height: 30px;
+  margin-left: 5px;
+}
+
+#awf-settings.awf-tab-seo-settings .awf-rewrite-parameters-row button.awf-remove-rewrite-parameter-btn::before {
+  font-size: 13px;
+}
+
 #awf-settings #awf_add_seo_filters_btn {
   margin-top: 5px;
 }

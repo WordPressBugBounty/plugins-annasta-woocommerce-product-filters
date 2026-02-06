@@ -15,6 +15,8 @@ if( ! class_exists( 'A_W_F_filter_frontend' ) ) {
     protected $cid = '';
     protected $input_classes;
     protected $hierarchical_level = 1;
+    protected $redirect_url;
+    protected $redirect_parameters;
 
     public function __construct( $preset_id, $filter_id ) {
       parent::__construct( $preset_id, $filter_id );
@@ -260,7 +262,7 @@ if( ! class_exists( 'A_W_F_filter_frontend' ) ) {
           if( 'yes' === get_option( 'awf_pretty_scrollbars' ) ) { $html .= ' awf-pretty-scrollbars'; }
         }
       }
-      if( ! empty( $this->settings['force_reload'] ) || ! empty( $this->settings['redirect_to_archive'] ) ) {
+      if( ! empty( $this->settings['force_reload'] ) || ( ! empty( $this->settings['redirect_to_archive'] ) && A_W_F::$front->is_archive !== $this->settings['taxonomy'] ) ) {
         $html .= ' awf-force-reload';
       }
       if( ! empty( $this->settings['block_deselection'] ) ) { $html .= ' awf-block-deselection-container'; }
@@ -632,7 +634,7 @@ if( ! class_exists( 'A_W_F_filter_frontend' ) ) {
 
           if( true === A_W_F::$front->preset->is_url_query ) {
 
-            $href = '';
+            $href = $nofollow = '';
 
             if( ! in_array( 'disabled', $input_props ) ) {
               if( empty( $this->settings['reset_all'] ) ) {
@@ -644,9 +646,20 @@ if( ! class_exists( 'A_W_F_filter_frontend' ) ) {
               }
             }
             
-            if( empty( $href ) ) { $href = 'javascript:void(0);'; } else { $href = esc_url( $href ); }
+            if( empty( $href ) ) {
+              $href = 'javascript:void(0);';
+              
+            } else {
 
-            $html .= '<a href="' . $href . '" tabindex="-1">';
+              if( ! empty( A_W_F::$front->get_access_to['nofollow'][$href] ) ) {
+                $nofollow = ' rel="nofollow"';
+                unset( A_W_F::$front->get_access_to['nofollow'][$href] );
+              }
+
+              $href = esc_url( $href );
+            }
+
+            $html .= '<a href="' . $href . '"' . $nofollow . ' class="awf-' . $slug_for_classes . '-href"  tabindex="-1">';
             $html .= $filter_html;
             $html .= '</a>';
 
@@ -691,11 +704,12 @@ if( ! class_exists( 'A_W_F_filter_frontend' ) ) {
     }
 
     public function get_single_type_term_url( $term ) {
+
       $url_filters = A_W_F::$front->url_query;
-
       $url = A_W_F::$front->current_url;
+      $redirect = false;
 
-      if( $term->slug === $this->default_value ) { 
+      if( $term->slug === $this->default_value ) {
         if( isset( $url_filters[$this->var_name] ) ) {
           unset( $url_filters[$this->var_name] );
         }
@@ -728,6 +742,11 @@ if( ! class_exists( 'A_W_F_filter_frontend' ) ) {
           } else {
             $url_filters[$this->var_name] = $term->slug;
           }
+
+          if( ! empty( $this->settings['redirect_to_archive'] ) ) {
+            $this->setup_redirect( $url, $url_filters );
+            $redirect = $this->settings['taxonomy'];
+          }
         }
       }
 			
@@ -735,13 +754,27 @@ if( ! class_exists( 'A_W_F_filter_frontend' ) ) {
 				$url_filters[A_W_F::$front->vars->awf['search']] = urlencode( $url_filters[A_W_F::$front->vars->awf['search']] );
 			}
 
-      return add_query_arg( $url_filters, $url );
+      if( A_W_F::$front->rewrites ) {
+        $url = A_W_F::$front->get_url( $url, $url_filters, $redirect );
+
+      } else {
+        ksort( $url_filters );
+        $url = add_query_arg( $url_filters, user_trailingslashit( $url ) );
+      }
+
+      if( 'yes' === get_option( 'awf_add_nofollow', 'no' ) ) {
+        $this->set_nofollow( $url, $url_filters );
+      }
+
+      return $url;
     }
 
     public function get_multi_type_term_url( $term ) {
+
       $url_filters = A_W_F::$front->url_query;
       $url = A_W_F::$front->current_url;
       $href_terms = $this->active_values;
+      $redirect = false;
 
       if( empty( $this->active_values ) ) {
         $url_filters[$this->var_name] = $term->slug;
@@ -782,29 +815,50 @@ if( ! class_exists( 'A_W_F_filter_frontend' ) ) {
         }
       }
 
-      if( 'taxonomy' === $this->module && A_W_F::$front->is_archive === $this->settings['taxonomy'] ) {
-        if( isset( $url_filters[$this->var_name] ) ) {
+      if( 'taxonomy' === $this->module ) {
 
-          if( A_W_F::$front->permalinks_on ) {
-            $replace = user_trailingslashit( '/' . implode( ',', A_W_F::$front->query->tax[A_W_F::$front->is_archive] ) );
-            $pos = strrpos( A_W_F::$front->current_url, $replace );
-            if ( $pos !== false ) {
-              $url = substr_replace( A_W_F::$front->current_url, user_trailingslashit( '/' . implode( ',', $href_terms ) ), $pos, strlen( $replace ) );
+        if( A_W_F::$front->is_archive === $this->settings['taxonomy'] ) {
+
+          if( isset( $url_filters[$this->var_name] ) ) {
+
+            if( A_W_F::$front->permalinks_on ) {
+              $replace = user_trailingslashit( '/' . implode( ',', A_W_F::$front->query->tax[A_W_F::$front->is_archive] ) );
+              $pos = strrpos( A_W_F::$front->current_url, $replace );
+              if ( $pos !== false ) {
+                $url = substr_replace( A_W_F::$front->current_url, user_trailingslashit( '/' . implode( ',', $href_terms ) ), $pos, strlen( $replace ) );
+              }
+
+            } else {
+              $url_filters[A_W_F::$front->is_archive] = implode( ',', $href_terms );
             }
 
-          } else {
-            $url_filters[A_W_F::$front->is_archive] = implode( ',', $href_terms );
+            unset( $url_filters[$this->var_name] );
           }
 
-          unset( $url_filters[$this->var_name] );
+        } else {
+          if( ! empty( $this->settings['redirect_to_archive'] ) ) {
+            $this->setup_redirect( $url, $url_filters );
+            $redirect = $this->settings['taxonomy'];
+          }
         }
       }
-    
+
 			if( isset( $url_filters[A_W_F::$front->vars->awf['search']] ) ) {
 				$url_filters[A_W_F::$front->vars->awf['search']] = urlencode( $url_filters[A_W_F::$front->vars->awf['search']] );
 			}
 
-      return add_query_arg( $url_filters, $url );
+      if( A_W_F::$front->rewrites ) {
+        $url = A_W_F::$front->get_url( $url, $url_filters, $redirect );
+      } else {
+        ksort( $url_filters );
+        $url = add_query_arg( $url_filters, user_trailingslashit( $url ) );
+      }
+
+      if( 'yes' === get_option( 'awf_add_nofollow', 'no' ) ) {
+        $this->set_nofollow( $url, $url_filters );
+      }
+
+      return $url;
     }
     
     public function get_range_type_term_url( $term ) {
@@ -824,7 +878,19 @@ if( ! class_exists( 'A_W_F_filter_frontend' ) ) {
 				$url_filters[A_W_F::$front->vars->awf['search']] = urlencode( $url_filters[A_W_F::$front->vars->awf['search']] );
 			}
 
-      return add_query_arg( $url_filters, $url );
+      if( A_W_F::$front->rewrites ) {
+        $url = A_W_F::$front->get_url( $url, $url_filters );
+
+      } else {
+        ksort( $url_filters );
+        $url = add_query_arg( $url_filters, user_trailingslashit( $url ) );
+      }
+
+      if( 'yes' === get_option( 'awf_add_nofollow', 'no' ) ) {
+        $this->set_nofollow( $url, $url_filters );
+      }
+
+      return $url;
     }
 
     protected function remove_ancestors( $term, &$query_terms ) {
@@ -841,6 +907,75 @@ if( ! class_exists( 'A_W_F_filter_frontend' ) ) {
       }
 
       return;
+    }
+
+    public function get_all_links() {
+      $links = array();
+      
+      foreach( $this->terms as $term ) {
+        if( empty( $filter->settings['reset_all'] ) ) {
+          $f = 'get_' . $this->settings['type'] . '_type_term_url';
+          if( method_exists( $this, $f ) ) {
+            $links[str_replace( array( ',', '.' ), '-', $term->slug )] = $this->$f( $term );
+          }
+          
+        } else {
+          if( $this instanceof A_W_F_premium_filter_frontend ) { $links[$this->id] = $this->get_reset_all_url( $term ); }
+        }
+      }
+
+      return $links;
+    }
+
+    protected function setup_redirect( &$url, &$parameters ) {
+
+			if( isset( $parameters[A_W_F::$front->vars->tax[$this->settings['taxonomy']]] ) ) {
+				
+        if( is_null( $this->redirect_url ) ) {
+          global $wp_rewrite;
+
+          $permastruct = $wp_rewrite->get_extra_permastruct( $this->settings['taxonomy'] );
+
+          if( $permastruct ) {
+            $permastruct = trim( $permastruct, '/' );
+            $this->redirect_url = home_url( str_replace( '%' . $this->settings['taxonomy'] . '%', $parameters[A_W_F::$front->vars->tax[$this->settings['taxonomy']]], $permastruct ) );
+            $this->redirect_parameters = array();
+
+            if( A_W_F::$front->is_archive && isset( A_W_F::$front->query->tax[A_W_F::$front->is_archive] ) ) {
+              if( empty( $this->settings['reset_all'] ) ) {
+                $this->redirect_parameters[A_W_F::$front->vars->tax[A_W_F::$front->is_archive]] = implode( ',', A_W_F::$front->query->tax[A_W_F::$front->is_archive] );
+              }
+            }
+
+          } else {
+            $this->redirect_url = '';
+          }
+        }
+
+        if( ! empty( $this->redirect_url ) ) {
+          $url = $this->redirect_url;
+          unset( $parameters[A_W_F::$front->vars->tax[$this->settings['taxonomy']]] );
+          $parameters = array_merge( $parameters, $this->redirect_parameters );
+          $parameters[A_W_F::$front->vars->misc['archive']] = 1;
+        }
+			}
+    }
+
+    protected function set_nofollow( $url, $parameters ) {
+      
+      A_W_F::$front->get_access_to['nofollow'][$url] = 1;
+
+      $parameters = array_keys( $parameters );
+      $parameters =  array_diff( $parameters, array( A_W_F::$front->vars->misc['archive'] ) );
+
+      if( $parameters ) {
+        if( A_W_F::$front->canonical_parameters ) {
+          A_W_F::$front->set_canonical_nofollow( $url, $parameters );
+        }
+
+      } else {
+        A_W_F::$front->get_access_to['nofollow'][$url] = 0;
+      }
     }
     
     protected function edit_filter_wrapper( &$classes, &$options, &$append ) {

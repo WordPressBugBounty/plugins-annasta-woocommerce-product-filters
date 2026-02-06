@@ -39,6 +39,7 @@ if(! class_exists('A_W_F_admin') ) {
         add_action( 'plugins_loaded', array( $this, 'after_plugin_activation' ), 30 );
       }
       
+      add_action( 'admin_init', array( $this, 'flush_rewrite_rules'), 1000 );
       add_action( 'admin_menu', array( $this, 'add_plugin_menu' ) );
       add_filter( 'plugin_action_links_' . plugin_basename( A_W_F_PLUGIN_FILE ), array( $this, 'plugin_settings_link' ) );
       add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 10, 2 );
@@ -653,6 +654,14 @@ if(! class_exists('A_W_F_admin') ) {
         
       } elseif( 'wrapper_detection' === $_POST['awf_action'] ) {
         $this->detect_products_html_wrapper();
+        
+      } elseif( 'add_rewrite_parameter' === $_POST['awf_action'] ) {
+        $this->add_rewrite_parameter();
+        echo $this->get_rewrite_rules_html();
+        
+      } elseif( 'update_rewrite_rules' === $_POST['awf_action'] ) {
+        $this->update_rewrite_rules();
+        echo $this->get_rewrite_rules_html();
         
       } elseif( 'toggle-global-wrapper' === $_POST['awf_action'] ) {
         if( 'yes' === get_option( 'awf_global_wrapper', 'no' ) ) {
@@ -1562,7 +1571,7 @@ if( 'compatibility_mode' === $ajax_mode ) {
               <i class="fas fa-lightbulb"></i> 
               <div>
 <?php
-echo sprintf( wp_kses( __( '<div class="awf-dashboard-slide-header">Place your filters into a sidebar or header</div>Learn about disabling the modal sidebar mode in our <a href="%1$s" target="_blank"><strong>Getting Started tutorial</strong></a>.', 'annasta-filters' ), array( 'div' => array( 'class' => array() ), 'a' => array( 'href' => array(), 'target' => array() ), 'strong' => array() ) ), esc_url( 'https://annasta.net/plugins/annasta-woocommerce-product-filters/tutorials/getting-started/#display-options' ) );
+echo sprintf( wp_kses( __( '<div class="awf-dashboard-slide-header">Place your filters into a sidebar or header</div>Learn about <strong>disabling the popup sidebar mode</strong> in our <a href="%1$s" target="_blank"><strong>Getting Started tutorial</strong></a>.', 'annasta-filters' ), array( 'div' => array( 'class' => array() ), 'a' => array( 'href' => array(), 'target' => array() ), 'strong' => array() ) ), esc_url( 'https://annasta.net/plugins/annasta-woocommerce-product-filters/tutorials/getting-started/#display-options' ) );
 ?>
               </div>
             </div></div>
@@ -4001,7 +4010,34 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
         ),
         
         array( 'type' => 'sectionend', 'id' => 'awf_seo_titles_tab' ),
-        
+
+        array( 'type' => 'awf_seo_settings_rewrite_rules_options', 'id' => 'awf_seo_settings_rewrite_rules_options' ),
+        array( 'type' => 'sectionend', 'id' => 'awf_seo_settings_rewrite_rules_options' ),
+
+        array(
+          'id' => 'awf_seo_settings_canonical_tab',
+          'type' => 'title',
+          'name' => __( 'Canonical Links', 'annasta-filters' ),
+        ),
+
+        array( 
+          'id'       => 'awf_add_canonical', 
+          'type'     => 'checkbox',
+          'name'     => __( 'Add canonical annotations', 'annasta-filters' ),
+          'default'  => get_option( 'awf_add_canonical', 'no' ),
+          'desc_tip' => __( 'To discourage search engines from indexing duplicate and similar pages, canonical URLs will be inserted into filterable pages. Canonical URLs will point to the current page, with any parameters stripped. In premium version you can opt to keep some filtering parameters in canonical links with the help of the "Include in canonical links" option.', 'annasta-filters' )
+        ),
+
+        array( 
+          'id'       => 'awf_add_nofollow', 
+          'type'     => 'checkbox',
+          'name'     => __( 'Add rel="nofollow" attribute', 'annasta-filters' ),
+          'default'  => get_option( 'awf_add_nofollow', 'no' ),
+          'desc_tip' => __( 'Include rel="nofollow" attribute in filters\' links.', 'annasta-filters' )
+        ),
+
+        array( 'type' => 'sectionend', 'id' => 'awf_seo_settings_canonical_tab' ),
+
         array(
           'id' => 'awf_seo_meta_description_tab',
           'type' => 'title',
@@ -4060,6 +4096,278 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
         
         array( 'type' => 'sectionend', 'id' => 'awf_seo_settings_tab' ),
       );
+    }
+
+    public function display_seo_settings_rewrite_rules_options() {
+
+      $header_options = array(
+        'value' => '1',
+        'class' => '',
+        'suffix' => '',
+        'title' => __( 'Rewrite Filters to Permalinks', 'annasta-filters' )
+      );
+
+      $this->display_ts_header( $header_options );
+
+      echo '<table id="awf-rewrite-rules-wrapper" class="widefat awf-seo-url-options-table awf-ts awf-ts-1" data-rewrite-pages-select-placeholder="' . esc_attr__( 'Select filterable pages', 'annasta-filters' ) . '">';
+      echo $this->get_rewrite_rules_html();
+      echo '</table>';
+    }
+
+    protected function get_rewrite_rules_html() {
+
+      $rules = get_option( 'awf_rewrite_rules', array( 0 => array() ) );
+      
+      if( 0 === count( $rules ) ) {
+        $rules = array( 0 => array() );
+      }
+
+      $pages = array_keys( $rules );
+      $parameters = $rules[$pages[0]];
+
+      $all_pages = $this->get_rewrite_rule_pages();
+      $all_parameters = $this->get_rewrite_parameters();
+
+      $query_vars = (object) get_option( 'awf_query_vars', array( 'tax' => array(), 'awf' => array(), 'meta' => array() ) );
+
+      $example_page = $pages[0];
+      $example_url_3 = $example_url_4 = '';
+
+      if( empty( $example_page ) || 'shop' === $example_page ) {
+        $example_url_1 = $example_url_2 = trailingslashit( get_permalink( wc_get_page_id( 'shop' ) ) );
+      } else {
+        $terms = get_terms( array( 'taxonomy' => $example_page, 'parent' => 0, 'hide_empty' => true ) );
+        if( is_array( $terms ) && 0 < count( $terms ) ) {
+          $term = array_shift( $terms );
+          $example_url_1 = $example_url_2 = get_term_link( $term->slug, $example_page );
+        } else {
+          $example_url_1 = $example_url_2 = trailingslashit( get_permalink( wc_get_page_id( 'shop' ) ) );
+        }
+      }
+
+      $example_parameters = array_values( $parameters );
+
+      if( 2 > count( $example_parameters ) ) {
+        $example_parameters = array_merge( $example_parameters, array_keys( $all_parameters ) );
+        $example_parameters = array_unique( $example_parameters );
+        $example_parameters = array_splice( $example_parameters, 0, 2 );
+      }
+
+      $example_url_1 .= '?';
+      foreach( $example_parameters as $i => $ep ) {
+        $name = isset( $query_vars->tax[$ep] ) ? $query_vars->tax[$ep] : $ep;
+        $terms = get_terms( array( 'taxonomy' => $ep, 'fields' => 'slugs', 'parent' => 0, 'hide_empty' => true ) );
+        $terms_count = $i + 1;
+
+        if( count( $terms ) >= $terms_count ) {
+          $terms = array_splice( $terms, 0, $terms_count );
+          $terms = implode( ',', $terms );
+        } else {
+          if( count( $terms ) === 1 ) {
+            $terms = $terms[0];
+          } else {
+            $terms = 'example-term';
+          }
+        }
+
+        if( 0 === $i ) {
+          $example_url_3 = $name . '-' . $terms;
+        } else {
+          $example_url_4 = $name . '-' . $terms;
+        }
+
+        $example_url_1 .= $name . '=' . $terms . '&';
+        $example_url_2 .= $name . '-' . $terms . '/';
+      }
+
+      $example_url_1 = rtrim( $example_url_1, '&' );
+
+      $html = 
+        '<thead>' .
+        '<tr>' .
+        '<th class="awf-info-notice-container"><span class="awf-info-notice">' .
+        wp_kses( __( '<strong>Transform filtering parameters to permalinks.</strong><br>This experimental feature is currently limited to 2 parameters and may not work in combination with other plugins and theme options. Premium version users can customize the parameters\' labels in annasta Filters > Plugin Settings > Advanced Settings > <strong>Query parameters\' labels</strong>', 'annasta-filters' ), array( 'strong' => array(), 'br' => array() ) ) .
+
+        '<div class="awf-rewrite-rule-example"><strong>' . esc_html__( 'Example:', 'annasta-filters' ) . '</strong> <span>' . $example_url_1 . '</span> <span class="dashicons dashicons-arrow-right-alt2"></span> <strong>' . $example_url_2 . '</strong></div>' .
+      
+        '</span></th>' .
+        '</tr>' .
+        '</thead>' .
+        '<tbody>'
+      ;
+
+      $pages_select = array( 'id' => 'awf-rewrite-pages-select-1', 'options' => array_diff_key( $all_pages, array_flip( $parameters ) ), 'selected'=> $pages, 'class' => 'chosen_select', 'custom' => ' multiple' );
+      $i = 1;
+      $parameters_select = array( 'class' => 'awf-rewrite-parameters-select', 'options' => array_diff_key( $all_parameters, $rules ) );
+
+      $html .=
+        '<tr class="awf-rewrite-rule-row"><td>' .
+        '<table class="awf-rewrite-rule-table"><tbody>' .
+        '<tr class="awf-rewrite-pages-row">' .
+        '<th><label for="awf-rewrite-pages-select-1"><span>' . esc_html__( 'Rewrite Pages', 'annasta-filters' ) . '</span>' .
+        '<span class="woocommerce-help-tip" data-tip="' . esc_html__( 'To avoid the overload of your site\'s htaccess file, select only the needed pages.', 'annasta-filters' ) . '"></span>' .
+        '</label></th>' .
+        '<td>' . A_W_F::$admin->build_select_html( $pages_select ) . '</td>' .
+        '</tr>' .
+        '<tr class="awf-rewrite-parameters-row" >' .
+        '<th>' . esc_html__( 'Rewrite Parameters', 'annasta-filters' ) . '</th>' .
+        '<td><div class="awf-rewrite-rule-parameters-container">' .
+        '<ul>'
+      ;
+
+      foreach( $parameters as $ii => $parameter ) {
+
+        if( $ii === 0 ) {
+          $example = $example_url_3;
+        } else {
+          $example = $example_url_4;
+        }
+
+        $html .= '<li class="awf-rewrite-parameter-wrapper" ><div class="awf-rewrite-parameter-container" >';
+
+        $parameters_select['selected'] = $parameter;
+        $html .= $this->build_select_html( $parameters_select );
+        $html .= '<button type="button" class="button button-secondary awf-fa-icon awf-fas-icon awf-fa-delete-btn awf-remove-rewrite-parameter-btn" title="' . esc_attr__( 'Remove rewrite parameter', 'annasta-filters' ) . '"></button>';
+
+        $html .= '</div><div class="awf-rewrite-parameter-example">' . $example . '</div></li>';
+
+        if( ++$i > 2 ) {
+          break;
+        }
+      }
+
+      $html .= '</ul>';
+
+      if( $i <= 2 ) {
+        $html .= '<button type="button" id="awf-add-rewrite-parameter-btn" class="button button-secondary awf-fa-icon-text-btn awf-fa-add-btn" title="' .
+        esc_attr__( 'Add parameter', 'annasta-filters' ) . '">' . esc_html__( 'Add parameter', 'annasta-filters' ) . '</button>';
+      }
+
+      $html .=
+        '</div><!-- awf-rewrite-rule-parameters-container --></td>' .
+        '</tr><!-- awf-rewrite-parameters-row -->' .
+        '</tbody></table><!-- awf-rewrite-rule-table -->' .
+        '</td></tr><!-- awf-rewrite-rule-row -->';
+
+      $html .= '</tbody>';
+
+      return $html;
+    }
+    
+    protected function get_rewrite_rule_pages() {
+
+      $pages = array(
+        'shop' => __( 'Shop pages', 'annasta-filters' ),
+      );
+      
+      $taxonomies = get_object_taxonomies( 'product', 'objects' );
+
+      foreach( $taxonomies as $t ) {
+        if( in_array( $t->name, A_W_F::$excluded_taxonomies ) ) { continue; }
+
+        if( $t->public && $t->publicly_queryable ) {
+          $pages[urldecode( sanitize_title( $t->name ) )] = sprintf( __( '%s archives', 'annasta-filters' ), $t->label);
+        }
+      }
+
+      $filterable_shortcodes = get_option( 'awf_shortcode_pages', array() );
+
+      foreach( $filterable_shortcodes as $page_id ) {
+        $pages['awf_shortcode_page-' . $page_id] = get_the_title( $page_id );
+      }
+      
+      return $pages;
+    }
+
+    protected function get_rewrite_parameters() {
+      $filters = array();
+      
+      $taxonomies = get_object_taxonomies( 'product', 'objects' );
+      $query_vars = get_option( 'awf_query_vars', array( 'tax' => array(), 'awf' => array(), 'range' => array(), 'meta' => array(), 'misc' => array() ) );
+
+      foreach( $taxonomies as $t ) {
+        if( in_array( $t->name, A_W_F::$excluded_taxonomies ) ) { continue; }
+
+        $t_name = urldecode( sanitize_title( $t->name ) );
+
+        if( ! isset( $query_vars['tax'][$t_name] ) ) { continue; }
+        // if( $remove_current && isset( $current_rules[$t_name] ) ) { continue; }
+
+        $filters[$t_name] = $query_vars['tax'][$t_name] . ' (' . $t->label . ')';
+      }
+      
+      return $filters;
+    }
+
+    protected function add_rewrite_parameter() {
+
+      $rules = get_option( 'awf_rewrite_rules', array( 0 => array() ) );
+
+      if( 0 === count( $rules ) ) {
+        $rules = array( 0 => array() );
+      }
+
+      $parameters = reset( $rules );
+
+      if( false === $parameters ) {
+        $parameters = array();
+      }
+
+      $count = count( $parameters );
+
+      if( $count >= 2 ) { return; }
+
+      $all_parameters = array_keys( $this->get_rewrite_parameters() );
+
+      $count++;
+      $parameters = array_merge( $parameters, $all_parameters );
+      $parameters = array_unique( $parameters );
+      $parameters = array_splice( $parameters, 0, $count );
+
+      foreach( $rules as $page => $old_parameters ) {
+        $rules[$page] = $parameters;
+      }
+
+      update_option( 'awf_rewrite_rules', $rules );
+      set_transient( 'awf_rewrite_rules_changed', 1 );
+    }
+
+    protected function update_rewrite_rules() {
+
+      $rules = array();
+      $parameters = array();
+      $all_pages = array_keys( $this->get_rewrite_rule_pages() );
+      $all_parameters = array_keys( $this->get_rewrite_parameters() );
+
+      if( isset( $_POST['awf_rewrite_rules'] ) && is_array( $_POST['awf_rewrite_rules'] ) && 0 < count( $_POST['awf_rewrite_rules'] ) ) {
+
+        $rule = array_shift( $_POST['awf_rewrite_rules'] );
+
+        if( ! isset( $rule['pages'] ) ) {$rule['pages'] = array(); }
+        if( ! isset( $rule['parameters'] ) ) { $rule['parameters'] = array(); }
+
+        if( 0 < count( $rule['parameters'] ) ) {
+          $parameters = array_map( 'sanitize_title', $rule['parameters'] );
+          $parameters = array_map( 'urldecode', $parameters );
+          $parameters = array_unique( $parameters );
+          $parameters = array_intersect( $parameters, $all_parameters ); // the 1st element keeps the sorting
+          $parameters = array_splice( $parameters, 0, 2 );
+        }
+
+        foreach( $rule['pages'] as $page ) {
+          $page = urldecode( sanitize_title( $page ) );
+          if( in_array( $page, $all_pages ) ) {
+            $rules[$page] = $parameters;
+          }
+        }         
+      }
+
+      if( 0 === count( $rules ) ) {
+        $rules[0] = $parameters;
+      }
+
+      update_option( 'awf_rewrite_rules', $rules );
+      set_transient( 'awf_rewrite_rules_changed', 1 );
     }
 
     public function display_custom_seo_settings() {
@@ -4126,6 +4434,13 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
             
       $seo_settings = $this->get_seo_filters_list( $update_filters );
       update_option( 'awf_seo_filters_settings', $seo_settings );
+    }
+    
+    public function flush_rewrite_rules() {
+      if( delete_transient( 'awf_flush_rewrite_rules' ) ) {
+        flush_rewrite_rules();
+        delete_transient( 'awf_rewrite_rules_changed' );
+      }
     }
     
     protected function get_seo_filters_list( $update = false ) {
@@ -6174,7 +6489,15 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
       if( isset( $options['options'] ) ) {
         foreach( $options['options'] as $value => $label ) {
           $html .= '<option value="'. esc_attr( $value ) . '"';
-          if( isset( $options['selected'] ) && $value === $options['selected'] ) { $html .= ' selected'; }
+          if( isset( $options['selected'] ) ) {
+            if( $value === $options['selected'] ) {
+              $html .= ' selected';
+            } elseif( is_array( $options['selected'] ) ) {
+              if( in_array( $value, $options['selected'] ) ) {
+                $html .= ' selected';
+              }
+            }
+          }
           if( isset( $options['disabled'] ) && in_array( $value, $options['disabled'] ) ) { $html .= ' disabled'; }
           $html .= '>' . esc_html( $label ) . '</option>';
         }

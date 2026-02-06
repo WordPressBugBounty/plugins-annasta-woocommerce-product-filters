@@ -35,11 +35,22 @@ if( ! class_exists('A_W_F_frontend') ) {
 		public $shop_page_id;
 		public $shop_url;
 		public $current_url;
-		public $seo_parts;
+		public $url_page = 'shop';
 
 		protected $is_wp_page = false;
 		public $is_sc_page = false;
 		public $is_archive = false;
+
+		public $seo_parts;
+
+		/** List of rewrite rules
+		 *
+		 * @since 1.8.2
+		 * @var array
+		 */
+		public $rewrites = array();
+		public $current_rewrites;
+		public $canonical_parameters = array();
 
 		public $counts;
 		protected $counts_cache_name;
@@ -168,11 +179,21 @@ if( ! class_exists('A_W_F_frontend') ) {
 				add_action( 'awf_add_ajax_products_header_title', array( $this, 'add_ajax_products_header_title' ) );
 			}
 
-			$this->get_access_to['remove_pagination_args'] = array( 'awf_front', 'awf_action', 'awf_query', 'awf_ajax_extras', 'awf_sc', 'awf_sc_page', 'awf_archive_page' );
+			$this->get_access_to['remove_pagination_args'] = array( 'awf_front', 'awf_action', 'awf_query', 'awf_ajax_extras', 'awf_sc', 'awf_sc_page', 'awf_archive_page', 'awf_cm_v2', 'awf_rewrite', 'rewrite', 'sc_page' );
 
 			add_filter( 'paginate_links', function( $href ) {
 				return remove_query_arg( $this->get_access_to['remove_pagination_args'], $href );
 			});
+
+			add_action( 'wp', function() {
+				if( isset( $_REQUEST['awf_rewrite'] ) ) {
+					$this->setup_ajax_rewrites();
+					if( $this->current_rewrites ) {
+						$this->get_access_to['remove_pagination_args'] = array_merge( $this->get_access_to['remove_pagination_args'], array_values( $this->current_rewrites ) );
+						add_filter( 'woocommerce_pagination_args', array( $this, 'adjust_wc_pagination' ) );
+					}
+				}
+			} );
 		}
 
 		public function ajax_controller() {
@@ -228,6 +249,8 @@ if( ! class_exists('A_W_F_frontend') ) {
 				}
 
 				$this->build_ajax_queries();
+
+				$this->setup_ajax_rewrites();
 				
 				$_GET = $this->get_url_query();
 				
@@ -243,7 +266,7 @@ if( ! class_exists('A_W_F_frontend') ) {
 					$_GET['product-page'] = $page_number;
 					if( version_compare( WC_VERSION, '3.3.3', '<' ) ) { set_query_var( 'product-page', $page_number ); }
 				}
-				
+
 				add_filter( 'woocommerce_pagination_args', array( $this, 'adjust_wc_pagination' ) );
 				add_filter( 'paginate_links', function( $href ) {
 					$remove_pagination_args = array_keys( $_REQUEST );
@@ -353,9 +376,29 @@ if( ! class_exists('A_W_F_frontend') ) {
 
 				$this->do_wc_products_shortcode( $sc_args );
 
+			} else if( 'request_url' === $_GET['awf_action'] ) {
+				$response = array();
+
+				$this->awf_settings['include_children'] = ( 'yes' === get_option( 'awf_include_children_on', 'yes' ) );
+				$this->set_query_vars();
+				$this->build_ajax_queries();
+				$this->setup_ajax_rewrites();
+
+				$url = $this->current_url;
+				$url_filters = $this->url_query;
+
+				if( $this->current_rewrites ) {
+					$response['url'] = A_W_F::$front->get_url( $url, $url_filters );
+				} else {
+					$response['url'] = add_query_arg( $url_filters, $url );
+				}
+
+				echo( json_encode( $response ) );
+
 			} else if( 'update_filters' === $_GET['awf_action'] ) {
 
 				$response = array();
+
 				$this->awf_settings['include_children'] = ( 'yes' === get_option( 'awf_include_children_on', 'yes' ) );
 				$this->set_query_vars();
 
@@ -376,6 +419,12 @@ if( ! class_exists('A_W_F_frontend') ) {
 				}
 
 				$this->build_ajax_queries();
+
+				if( isset( $_GET['awf_rewrite']['rewrite'] ) ) {
+					$this->setup_canonical_parameters();
+					$this->setup_ajax_rewrites();
+				}
+
 				$this->prepare_product_counts();
 
 				foreach( $_GET['awf_callers'] as $caller ) {
@@ -385,7 +434,17 @@ if( ! class_exists('A_W_F_frontend') ) {
 					$pieces = explode( '-', $pieces );
 					$preset_id = (int) array_pop( $pieces );
 
-					if( isset( A_W_F::$presets[$preset_id] ) ) { $preset = new A_W_F_preset_frontend( $preset_id ); }
+					if( isset( A_W_F::$presets[$preset_id] ) ) {
+						$preset = new A_W_F_preset_frontend( $preset_id );
+
+						if( ! empty( $_GET['awf_rewrite'] ) ) {
+							$response['links'][$preset->id] = $preset->get_filters_links();
+						}
+					}
+				}
+
+				if( isset( $this->get_access_to['nofollow'] ) ) {
+					$response['nofollow'] = $this->get_access_to['nofollow'];
 				}
 
 				foreach( $this->counts as $taxonomy => $counts ) {
@@ -400,79 +459,6 @@ if( ! class_exists('A_W_F_frontend') ) {
 			}
 
 			die();
-		}
-
-		public function get_price_filter_min_max() {
-			global $wpdb;
-
-			$query_args = apply_filters( 'awf_dynamic_price_range_args', array() );
-
-			if( empty( $query_args ) ) {
-				$query_args = array(
-					'post_type' => 'product',
-					'fields' => 'ids',
-					'post_status' => 'publish',
-					'ignore_sticky_posts' => true,
-					'no_found_rows' => true,
-					'posts_per_page' => -1,
-					'paged' => '',
-				);
-				
-				if( isset( $this->get_access_to['counts_meta_query'] ) ) {
-					$query_args['meta_query'] = $this->get_access_to['counts_meta_query'];
-				} else {
-					$this->get_access_to['counts_meta_query'] = $query_args['meta_query'] = $this->set_wc_meta_query( array() );
-				}
-
-				unset( $query_args['meta_query']['price_filter'] );
-				
-				$query_args['post__in'] = $this->get_wc_post__in( array() );
-
-				$query_args['tax_query'] = $this->set_wc_tax_query( array() );
-				$this->set_default_visibility( $query_args['tax_query'] );
-			}
-
-			$query = new WP_Query( $query_args );
-
-			if( ! empty( $query->posts ) ) {
-				$sql = "
-				SELECT MIN( min_price ) as min_price, MAX( max_price ) as max_price
-				FROM {$wpdb->wc_product_meta_lookup}
-				WHERE product_id IN (" . implode( ',', $query->posts ) . ")";
-
-				$min_max_prices = $wpdb->get_row( $sql, ARRAY_A );
-
-				if( empty( $min_max_prices['min_price'] ) ) {
-					$min_max_prices['min_price'] = 0;
-				}
-
-				if( empty( $min_max_prices['max_price'] ) ) {
-					$min_max_prices['max_price'] = 1;
-				}
-
-				if ( wc_tax_enabled() && 'incl' === get_option( 'woocommerce_tax_display_shop' ) && ! wc_prices_include_tax() ) {
-					$tax_class = apply_filters( 'awf_price_filter_tax_class', '' );
-					$tax_rates = WC_Tax::get_rates( $tax_class );
-
-					if( $tax_rates ) {
-						$min_max_prices['min_price'] += WC_Tax::get_tax_total( WC_Tax::calc_inclusive_tax( $min_max_prices['min_price'], $tax_rates ) );
-						$min_max_prices['max_price'] += WC_Tax::get_tax_total( WC_Tax::calc_inclusive_tax( $min_max_prices['max_price'], $tax_rates ) );
-					}
-				}
-
-				if( class_exists( 'SitePress' ) && function_exists( 'wcml_get_woocommerce_currency_option' ) ) {
-					$current_currency = apply_filters( 'wcml_price_currency', NULL );
-
-					if( $current_currency !== wcml_get_woocommerce_currency_option() ) {
-						$min_max_prices['min_price'] = apply_filters( 'wcml_raw_price_amount', $min_max_prices['min_price'], $current_currency );
-						$min_max_prices['max_price'] = apply_filters( 'wcml_raw_price_amount', $min_max_prices['max_price'], $current_currency );
-					}
-				}
-
-				return $min_max_prices;
-			}
-
-			return array( 'min_price' => 0, 'max_price' => 1 );
 		}
 		
 		protected function build_ajax_queries() {
@@ -496,21 +482,31 @@ if( ! class_exists('A_W_F_frontend') ) {
 				
 				$this->set_numeric_taxonomy_ranges();
 			}
-			
-			if( isset( $_GET['awf_query'][$this->vars->misc['archive']] )
+
+			if(
+				isset( $_GET['awf_query'][$this->vars->misc['archive']] )
+				&& ! isset( $_GET['awf_rewrite'] )
 				&& false !== ( $tax = array_search( $_GET['awf_archive_page'], $this->vars->tax ) )
 				&& isset( $this->query->tax[$tax] )
 			) {
-				$this->is_archive = $tax;
+				$this->is_archive = $this->url_page = $tax;
 				$this->setup_archive( implode( ',', $this->query->tax[$tax] ) );
 			}
 
 			$this->sort_query();
 		}
-		
+
 		public function initialize() {
 
 			$this->permalinks_on = ! empty( get_option( 'permalink_structure' ) );
+
+			$this->rewrites = get_option( 'awf_rewrite_rules', array() );
+			unset( $this->rewrites[0] );
+			$this->rewrites = array_filter( $this->rewrites );
+
+			if( $this->rewrites ) {
+				add_action( 'parse_request', array( $this, 'remove_empty_rewrites' ) );
+			}
 			
 			$this->shop_page_id = wc_get_page_id( 'shop' );
 			if( 'page' === get_option( 'show_on_front' ) && intval( get_option( 'page_on_front' ) ) === $this->shop_page_id ) {
@@ -556,9 +552,50 @@ if( ! class_exists('A_W_F_frontend') ) {
 			}
 
 			if( isset( $_REQUEST['awf_cm_v2'] ) ) {
-				add_filter( 'get_pagenum_link', function( $url ) {
-					return remove_query_arg( 'awf_cm_v2', $url );
-				}, 10, 1 );
+
+				add_filter( 'get_pagenum_link', function( $url, $pagenum ) {
+
+					if( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() && $this->current_rewrites ) {
+
+						$parts = explode( '?', $url );
+						$p = array_shift( $parts );
+
+						if( ! empty( $p ) ) {
+							global $wp_rewrite;
+							$count = 0;
+
+							$page = '/' . $wp_rewrite->pagination_base . '/' . $pagenum;
+							$p = str_replace( $page, '', $p, $count );
+							$p = $this->get_url( $p, $this->url_query );
+
+							$parts = explode( '?', $p );
+							$p = array_shift( $parts );
+							$q = array_shift( $parts );
+
+							if( $count > 0 ) {
+								$p = rtrim( $p, '/' ) . $page;
+							}
+							
+							$p = user_trailingslashit( $p );
+							
+							if( $q ) {
+								$p .= '?' . $q;
+							}
+
+							$url = $p;
+						}
+					}
+
+					$remove_params = array( 'awf_cm_v2', 'awf_rewrite' );
+					if( $this->current_rewrites ) {
+						$remove_params = array_merge( $remove_params, array_values( $this->current_rewrites ) );
+					}
+
+					$url = remove_query_arg( $remove_params, $url );
+
+					return $url;
+
+				}, 10, 2 );
 
 				switch( get_option( 'awf_ajax_pagination', 'none' ) ) {
 					case 'infinite_scroll':
@@ -569,6 +606,24 @@ if( ! class_exists('A_W_F_frontend') ) {
 						$this->add_ajax_compatibility_mode_support();
 						break;
 				}
+			}
+
+			if( $this->shop_on_frontpage && get_option( 'awf_force_ppt_on_fps', false ) ) {
+				add_action( 'parse_request', function( $q ) {
+
+					if( $q->query_vars ) {
+						$awf_vars = array();
+
+						foreach( $this->vars as $arr ) {
+							$awf_vars = array_merge( array_values( $awf_vars ), $arr );
+						}
+
+						if( ! array_diff( array_keys( $q->query_vars ), $awf_vars ) ) {
+							$q->query_vars['post_type'] = 'product';
+						}
+					}
+					
+				});
 			}
 		}
 
@@ -641,8 +696,26 @@ if( ! class_exists('A_W_F_frontend') ) {
 
 			if ( false !== $this->is_sc_page ) { $this->current_url = get_permalink( $this->is_sc_page ); }
 		}
+		
+		public function remove_empty_rewrites( $q ) {
+			
+			$empty = array_diff( $q->query_vars, array_filter( $q->query_vars ) );
 
-		public function wc_query( $query, $class_wc_query ) {}
+			if( $empty ) {
+				$awf_rewrites = reset( $this->rewrites );
+				$awf_rewrites = array_map( function( $v ) {
+					return isset( $this->vars->tax[$v] ) ? $this->vars->tax[$v] : false;
+				}, $awf_rewrites );
+				$empty = array_intersect_key( $empty, array_flip( $awf_rewrites ) );
+				foreach( $empty as $p => $v ) {
+					unset( $q->query_vars[$p] );
+				}
+			}
+		}
+
+		public function wc_query( $query, $class_wc_query ) {
+			// A_W_F::format_print_r($query);
+		}
 
 		public function before_wc_query( $query ) {
 
@@ -650,6 +723,7 @@ if( ! class_exists('A_W_F_frontend') ) {
 			
 			$is_shop = false;
 			$product_taxonomies = array_keys( $this->vars->tax );
+			$queried_taxonomies = empty( $query->tax_query->queried_terms ) ? array() : array_keys( $query->tax_query->queried_terms );
 
 			if( $query->is_post_type_archive( 'product' ) ) {
 				$is_shop = true;
@@ -658,6 +732,13 @@ if( ! class_exists('A_W_F_frontend') ) {
 			} elseif( $query->is_tax( $product_taxonomies ) ) {
 				$this->is_archive = true;
 				$this->filter_on = true;
+
+				if( $this->rewrites ) {
+					$rewrite_taxonomies = array_intersect( $queried_taxonomies, array_keys( $this->rewrites ) );
+					if( 1 === count( $rewrite_taxonomies ) ) {
+						$rewrite_page = array_shift( $rewrite_taxonomies );
+					}
+				}
 			
 			} else {
 			
@@ -696,19 +777,19 @@ if( ! class_exists('A_W_F_frontend') ) {
 					if( false !== ( $var_name = array_search( $var, $this->vars->tax ) ) ) {
 
 						if( is_array( $value ) ) {
-							$terms = $value;
+							$terms = array_map( 'urldecode', $value );
+							$terms = array_map( 'sanitize_text_field', $terms );
 						} else {
-							$terms = explode( ',', $value );
+							$terms = explode( ',', sanitize_text_field( urldecode( $value ) ) );
 						}
 
-						$this->query->tax[$var_name] = array_map( 'sanitize_text_field', $terms );
+						$this->query->tax[$var_name] = $terms;
 
 					} else if( false !== ( $awf_var_name = array_search( $var, $this->vars->awf ) ) ) {
-						$this->query->awf[$awf_var_name] = sanitize_text_field( $value );
+						$this->query->awf[$awf_var_name] = sanitize_text_field( urldecode( $value ) );
 
 					} else if( false !== ( $meta_var_name = array_search( $var, $this->vars->meta ) ) ) {
-						$this->query->meta[$meta_var_name] = explode( ',', $value );
-						$this->query->meta[$meta_var_name] = array_map( 'sanitize_text_field', $this->query->meta[$meta_var_name] );
+						$this->query->meta[$meta_var_name] = explode( ',', sanitize_text_field( urldecode( $value ) ) );
 
 					} else if( false !== ( $range_var_name = array_search( $var, $this->vars->range ) ) ) {
 						$this->query->range[$range_var_name] = (float) $value;
@@ -718,12 +799,13 @@ if( ! class_exists('A_W_F_frontend') ) {
 				$this->set_numeric_taxonomy_ranges();
 
 				if( empty( $this->query->awf['search'] ) && ! empty( $query->get( 's' ) ) ) {
-					$this->query->awf['search'] = $query->query['s'];
+					$this->query->awf['search'] = sanitize_text_field( urldecode( $query->query['s'] ) );
 				}
 
 				if( $this->is_archive ) {
-					if( 1 === count( array_intersect_key( $query->tax_query->queried_terms, $this->vars->tax ) )
-						&& ( ! empty( $query->get( $this->vars->misc['archive'] ) ) || ! count( $this->query->tax ) )
+					if(
+						1 === count( array_intersect( $queried_taxonomies, $product_taxonomies ) )
+						&& ( ! empty( $query->get( $this->vars->misc['archive'] ) ) || ! count( $this->query->tax ) || ! empty( $rewrite_page ) )
 					) {
 						$queried_object = $query->get_queried_object();
 						$this->is_archive = $queried_object->taxonomy;
@@ -788,10 +870,180 @@ if( ! class_exists('A_W_F_frontend') ) {
 						$query->set( 'post_status', 'publish' );
 					}
 				}
+
+				if( 'yes' === get_option( 'awf_add_canonical', 'no' ) ) { add_action( 'wp_head', array( $this, 'add_canonical_link' ), 5 ); }
+							
+				$this->sort_query();
+				$this->url_query = $this->get_url_query();
+
+				if( $this->is_archive ) {
+					$this->url_page = $this->is_archive;
+				} elseif( $this->is_sc_page ) {
+					$this->url_page = 'awf_shortcode_page-' . $this->is_sc_page;
+				}
+
+				$this->setup_rewrites();
+				$this->setup_canonical_parameters();
+
+			} else {
+				$this->url_query = array();
+			}
+
+		}
+
+		protected function sort_query() {
+			ksort( $this->query->tax );
+			ksort( $this->query->awf );
+			ksort( $this->query->meta );
+			ksort( $this->query->range );
+
+			array_walk( $this->query->tax, function( &$value, $key ) {
+				if( is_array( $value ) ) { sort( $value ); }
+			});
+
+			array_walk( $this->query->meta, function( &$value, $key ) {
+				if( is_array( $value ) ) { sort( $value ); }
+			});
+		}
+
+		public function get_url_query() {
+
+			$url_query = array();
+			$delete_params = array( 's' => '', 'paged' => '', 'product-page' => '' );
+
+			foreach( $this->query->tax as $var => $value ) {
+				$url_query[$this->vars->tax[$var]] = implode( ',', $value );
 			}
 			
+			foreach( $this->query->awf as $var => $value ) {
+				$url_query[$this->vars->awf[$var]] = $value;
+			}
+			
+			foreach( $this->query->meta as $var => $value ) {
+				$url_query[$this->vars->meta[$var]] = implode( ',', $value );
+			}
+			
+			foreach( $this->query->range as $var => $value ) {
+				$url_query[$this->vars->range[$var]] = $value;
+				
+				$var = substr( $var, 4 );
+				if( isset( $this->vars->tax[$var] ) ) { $delete_params[$this->vars->tax[$var]] = ''; }
+			}
+			
+			if( $this->filter_on && 'yes' === get_option( 'awf_get_parameters_support', 'no' ) ) {
+				$url_query = array_merge( $url_query, $_GET );
+			}
+			
+			$url_query = array_diff_key( $url_query, $this->vars->tax, $delete_params );
+			
+			if( isset( $url_query[$this->vars->awf['search']] ) ) {
+				$url_query[$this->vars->awf['search']] = str_replace( array( '\"', "\'" ), array( '"', "'" ), $url_query[$this->vars->awf['search']] );
+			}
+			
+			if( $this->is_archive ) {
+				$url_query[$this->vars->misc['archive']] = 1;
+
+				if( $this->permalinks_on ) {
+					unset( $url_query[$this->vars->tax[$this->is_archive]] );
+				} else {
+					$url_query[$this->is_archive] = $url_query[$this->vars->tax[$this->is_archive]];
+					unset( $url_query[$this->vars->tax[$this->is_archive]] );
+				}
+			}
+			
+			ksort( $url_query );
+
+			return $url_query;
+		}
+
+		protected function setup_rewrites() {
+			
+			if( isset( $this->rewrites[$this->url_page] ) ) {
+				$this->current_rewrites = array();
+
+				foreach( $this->rewrites[$this->url_page] as $parameter ) {
+					if( isset( $this->vars->tax[$parameter] ) ) {
+						$this->current_rewrites[$parameter] = $this->vars->tax[$parameter];
+					}
+				}
+			}
+
+		}
+
+		public function setup_ajax_rewrites() {
+
+			$this->rewrites = get_option( 'awf_rewrite_rules', array() );
+			unset( $this->rewrites[0] );
+			$this->rewrites = array_filter( $this->rewrites );
+			
+			$this->permalinks_on = ! empty( get_option( 'permalink_structure' ) );
+			$this->shop_page_id = wc_get_page_id( 'shop' );
+			if( 'page' === get_option( 'show_on_front' ) && intval( get_option( 'page_on_front' ) ) === $this->shop_page_id ) {
+				$this->shop_on_frontpage = true;
+			}
+
+			$archive = false;
+
+			if( isset( $_GET['awf_rewrite']['archive_page'] ) ) {
+				$archive = array_search( urldecode( sanitize_title( $_GET['awf_rewrite']['archive_page'] ) ), $this->vars->tax );
+				
+				if( isset( $this->query->tax[$archive] ) ) {
+					$this->is_archive = $this->url_page = $archive;
+				}
+
+			} elseif( isset( $_GET['awf_rewrite']['sc_page'] ) ) {
+				$this->is_sc_page = (int) $_GET['awf_rewrite']['sc_page'];
+				$this->url_page = 'awf_shortcode_page-' . $this->is_sc_page;
+			}
+
+			// $this->set_awf_settings();
+
+			$this->setup_urls();
+			if( $this->is_archive ) { $this->setup_archive( implode( ',', $this->query->tax[$this->is_archive] ) ); }
+			$this->setup_rewrites();
 			$this->url_query = $this->get_url_query();
-			$this->sort_query();
+		}
+
+		public function get_url( $url, $parameters, $page = false ) {
+
+			if( ! $page ) {
+				$page = $this->url_page;
+			}
+			
+			$rewrite_parameters = array();
+
+			if( ! isset( $this->get_access_to['rewrite'][$page] ) ) {
+
+				if( isset( $this->rewrites[$page] ) ) {
+					$this->get_access_to['rewrite'][$page] = array_map( function( $v ) {
+						return isset( $this->vars->tax[$v] ) ? $this->vars->tax[$v] : false;
+					}, $this->rewrites[$page] );
+					$this->get_access_to['rewrite'][$page] = array_filter( $this->get_access_to['rewrite'][$page] );
+					$this->get_access_to['rewrite'][$page] = array_flip( $this->get_access_to['rewrite'][$page] );
+
+				} else {
+					$this->get_access_to['rewrite'][$page] = array();
+				}
+			}
+
+			if( $this->get_access_to['rewrite'][$page] ) {
+				$rewrites = array_intersect_key( $this->get_access_to['rewrite'][$page], $parameters ); // 1st array ensures proper sorting
+				
+				if( $rewrites ) {
+					foreach( $rewrites as $parameter => $values ) {
+						$rewrite_parameters[$parameter] = $parameter . '-' . $parameters[$parameter];
+						unset( $parameters[$parameter] );
+					}
+
+					$url = trailingslashit( $url ) . implode( '/', $rewrite_parameters );
+				}
+			}
+
+			ksort( $parameters );
+			$url = user_trailingslashit( $url );
+			$url = add_query_arg( $parameters, $url );
+			
+			return $url;
 		}
 
 		private function setup_archive( $archive_terms_string ) {
@@ -808,7 +1060,7 @@ if( ! class_exists('A_W_F_frontend') ) {
 				if( class_exists( 'SitePress' ) ) {
 					global $woocommerce_wpml;
 
-					if ( $woocommerce_wpml && isset( $woocommerce_wpml->url_translation ) ) {
+					if( $woocommerce_wpml && isset( $woocommerce_wpml->url_translation ) ) {
 						if( 'product_cat' === $this->is_archive || 'product_tag' == $this->is_archive ) {
 							add_filter( 'term_link', [ $woocommerce_wpml->url_translation, 'translate_taxonomy_base' ], 15, 3 );
 
@@ -822,16 +1074,19 @@ if( ! class_exists('A_W_F_frontend') ) {
 					}
 				}
 			}
+
+			$tl = get_term_link( reset( $archive_terms ), $this->is_archive );
 			
-			$this->current_url = user_trailingslashit( get_term_link( reset( $archive_terms ), $this->is_archive ) );
 			remove_filter( 'term_link', array( $this, 'adjust_hierarchical_term_links' ), 10 );
 			remove_filter( 'term_link', array( $this, 'adjust_wpml_custom_taxonomy_base' ), 15 );
-			$this->current_url = urldecode( $this->current_url );
 
-			if( is_wp_error( $this->current_url ) ) {
+			if( is_wp_error( $tl ) ) {
 				$this->current_url = $this->shop_url;
 
 			} else {
+				$this->current_url = user_trailingslashit( $tl );
+				$this->current_url = urldecode( $this->current_url );
+				
 				if( 1 < count( $archive_terms ) ) {
 					if( $this->permalinks_on ) {
 						$replace = user_trailingslashit( '/' . reset( $archive_terms ) );
@@ -850,13 +1105,26 @@ if( ! class_exists('A_W_F_frontend') ) {
 			$slug = $term->slug;
 			$t    = get_taxonomy( $taxonomy );
 	
-			if ( isset( $t->rewrite['hierarchical'] ) && $t->rewrite['hierarchical'] ) {
+			if( isset( $t->rewrite['hierarchical'] ) && $t->rewrite['hierarchical'] ) {
 				global $wp_rewrite;
 
 				$termlink = $wp_rewrite->get_extra_permastruct( $taxonomy );
-				$termlink = str_replace( "%$taxonomy%", $slug, $termlink );
+				if( $termlink ) {
 
-				$termlink = home_url( user_trailingslashit( $termlink, 'category' ) );
+					if( class_exists( 'SitePress' ) ) {
+						global $woocommerce_wpml;
+
+						if( $woocommerce_wpml && isset( $woocommerce_wpml->url_translation ) ) {
+							$base = $woocommerce_wpml->url_translation->get_translated_tax_slug( $taxonomy );
+							if( ! empty( $base['translated_slug'] ) ) {
+								$termlink = str_replace( $base['slug'], $base['translated_slug'], $termlink );
+							}
+						}
+					}
+
+					$termlink = str_replace( "%$taxonomy%", $slug, $termlink );
+					$termlink = home_url( user_trailingslashit( $termlink, 'category' ) );
+				}
 			}
 
 			return $termlink;
@@ -1763,6 +2031,22 @@ if( ! class_exists('A_W_F_frontend') ) {
 			return $ppp;
 		}
 
+		protected function setup_canonical_parameters() {}
+		protected function build_canonical_parameters( &$parameters ) {}
+		public function set_canonical_nofollow( $url, $all_parameters ) {}
+
+		public function add_canonical_link() {
+
+			$parts = explode( '?', $this->current_url );
+			$canonical_url = array_shift( $parts );
+			$parameters = array();
+
+			if( ! empty( $canonical_url ) ) {
+				$this->build_canonical_parameters( $parameters );				
+				echo PHP_EOL . '<link rel="canonical" href="' . esc_attr( $this->get_url( $canonical_url, $parameters ) ) . '" />' . PHP_EOL;
+			}
+		}
+
 		public function add_meta_description() {
 			if( is_shop() || ( is_product_category() && ( 'yes' === get_option( 'awf_archive_components_support', 'yes' ) ) ) ) {
 				echo '<meta name="description" content="' . esc_attr( A_W_F::get_seo_meta_description( $this->query ) ) . '" />' . PHP_EOL;
@@ -1989,7 +2273,31 @@ if( ! class_exists('A_W_F_frontend') ) {
 		}
 
 		public function adjust_product_category_link( $termlink, $term, $taxonomy ) {
-			$termlink = add_query_arg( $this->get_access_to['product_categories_url_parameters'], $termlink );
+
+			if( isset( $this->rewrites[$taxonomy] ) ) {
+
+				$rewrites = array_map( function( $v ) {
+					return isset( $this->vars->tax[$v] ) ? $this->vars->tax[$v] : false;
+				}, $this->rewrites[$taxonomy] );
+				$rewrites = array_filter( $rewrites );
+				$rewrites = array_intersect_key( array_flip( $rewrites ), $this->get_access_to['product_categories_url_parameters'] ); // 1st array ensures proper sorting
+				
+				if( $rewrites ) {
+					$rewrite_parameters = array();
+					$parameters = $this->get_access_to['product_categories_url_parameters'];
+
+					foreach( $rewrites as $parameter => $values ) {
+						$rewrite_parameters[$parameter] = $parameter . '-' . $parameters[$parameter];
+						unset( $parameters[$parameter] );
+					}
+
+					$termlink = user_trailingslashit( trailingslashit( $termlink ) . implode( '/', $rewrite_parameters ) );
+					return add_query_arg( $parameters, $termlink );
+				}
+
+			} else {
+				$termlink = add_query_arg( $this->get_access_to['product_categories_url_parameters'], $termlink );
+			}
 
 			return $termlink;
 		}
@@ -2307,23 +2615,44 @@ if( ! class_exists('A_W_F_frontend') ) {
     }
 
 		public function adjust_wc_pagination( $args ) {
-			if( ! empty( $this->is_sc_page ) ) {
-				$args['base'] = esc_url_raw( add_query_arg( array( 'product-page' => '%#%' ), $this->current_url ) );
-				
+
+			if( $this->current_rewrites ) {
+				$current_url = $this->get_url( $this->current_url, $_GET );
+				$parts = explode( '?', $current_url );
+
+				if( $parts ) {
+					if( ! empty( $this->is_sc_page ) ) {
+						$args['base'] = esc_url_raw( add_query_arg( array( 'product-page' => '%#%' ), $current_url ) );
+
+					} else {
+						global $wp_rewrite;
+						$base = array_shift( $parts );
+						$args['base'] = str_replace( 999999999, '%#%', trailingslashit( $base ) . user_trailingslashit( $wp_rewrite->pagination_base . '/' . 999999999, 'paged' ) );
+					}
+
+					$args['add_args'] = array_diff_key( $_GET, array_flip( $this->current_rewrites ) );
+				}
+
 			} else {
-				if( $this->permalinks_on ) {
-					global $wp_rewrite;
-					
-					$args['base'] = str_replace( 999999999, '%#%', trailingslashit( $this->current_url ) . user_trailingslashit( $wp_rewrite->pagination_base . '/' . 999999999, 'paged' ) );
+				if( ! empty( $this->is_sc_page ) ) {
+					$args['base'] = esc_url_raw( add_query_arg( array( 'product-page' => '%#%' ), $this->current_url ) );
 					
 				} else {
-					$args['base'] = esc_url_raw( add_query_arg( array( 'paged' => '%#%' ), $this->current_url ) );
+					if( $this->permalinks_on ) {
+						global $wp_rewrite;
+						
+						$args['base'] = str_replace( 999999999, '%#%', trailingslashit( $this->current_url ) . user_trailingslashit( $wp_rewrite->pagination_base . '/' . 999999999, 'paged' ) );
+						
+					} else {
+						$args['base'] = esc_url_raw( add_query_arg( array( 'paged' => '%#%' ), $this->current_url ) );
+					}
+					
+					$args['format'] = '';
 				}
-				
-				$args['format'] = '';
+
+				$args['add_args'] = $_GET;
 			}
 
-			$args['add_args'] = $_GET;
 			unset( $args['add_args']['product-page'] );
 			
 			return $args;
@@ -2496,6 +2825,13 @@ if( ! class_exists('A_W_F_frontend') ) {
 				)
 			);
 			
+			if( $this->rewrites ) {
+				$js_data['rewrite'] = 'yes';
+				if( isset( $this->rewrites[$this->url_page] ) ) {
+					$js_data['rewrite_page'] = $this->url_page;
+				}
+			}
+
 			if( $this->is_archive ) {
 				$js_data['archive_page'] = $this->vars->tax[$this->is_archive];
 				$js_data['archive_identifier'] = $this->vars->misc['archive'];
@@ -2570,7 +2906,7 @@ if( ! class_exists('A_W_F_frontend') ) {
 
 			}
 
-			if( function_exists( 'wc_current_theme_is_fse_theme' ) && wc_current_theme_is_fse_theme() ) {
+			if( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) {
 				$js_data['cm_v2'] = 'yes';
 
 				if( isset( $js_data['products_container'] ) ) {
@@ -2760,54 +3096,6 @@ if( ! class_exists('A_W_F_frontend') ) {
 			}
 
 			return false;
-		}
-
-		public function get_url_query() {
-
-			$url_query = array();
-			$delete_params = array( 's' => '', 'paged' => '', 'product-page' => '' );
-
-			foreach( $this->query->tax as $var => $value ) {
-				$url_query[$this->vars->tax[$var]] = implode( ',', $value );
-			}
-			
-			foreach( $this->query->awf as $var => $value ) {
-				$url_query[$this->vars->awf[$var]] = $value;
-			}
-			
-			foreach( $this->query->meta as $var => $value ) {
-				$url_query[$this->vars->meta[$var]] = implode( ',', $value );
-			}
-			
-			foreach( $this->query->range as $var => $value ) {
-				$url_query[$this->vars->range[$var]] = $value;
-				
-				$var = substr( $var, 4 );
-				if( isset( $this->vars->tax[$var] ) ) { $delete_params[$this->vars->tax[$var]] = ''; }
-			}
-			
-			if( $this->filter_on && 'yes' === get_option( 'awf_get_parameters_support', 'no' ) ) {
-				$url_query = array_merge( $url_query, $_GET );
-			}
-			
-			$url_query = array_diff_key( $url_query, $this->vars->tax, $delete_params );
-			
-			if( isset( $url_query[$this->vars->awf['search']] ) ) {
-				$url_query[$this->vars->awf['search']] = str_replace( array( '\"', "\'" ), array( '"', "'" ), $url_query[$this->vars->awf['search']] );
-			}
-			
-			if( $this->is_archive ) {
-				$url_query[$this->vars->misc['archive']] = 1;
-
-				if( $this->permalinks_on ) {
-					unset( $url_query[$this->vars->tax[$this->is_archive]] );
-				} else {
-					$url_query[$this->is_archive] = $url_query[$this->vars->tax[$this->is_archive]];
-					unset( $url_query[$this->vars->tax[$this->is_archive]] );
-				}
-			}
-			
-			return $url_query;
 		}
 		
 		public function get_reset_all_exceptions( $exceptions = array() ) {
@@ -3253,19 +3541,77 @@ if( ! class_exists('A_W_F_frontend') ) {
 			return $where;
 		}
 
-		protected function sort_query() {
-			ksort( $this->query->tax );
-			ksort( $this->query->awf );
-			ksort( $this->query->meta );
-			ksort( $this->query->range );
+		public function get_price_filter_min_max() {
+			global $wpdb;
 
-			array_walk( $this->query->tax, function( &$value, $key ) {
-				if( is_array( $value ) ) { sort( $value ); }
-			});
+			$query_args = apply_filters( 'awf_dynamic_price_range_args', array() );
 
-			array_walk( $this->query->meta, function( &$value, $key ) {
-				if( is_array( $value ) ) { sort( $value ); }
-			});
+			if( empty( $query_args ) ) {
+				$query_args = array(
+					'post_type' => 'product',
+					'fields' => 'ids',
+					'post_status' => 'publish',
+					'ignore_sticky_posts' => true,
+					'no_found_rows' => true,
+					'posts_per_page' => -1,
+					'paged' => '',
+				);
+				
+				if( isset( $this->get_access_to['counts_meta_query'] ) ) {
+					$query_args['meta_query'] = $this->get_access_to['counts_meta_query'];
+				} else {
+					$this->get_access_to['counts_meta_query'] = $query_args['meta_query'] = $this->set_wc_meta_query( array() );
+				}
+
+				unset( $query_args['meta_query']['price_filter'] );
+				
+				$query_args['post__in'] = $this->get_wc_post__in( array() );
+
+				$query_args['tax_query'] = $this->set_wc_tax_query( array() );
+				$this->set_default_visibility( $query_args['tax_query'] );
+			}
+
+			$query = new WP_Query( $query_args );
+
+			if( ! empty( $query->posts ) ) {
+				$sql = "
+				SELECT MIN( min_price ) as min_price, MAX( max_price ) as max_price
+				FROM {$wpdb->wc_product_meta_lookup}
+				WHERE product_id IN (" . implode( ',', $query->posts ) . ")";
+
+				$min_max_prices = $wpdb->get_row( $sql, ARRAY_A );
+
+				if( empty( $min_max_prices['min_price'] ) ) {
+					$min_max_prices['min_price'] = 0;
+				}
+
+				if( empty( $min_max_prices['max_price'] ) ) {
+					$min_max_prices['max_price'] = 1;
+				}
+
+				if ( wc_tax_enabled() && 'incl' === get_option( 'woocommerce_tax_display_shop' ) && ! wc_prices_include_tax() ) {
+					$tax_class = apply_filters( 'awf_price_filter_tax_class', '' );
+					$tax_rates = WC_Tax::get_rates( $tax_class );
+
+					if( $tax_rates ) {
+						$min_max_prices['min_price'] += WC_Tax::get_tax_total( WC_Tax::calc_inclusive_tax( $min_max_prices['min_price'], $tax_rates ) );
+						$min_max_prices['max_price'] += WC_Tax::get_tax_total( WC_Tax::calc_inclusive_tax( $min_max_prices['max_price'], $tax_rates ) );
+					}
+				}
+
+				if( class_exists( 'SitePress' ) && function_exists( 'wcml_get_woocommerce_currency_option' ) ) {
+					$current_currency = apply_filters( 'wcml_price_currency', NULL );
+
+					if( $current_currency !== wcml_get_woocommerce_currency_option() ) {
+						$min_max_prices['min_price'] = apply_filters( 'wcml_raw_price_amount', $min_max_prices['min_price'], $current_currency );
+						$min_max_prices['max_price'] = apply_filters( 'wcml_raw_price_amount', $min_max_prices['max_price'], $current_currency );
+					}
+				}
+
+				return $min_max_prices;
+			}
+
+			return array( 'min_price' => 0, 'max_price' => 1 );
 		}
 
 		public function prepare_product_counts() {

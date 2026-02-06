@@ -33,11 +33,18 @@ jQuery( document ).ready( function( $ ){
   
       } else {
         $filter.on( 'click', function() {
+
           if( $preset_wrapper.hasClass( 'awf-left-popup-sidebar-mode' ) ) {
             a_w_f.close_togglable_preset();
           }
-          $( 'body' ).block( $( '<div class="awf-loader"></div>' ) );
-          window.location.href = $( this ).closest( 'a' ).attr( 'href' );
+          $( 'body' ).block( { message: $( '<div class="awf-loader"></div>' ), blockMsgClass: 'blockMsg awf-blockMsg' } );
+
+          if( 'pre_button_query' in awf_data ) {
+            awf_data.page_reload = true;
+          } else {
+            window.location.href = $( this ).closest( 'a' ).attr( 'href' );
+          }
+          
         });
       }
     }
@@ -193,6 +200,7 @@ jQuery( document ).ready( function( $ ){
       a_w_f.setup_daterangepicker( $filter, $filter_container, $preset_wrapper );
   
     } else {
+
       /* No jQuery solution https://github.com/jquery/jquery/issues/2871*/
       $filter.siblings('label').each( function() {
         this.addEventListener( 'touchstart', function() { $filter_container.addClass( 'awf-hover-off' ); }, { passive: true } );
@@ -726,14 +734,24 @@ jQuery( document ).ready( function( $ ){
 
     if( $preset_wrapper.hasClass( 'awf-url' ) ) {
       
-      if( $filter instanceof jQuery ) {
+      if( ( $filter instanceof jQuery ) && ! awf_data.page_reload ) {
         a_w_f.update_url();
+
       } else {
         if( $preset_wrapper.hasClass( 'awf-left-popup-sidebar-mode' ) ) {
           a_w_f.close_togglable_preset();
         }
-        $( 'body' ).block( $( '<div class="awf-loader"></div>' ) );
-        window.location.href = a_w_f.build_url( $.extend( true, {}, awf_data.query ) );
+
+        $( 'body' ).block( { message: $( '<div class="awf-loader"></div>' ), blockMsgClass: 'blockMsg awf-blockMsg' } );
+
+        if( 'rewrite_page' in awf_data ) {
+          a_w_f.request_url().then( function( response ) {
+            if( 'url' in response ) { window.location.href = response.url; } else { window.location.href = a_w_f.build_url(); }
+          } );
+
+        } else {
+          window.location.href = a_w_f.build_url();
+        }
       }
       
     } else if( $preset_wrapper.hasClass( 'awf-ajax' ) ) {
@@ -901,7 +919,7 @@ jQuery( document ).ready( function( $ ){
     }
     
     if( 0 === $wrapper.length ) { return; }
-    
+
     if( 'ajax_pagination' in awf_data ) {
       
       if( awf_data.ajax_pagination_loading ) {
@@ -931,14 +949,25 @@ jQuery( document ).ready( function( $ ){
         $loader.css( 'padding-top', padding_top );
       }
     }
-    
-    var url = window.location.href;
+
+    var url;
     var $response;
+
+    if( 'rewrite_page' in awf_data ) {
+      ajax_data.awf_rewrite = a_w_f.get_rewrites_ajax_data();
+    }
 
     if( 'dedicated_ajax' === awf_data.ajax_mode ) {
       url = awf_data.ajax_url;
 
     } else {
+
+      if( 'rewrite_page' in awf_data ) {
+        url = a_w_f.build_url();
+      } else {
+        url = window.location.href;
+      }
+
       delete ajax_data.action;
 
       if( 'yes' === awf_data.cm_v2 ) {
@@ -947,7 +976,7 @@ jQuery( document ).ready( function( $ ){
     }
 
     if( is_cm_v2 ) {
-      a_w_f.get_products_cm_v2( ajax_data, $wrapper, is_sc );
+      a_w_f.get_products_cm_v2( url, ajax_data, $wrapper, is_sc );
 
     } else {
 
@@ -973,7 +1002,7 @@ jQuery( document ).ready( function( $ ){
             if( $response instanceof jQuery && 0 < $response.length ) {
               a_w_f.parse_ajax_response( $response, ajax_data, $wrapper, is_sc );
             } else {
-              a_w_f.get_products_cm_v2( ajax_data, $wrapper, is_sc );
+              a_w_f.get_products_cm_v2( url, ajax_data, $wrapper, is_sc );
             }
 
           }
@@ -982,7 +1011,7 @@ jQuery( document ).ready( function( $ ){
           if( 'debug' in awf_data ) {
             console.log( error_msg );
           } else {
-            a_w_f.get_products_cm_v2( ajax_data, $wrapper, is_sc );
+            a_w_f.get_products_cm_v2( url, ajax_data, $wrapper, is_sc );
           }
         }
       });
@@ -991,14 +1020,23 @@ jQuery( document ).ready( function( $ ){
 
   };
   
-  a_w_f.get_products_cm_v2 = function( ajax_data, $wrapper, is_sc ) {
+  a_w_f.get_products_cm_v2 = function( url, ajax_data, $wrapper, is_sc ) {
 
-    var url = window.location.href;
     var url_parts = url.split('?');
     var params = 'awf_cm_v2=1';
 
     if( ( 'ajax_pagination' in awf_data ) && awf_data.ajax_pagination_loading && 'page_number' in ajax_data ) {
-      params += '&paged=' + ajax_data.page_number;
+      if( is_sc ) {
+        params += '&product-page=' + ajax_data.page_number;
+      } else {
+        params += '&paged=' + ajax_data.page_number;
+      }
+    }
+
+    if( 'awf_rewrite' in ajax_data && 0 < Object.keys( ajax_data.awf_rewrite ).length ) {
+      params += '&' + Object.keys( ajax_data.awf_rewrite ).map( function( k ) {
+        return 'awf_rewrite[' + k + ']=' + ajax_data.awf_rewrite[k];
+      } ).join( '&' );
     }
 
     if( 2 === url_parts.length ) {
@@ -1140,7 +1178,7 @@ jQuery( document ).ready( function( $ ){
 
         $wrapper.unblock();
       }
-      
+
       if( 'ajax_scroll' in awf_data ) {
         $( [document.documentElement, document.body] ).animate( { scrollTop: a_w_f.products_wrappers.offset().top - parseInt( awf_data.ajax_scroll, 10 ) }, 500, 'swing' );
       }
@@ -1212,10 +1250,12 @@ jQuery( document ).ready( function( $ ){
         awf_ajax_extras: ( 'ajax_extras' in awf_data ) ? awf_data.ajax_extras : '',
         awf_archive_page: ( 'archive_page' in awf_data ) ? awf_data.archive_page : '',
         awf_sc_attrs: ( 'sc_attrs' in data ) ? data.sc_attrs : {},
+        awf_rewrite: a_w_f.get_rewrites_ajax_data(),
         awf_callers: callers,
       },
       success:  function( response ) {
         if( response ) {
+
           $.each( response.counts, function( taxonomy, slugs ) {
             $.each( slugs, function( slug, count ) {
               var $filters = $( 'input.awf-filter[data-taxonomy="' + taxonomy + '"][value="' + slug + '"]' );
@@ -1276,7 +1316,7 @@ jQuery( document ).ready( function( $ ){
 
           }
 
-          a_w_f.update_hrefs();
+          a_w_f.update_hrefs( response );
           
           $( document ).trigger( 'awf_after_counts_update' );
           
@@ -1457,7 +1497,50 @@ jQuery( document ).ready( function( $ ){
     }
   };
   
+  a_w_f.get_rewrites_ajax_data = function() {
+    var data = {};
+    
+    if( 'rewrite_page' in awf_data ) {
+      data.rewrite = 1;
+
+      if( 'archive_page' in awf_data ) {
+        data.archive_page = awf_data.archive_page;
+
+      } else if( 'sc_page' in awf_data ) {
+        data.sc_page = awf_data.sc_page;
+      }
+    }
+
+    return data;
+  }
+
+  a_w_f.request_url = function( query ) {
+    
+    if( 'undefined' === typeof( query ) ) {
+      query = $.extend( true, {}, awf_data.query );
+    }
+    
+    var data = {
+      action: 'awf',
+      awf_front: 1,
+      awf_action: 'request_url',
+      awf_query: query,
+      awf_rewrite: a_w_f.get_rewrites_ajax_data()
+    }
+
+    return $.ajax({
+      type:     "get",
+      url:      awf_data.ajax_url,
+      dataType: "json",
+      data: data
+    });
+  }
+  
   a_w_f.build_url = function( query, archive_url ) {
+
+    if( 'undefined' === typeof( query ) ) {
+      query = $.extend( true, {}, awf_data.query );
+    }
 
     var url = awf_data.filters_url;
     
@@ -1504,84 +1587,106 @@ jQuery( document ).ready( function( $ ){
     return url;
   };
   
-  a_w_f.update_hrefs = function() {
-    $( '.awf-url .awf-filter-wrapper' ).each( function( i, wrapper ) {
-      
-      if( $( wrapper ).hasClass( 'awf-reset-all' ) ) {
-        if( 'premium' in a_w_f ) { a_w_f.update_reset_all_hrefs( $( wrapper ) ); }
-        
-      } else if( $( wrapper ).hasClass( 'awf-single' ) || $( wrapper ).hasClass( 'awf-range' ) ) {
-        $( wrapper ).find( '.awf-filter' ).each( function( ii, filter ) {
-          
-          var $filter = $( filter );
-          var query = $.extend( true, {}, awf_data.query );
-          var taxonomy = $filter.attr( 'data-taxonomy' );
-          
-          if( ! ( taxonomy in query ) ) {
-            query[taxonomy] = '';
-          }
-          
-          if( $filter.hasClass( 'awf-default' ) || $filter.val() === query[taxonomy] ) {
-            if( ! ( ( 'archive_page' in awf_data ) && taxonomy === awf_data.archive_page ) ) {
-              delete query[taxonomy];
+  a_w_f.update_hrefs = function( ajax_data ) {
 
-              if( $filter.is( '[data-max-name]' ) ) { delete query[$filter.attr( 'data-max-name' )]; }
+    if( 'links' in ajax_data ) {
+      a_w_f.preset_wrappers.filter( '.awf-url' ).each( function( i, preset_wrapper ) {
+        var $preset_wrapper = $( preset_wrapper );
+        var preset_id = $preset_wrapper.attr( 'data-preset-id' );
+        
+        if( preset_id in ajax_data.links ) {
+          $.each( ajax_data.links[preset_id], function( filter_id, filters ) {
+            var $links = $preset_wrapper.find( '.awf-filters-' + preset_id + '-' + filter_id + '-container a' );
+            $.each( filters, function( slug, href ) {
+              var nofollow = '';
+              if( 'nofollow' in ajax_data && href in ajax_data.nofollow && 1 == ajax_data.nofollow[href] ) {
+                nofollow = 'nofollow';
+              }
+              $links.filter( '.awf-' + slug + '-href' ).attr( 'href', href ).attr( 'rel', nofollow );
+            });
+          });
+        }
+      });
+
+    } else {
+      $( '.awf-url .awf-filter-wrapper' ).each( function( i, wrapper ) {
+        
+        if( $( wrapper ).hasClass( 'awf-reset-all' ) ) {
+          if( 'premium' in a_w_f ) { a_w_f.update_reset_all_hrefs( $( wrapper ) ); }
+          
+        } else if( $( wrapper ).hasClass( 'awf-single' ) || $( wrapper ).hasClass( 'awf-range' ) ) {
+          $( wrapper ).find( '.awf-filter' ).each( function( ii, filter ) {
+            
+            var $filter = $( filter );
+            var query = $.extend( true, {}, awf_data.query );
+            var taxonomy = $filter.attr( 'data-taxonomy' );
+            
+            if( ! ( taxonomy in query ) ) {
+              query[taxonomy] = '';
             }
             
-          } else {
-            query[taxonomy] = $filter.val();
-            if( $filter.is( '[data-max-name]' ) ) { query[$filter.attr( 'data-max-name' )] = $filter.attr( 'data-next-value' ); }
-          }
-          
-          if( $filter.is( '[data-archive-permalink]' ) ) {
-            $filter.closest( 'a' ).attr( 'href', a_w_f.build_url( query, $filter.attr( 'data-archive-permalink' ) ) );
-          } else {
-            $filter.closest( 'a' ).attr( 'href', a_w_f.build_url( query ) );
-          }
+            if( $filter.hasClass( 'awf-default' ) || $filter.val() === query[taxonomy] ) {
+              if( ! ( ( 'archive_page' in awf_data ) && taxonomy === awf_data.archive_page ) ) {
+                delete query[taxonomy];
+
+                if( $filter.is( '[data-max-name]' ) ) { delete query[$filter.attr( 'data-max-name' )]; }
+              }
               
-        });
-        
-      } else if( $( wrapper ).hasClass( 'awf-multi' ) ) {
-        
-        $( wrapper ).find( '.awf-filter' ).each( function( ii, filter ) {
-          
-          var $filter = $( filter );
-          var query = $.extend( true, {}, awf_data.query );
-          var taxonomy = $filter.attr( 'data-taxonomy' );
-          var values;
-          if( taxonomy in query ) { values = query[taxonomy].split( ',' ); } else { values = []; }
-          
-          if( $filter.is( ':checked' ) ) {
-            values = $.grep( values, function( v ) { return v !== $filter.val(); } );
-
-          } else {
-            $filter.parents( 'ul' ).prev( 'li.awf-filter-container' ).find( '.awf-filter' ).each( function( i, f ) {
-              values = $.grep( values, function( v ) { return v !== $( f ).val(); } );
-            });
-
-            $filter.parents( 'li.awf-filter-container' ).next( 'ul' ).find( '.awf-filter' ).each( function( i, f ) {
-              values = $.grep( values, function( v ) { return v !== $( f ).val(); } );
-            });
-            
-            values.push( $filter.val() );
-          }
-          
-          if( values.length > 0 ) {
-            values.sort();
-            query[taxonomy] = values.join( ',' );
-
-          } else {
-            if( ( 'archive_page' in awf_data ) && taxonomy === awf_data.archive_page ) {
-              query[taxonomy] = $filter.val();
             } else {
-              delete query[taxonomy];
+              query[taxonomy] = $filter.val();
+              if( $filter.is( '[data-max-name]' ) ) { query[$filter.attr( 'data-max-name' )] = $filter.attr( 'data-next-value' ); }
             }
-          }
+            
+            if( $filter.is( '[data-archive-permalink]' ) ) {
+              $filter.closest( 'a' ).attr( 'href', a_w_f.build_url( query, $filter.attr( 'data-archive-permalink' ) ) );
+            } else {
+              $filter.closest( 'a' ).attr( 'href', a_w_f.build_url( query ) );
+            }
+                
+          });
           
-          $filter.closest( 'a' ).attr( 'href', a_w_f.build_url( query ) );
-        });
-      }
-    });
+        } else if( $( wrapper ).hasClass( 'awf-multi' ) ) {
+          
+          $( wrapper ).find( '.awf-filter' ).each( function( ii, filter ) {
+            
+            var $filter = $( filter );
+            var query = $.extend( true, {}, awf_data.query );
+            var taxonomy = $filter.attr( 'data-taxonomy' );
+            var values;
+            if( taxonomy in query ) { values = query[taxonomy].split( ',' ); } else { values = []; }
+            
+            if( $filter.is( ':checked' ) ) {
+              values = $.grep( values, function( v ) { return v !== $filter.val(); } );
+
+            } else {
+              $filter.parents( 'ul' ).prev( 'li.awf-filter-container' ).find( '.awf-filter' ).each( function( i, f ) {
+                values = $.grep( values, function( v ) { return v !== $( f ).val(); } );
+              });
+
+              $filter.parents( 'li.awf-filter-container' ).next( 'ul' ).find( '.awf-filter' ).each( function( i, f ) {
+                values = $.grep( values, function( v ) { return v !== $( f ).val(); } );
+              });
+              
+              values.push( $filter.val() );
+            }
+            
+            if( values.length > 0 ) {
+              values.sort();
+              query[taxonomy] = values.join( ',' );
+
+            } else {
+              if( ( 'archive_page' in awf_data ) && taxonomy === awf_data.archive_page ) {
+                query[taxonomy] = $filter.val();
+              } else {
+                delete query[taxonomy];
+              }
+            }
+            
+            $filter.closest( 'a' ).attr( 'href', a_w_f.build_url( query ) );
+          });
+        }
+      });
+    }
   };
   
   a_w_f.range_slider_onchange = function( range_container, values, min, max ) {
@@ -1870,8 +1975,21 @@ jQuery( document ).ready( function( $ ){
   };
   
   a_w_f.update_url = function() {
-    var url = a_w_f.build_url( $.extend( true, {}, awf_data.query ) );
-    window.history.pushState( { awf_ajax_call: true }, '', url );
+
+    if( 'rewrite_page' in awf_data ) {
+
+      a_w_f.request_url().then( function( response ) {
+        if( 'url' in response ) {
+          window.history.pushState( { awf_ajax_call: true }, '', response.url );
+        } else {
+          window.history.pushState( { awf_ajax_call: true }, '', a_w_f.build_url() );
+        }
+      } );
+
+    } else {
+      var url = a_w_f.build_url();
+      window.history.pushState( { awf_ajax_call: true }, '', url );
+    }
   };
   
   a_w_f.build_products_wrappers = function() {
@@ -2396,14 +2514,34 @@ jQuery( document ).ready( function( $ ){
   a_w_f.load_new_history_state = function( url ) {
 
     if( 'undefined' === typeof( url ) ) {
-      url = a_w_f.build_url( $.extend( true, {}, awf_data.query ) );
+
+      if( 'rewrite_page' in awf_data ) {
+        $( 'body' ).block( { message: $( '<div class="awf-loader"></div>' ), blockMsgClass: 'blockMsg awf-blockMsg' } );
+
+        a_w_f.request_url().then( function( response ) {
+
+          if( 'url' in response ) {
+            a_w_f.load_new_history_state( response.url );
+
+          } else {
+            url = a_w_f.build_url();
+            a_w_f.load_new_history_state( url );
+          }
+        } );
+
+      } else {
+        url = a_w_f.build_url();
+        a_w_f.load_new_history_state( url );
+      }
+
+    } else {
+
+      var history_state = a_w_f.get_ajax_history_state();
+
+      window.history.replaceState( history_state, document.title, window.location.href );
+      window.history.pushState( history_state, '', url );
+      window.location.reload();
     }
-
-    var history_state = a_w_f.get_ajax_history_state();
-
-    window.history.replaceState( history_state, document.title, window.location.href );
-    window.history.pushState( history_state, '', url );
-    window.location.reload();
   };
 
   $( window ).on( 'popstate', function( event ) {

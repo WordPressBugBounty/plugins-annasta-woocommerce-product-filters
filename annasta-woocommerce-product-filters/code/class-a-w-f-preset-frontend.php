@@ -23,6 +23,20 @@ if( ! class_exists( 'A_W_F_preset_frontend' ) ) {
       }
     }
 
+    public function get_filters_links() {
+      $links = array();
+
+      if( 'url' === $this->type ) {
+        foreach( $this->filters as $filter ) {
+          if( in_array( $filter->settings['type'], array( 'single', 'multi' ) ) ) {
+            $links[$filter->id] = $filter->get_all_links();
+          }
+        }
+      }
+
+      return $links;
+    }
+
     public function get_html() {
       
       $html = '';

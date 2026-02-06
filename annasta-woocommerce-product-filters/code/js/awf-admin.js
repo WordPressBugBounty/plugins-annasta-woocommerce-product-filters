@@ -1865,6 +1865,89 @@ jQuery( document ).ready( function( $ ) {
       } );
 
     } else if( a_w_f.settings_wrapper.hasClass( 'awf-tab-seo-settings' ) ) {
+
+      var $rewrite_rules_wrapper = $( '#awf-rewrite-rules-wrapper');
+
+      $( window ).on( 'load', function() {
+        $( '.awf-rewrite-pages-row' ).each( function() {
+          $( this ).find( 'select' ).first().select2( { 'placeholder': $rewrite_rules_wrapper.attr( 'data-rewrite-pages-select-placeholder' ) } );
+        });
+      });
+
+      $rewrite_rules_wrapper
+        .on( 'change', '.awf-rewrite-pages-row select', function() {
+          a_w_f.update_rewrite_rules();
+        })
+        .on( 'change', '.awf-rewrite-parameters-select', function() {
+          a_w_f.update_rewrite_rules();
+        })
+        .on( 'click', '.awf-remove-rewrite-parameter-btn', function() {
+          $( this ).closest( '.awf-rewrite-parameter-wrapper' ).remove();
+          a_w_f.update_rewrite_rules();
+        })
+      ;
+
+      $rewrite_rules_wrapper.on( 'click', '#awf-add-rewrite-parameter-btn', function() {
+
+        $('.awf-spinner-overlay').show();
+        
+        $.ajax({
+          type:     "post",
+          url:      "admin-ajax.php",
+          dataType: "html",
+          data:     { 
+            action: 'awf_admin',
+            awf_action: 'add_rewrite_parameter',
+            awf_rewrite_pages: $( this ).closest( '.awf-rewrite-rule-table' ).find( '.awf-rewrite-pages-row select' ).first().val(),
+            awf_ajax_referer: awf_js_data.awf_ajax_referer,
+          },
+          success: function( response ) {
+            $rewrite_rules_wrapper.html( response );
+            $rewrite_rules_wrapper.find( '.awf-rewrite-pages-row select.chosen_select' ).select2( { 'placeholder': $rewrite_rules_wrapper.attr( 'data-rewrite-pages-select-placeholder' ) } );
+
+            $('.awf-spinner-overlay').hide();
+          },
+          error: function( response ) { a_w_f.ajax_error_response( response ); }
+        } );
+      });
+
+      a_w_f.update_rewrite_rules = function() {
+        
+        $('.awf-spinner-overlay').show();
+        var rules = [];
+
+        $rewrite_rules_wrapper.find( '.awf-rewrite-rule-table' ).each( function( i, table ) {
+          var $table = $( table );
+          rules[i] = {
+            'pages': $table.find( '.awf-rewrite-pages-row select').first().val(),
+            'parameters': []
+          };
+
+          $table.find( '.awf-rewrite-parameters-row select.awf-rewrite-parameters-select').each( function( ii, select ) {
+            rules[i]['parameters'][ii] = $( select ).val();
+          });
+        });
+        
+        $.ajax({
+          type:     "post",
+          url:      "admin-ajax.php",
+          dataType: "html",
+          data:     { 
+            action: 'awf_admin',
+            awf_action: 'update_rewrite_rules',
+            awf_rewrite_rules: rules,
+            awf_ajax_referer: awf_js_data.awf_ajax_referer
+          },
+          success:  function( response ) {
+            $rewrite_rules_wrapper.find( '.awf-rewrite-pages-row select' ).select2( 'destroy' );
+            $rewrite_rules_wrapper.html( response );
+            $rewrite_rules_wrapper.find( '.awf-rewrite-pages-row select.chosen_select' ).select2( { 'placeholder': $rewrite_rules_wrapper.attr( 'data-rewrite-pages-select-placeholder' ) } );
+            $('.awf-spinner-overlay').hide();
+          },
+          error: function( response ) { a_w_f.ajax_error_response( response ); }
+        });
+      };
+
       $( '#awf_seo_meta_description' ).after(
         $( '<button type="button" id="awf_add_seo_filters_btn" class="button button-secondary"><i class="fas fa-plus-circle"></i><span>' + awf_js_data.l10n.add_seo_filters_btn_label + '</span></button>' ).on( 'click', function() {
           $( '#awf_seo_meta_description' ).val( $( '#awf_seo_meta_description' ).val() + '{annasta_filters}' );

@@ -1620,6 +1620,15 @@ li.awf-filter-container {
 
 /* BlockUI adjustments */
 
+.blockUI.blockMsg.awf-blockMsg {
+  background: transparent;
+  border: none !important;
+}
+
+.blockUI.blockMsg.awf-blockMsg h2 {
+  display: none;
+}
+
 .awf-filterable .blockUI.blockOverlay::before {
   content: "\f110";
   display: inline-block;

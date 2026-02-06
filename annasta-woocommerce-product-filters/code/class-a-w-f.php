@@ -109,6 +109,7 @@ if ( !class_exists( 'A_W_F' ) ) {
             add_action( 'widgets_init', array($this, 'register_widget') );
             add_action( 'init', array($this, 'register_shortcode') );
             add_action( 'customize_register', array($this, 'register_customizer') );
+            add_filter( 'rewrite_rules_array', array($this, 'add_rewrite_rules'), 10 );
             add_action( 'rest_api_init', function ( $wp_rest_server ) {
                 $referrer = wp_get_referer();
                 if ( !empty( $referrer ) ) {
@@ -365,7 +366,12 @@ if ( !class_exists( 'A_W_F' ) ) {
                 'awf_multilingual_support',
                 'awf_excluded_customizer_sections',
                 'awf_force_published_status',
-                'awf_cm_v2'
+                'awf_cm_v2',
+                'awf_rewrite_rules',
+                'awf_add_canonical',
+                'awf_add_nofollow',
+                'awf_canonical_parameters',
+                'awf_force_ppt_on_fps'
             );
             foreach ( $all_options as $name => $value ) {
                 if ( 0 !== strpos( $name, 'awf_' ) ) {
@@ -375,6 +381,7 @@ if ( !class_exists( 'A_W_F' ) ) {
                     delete_option( $name );
                 }
             }
+            flush_rewrite_rules();
         }
 
         public function add_wc_absence_warning() {
@@ -698,6 +705,142 @@ if ( !class_exists( 'A_W_F' ) ) {
                 }
             }
             return apply_filters( 'awf_seo_filters', $seo_parts );
+        }
+
+        public function add_rewrite_rules( $wp_rules ) {
+            // error_log( 'adding awf rewrites' );
+            $awf_rules = get_option( 'awf_rewrite_rules', array() );
+            unset($awf_rules[0]);
+            $awf_rules = array_filter( $awf_rules );
+            if ( 0 === count( $awf_rules ) ) {
+                return $wp_rules;
+            }
+            global $wp_rewrite;
+            $query_vars = (object) get_option( 'awf_query_vars', array(
+                'tax'  => array(),
+                'awf'  => array(),
+                'meta' => array(),
+            ) );
+            $vars_by_page = array();
+            foreach ( $awf_rules as $page => $parameters ) {
+                $vars_by_page[$page] = array();
+                foreach ( $parameters as $parameter ) {
+                    if ( isset( $query_vars->tax[$parameter] ) ) {
+                        $vars_by_page[$page][$parameter] = $query_vars->tax[$parameter];
+                    }
+                }
+                if ( 0 === count( $vars_by_page[$page] ) ) {
+                    unset($vars_by_page[$page]);
+                }
+            }
+            foreach ( $vars_by_page as $page => $vars ) {
+                $slugs = array_values( $vars );
+                $is_page = 0 === strpos( $page, 'awf_shortcode_page-' );
+                $rewrite = array(
+                    'rewrite' => '',
+                    'matches' => array(),
+                );
+                foreach ( $slugs as $var ) {
+                    $rewrite['rewrite'] .= '(?:/' . $var . '-([^/]+))?';
+                    $rewrite['matches'][] = array($var, false);
+                }
+                if ( !$is_page ) {
+                    $rewrite['rewrite'] .= '(?:/page/([0-9]{1,}))?';
+                    $rewrite['matches'][] = array('paged', false);
+                }
+                $awf_rewrites = array();
+                $position = 0;
+                switch ( $page ) {
+                    case 'shop':
+                        $key = array_search( 'index.php?post_type=product&paged=$matches[1]', $wp_rules );
+                        $keys = array_keys( $wp_rules );
+                        $position = array_search( $key, $keys );
+                        if ( false !== $position ) {
+                            $position = (int) $position;
+                            $position++;
+                            if ( 'page' === get_option( 'show_on_front' ) && intval( get_option( 'page_on_front' ) ) === wc_get_page_id( 'shop' ) ) {
+                                $slugs = array_values( $vars );
+                                switch ( count( $slugs ) ) {
+                                    case 1:
+                                        $awf_rewrites['(' . implode( '|', $slugs ) . ')-([^/]+)(?:/page/([0-9]{1,}))?/?$'] = 'index.php?post_type=product&$matches[1]=$matches[2]&paged=$matches[3]';
+                                        break;
+                                    case 2:
+                                        $awf_rewrites['(' . implode( '|', $slugs ) . ')-([^/]+)(?:/page/([0-9]{1,}))?/?$'] = 'index.php?post_type=product&$matches[1]=$matches[2]&paged=$matches[3]';
+                                        $awf_rewrites[$slugs[0] . '-([^/]+)/' . $slugs[1] . '-([^/]+)(?:/page/([0-9]{1,}))?/?$'] = 'index.php?post_type=product&' . $slugs[0] . '=$matches[1]&' . $slugs[1] . '=$matches[2]&paged=$matches[3]';
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            } else {
+                                $slug = get_post_field( 'post_name', wc_get_page_id( 'shop' ) );
+                                $awf_rewrites[$slug . $rewrite['rewrite'] . '/?$'] = 'index.php?post_type=product&' . $this->build_matches( $rewrite['matches'] );
+                            }
+                        }
+                        break;
+                    default:
+                        if ( $is_page ) {
+                            $parts = explode( '-', $page );
+                            if ( 2 === count( $parts ) ) {
+                                $page_id = (int) array_pop( $parts );
+                                $page_slug = get_post_field( 'post_name', $page_id );
+                                if ( empty( $page_slug ) ) {
+                                    continue 2;
+                                }
+                                $permastruct = $wp_rewrite->get_page_permastruct();
+                                $permastruct = trim( $permastruct, '/' );
+                                $permastruct = str_replace( '%pagename%', $page_slug, $permastruct );
+                                $awf_rewrites[$permastruct . $rewrite['rewrite'] . '/?$'] = 'index.php?page_id=' . $page_id . '&' . $this->build_matches( $rewrite['matches'] );
+                            }
+                        } else {
+                            $t = get_taxonomy( $page );
+                            if ( $t && !empty( $t->rewrite['slug'] ) ) {
+                                $permastruct = $wp_rewrite->get_extra_permastruct( $page );
+                                $terms = ( $t->hierarchical ? '(.+?)' : '([^/]+)' );
+                                if ( $permastruct ) {
+                                    $permastruct = trim( $permastruct, '/' );
+                                    $permastruct = str_replace( '%' . $page . '%', $terms, $permastruct );
+                                } else {
+                                    $permastruct = rtrim( ltrim( $t->rewrite['slug'], '/' ), '/' ) . '/' . $terms;
+                                }
+                                $key = array_search( 'index.php?' . $page . '=$matches[1]&paged=$matches[2]', $wp_rules );
+                                $keys = array_keys( $wp_rules );
+                                $position = array_search( $key, $keys );
+                                if ( false !== $position ) {
+                                    $position = (int) $position;
+                                    array_unshift( $rewrite['matches'], array($page, false) );
+                                    $awf_rewrites[$permastruct . $rewrite['rewrite'] . '/?$'] = 'index.php?' . $this->build_matches( $rewrite['matches'] );
+                                }
+                            }
+                        }
+                        break;
+                }
+                if ( 0 < count( $awf_rewrites ) ) {
+                    $wp_rules = array_merge( array_slice(
+                        $wp_rules,
+                        0,
+                        $position,
+                        true
+                    ), $awf_rewrites, array_slice(
+                        $wp_rules,
+                        $position,
+                        count( $wp_rules ),
+                        true
+                    ) );
+                }
+            }
+            // error_log( print_r( $wp_rules, true ) );
+            return $wp_rules;
+        }
+
+        private function build_matches( $matches, $add = array() ) {
+            $response = array();
+            $matches = array_merge( $matches, $add );
+            $i = 1;
+            foreach ( $matches as $match ) {
+                $k = ( empty( $match[0] ) ? '$matches[' . $i++ . ']' : $match[0] );
+                $response[] = ( empty( $match[1] ) ? $k . '=$matches[' . $i++ . ']' : $k . '=' . $match[1] );
+            }
+            return implode( '&', $response );
         }
 
         private function awf_autoloader( $class ) {

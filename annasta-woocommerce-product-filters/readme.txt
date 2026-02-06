@@ -3,7 +3,7 @@ Contributors: annastaa
 Tags: product filter, ajax filter, woocommerce filter, woocommerce product filter, woocommerce products filter
 Requires at least: 5.7
 Tested up to: 6.8
-Stable tag: 1.8.0
+Stable tag: 1.8.1
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -27,9 +27,10 @@ Use the versatile controls of the filters' admin interface to fine-tune the plug
 * [Control the pages on which you wish to display your filters](https://annasta.net/plugins/annasta-woocommerce-product-filters/documentation/preset-settings/display-on/), display different filter sets for different categories / brands / tags (multiple presets are available in the premium version).
 * Try the annasta dedicated [AJAX mode](https://annasta.net/plugins/annasta-woocommerce-product-filters/documentation/product-lists-settings/ajax-mode/) for even **faster AJAX filtering**.
 * URL filters: whenever needed (for SEO or other reasons), [setup your filters as HTML hyperlinks](https://annasta.net/plugins/annasta-woocommerce-product-filters/documentation/preset-settings/filtering-style/).
-* **Step-by-step filters style** with extensive settings allows the [creation of product finders](https://annasta.net/plugins/annasta-woocommerce-product-filters/documentation/preset-settings/step-by-step-filters-settings/), with or without redirects.
 * **URL updates and browser Back and Forward navigation support** is implemented in all our WooCommerce AJAX filter modes.
-* **SEO options** include the dynamic page and shop titles generation, as well as support for the meta description tags containing the combinations of all the currently active filters.
+* **NEW!** URL rewrite options allow [turning filtering parameters into permalinks](https://annasta.net/plugins/annasta-woocommerce-product-filters/documentation/seo-settings/rewrite-filters-to-permalinks/).
+* **SEO options** include the dynamic page and shop titles updates, auto-insertion of **canonical links** for filtered pages, addition of rel="nofollow" to filters' <a> tags, as well as auto-generation of meta description tags from combinations of currently active filters.
+* **Step-by-step filters style** with extensive settings allows the [creation of product finders](https://annasta.net/plugins/annasta-woocommerce-product-filters/documentation/preset-settings/step-by-step-filters-settings/), with or without redirects.
 * Variable products stock status support.
 * Suggestions **autocomplete** option is available for the annasta products string search control.
 * Built-in [AJAX pagination options](https://annasta.net/plugins/annasta-woocommerce-product-filters/documentation/product-lists-settings/pagination/) for your WooCommerce shop include **Infinite scroll**, AJAX-driven page numbers, and **Load More button** next page loads.
@@ -127,6 +128,17 @@ We do maintain the program of the new features introduction for the future plugi
 * [Google Fonts](https://fonts.google.com)
 
 == Changelog ==
+
+= 1.8.2 =
+* SEO: added URL rewrite options that allow turning filtering parameters into permalinks.
+* SEO: added option to auto-insert canonical links into filterable pages.
+* SEO: added option to add rel="nofollow" for filters-generated links.
+* Improved the consistency of URL parameters sorting.
+* Improved the handling of non-latin characters in slugs.
+* WPML compatibility: fixes in the handling of translated taxonomy base slugs.
+* Other fixes, including the removal of some PHP 8.3 warnings and notices.
+* Freemius update to version 2.12.2
+* Upped the WooCommerce version compliance to 10.2
 
 = 1.8.1 =
 * Added the "Layout" filter setting (the old "Display in row" setting has been moved to its options).
