@@ -18,20 +18,23 @@
     'custom' => ' style="max-width:170px; margin-right:2em;"',
     'options' => array(
       'scrollbars' => __( 'Scrollbars', 'annasta-filters' ),
-      'toggle' => __( '"Show more" button', 'annasta-filters' ),
     )
   );
 
-  if( ! A_W_F::$premium ) {
-    $select_options['options']['toggle'] = '(premium) ' . $select_options['options']['toggle'];
-    $select_options['disabled'] = array( 'toggle' );
+  if( 'search' !== $filter->module ) {
+    if( A_W_F::$premium ) {
+      $select_options['options']['toggle'] = __( '"Show more" button', 'annasta-filters' );
+    } else {
+      $select_options['options']['toggle'] = '(premium) ' . __( '"Show more" button', 'annasta-filters' );
+      $select_options['disabled'] = array( 'toggle' );
+    }
   }
 
   echo A_W_F::$admin->build_select_html( $select_options );
 ?>
 
-                  <input type="checkbox" style="margin-right:-5px;" name="<?php echo $filter->prefix; ?>shrink_height_limit" id="<?php echo $filter->prefix; ?>shrink_height_limit" value="yes"<?php if( ! empty( $filter->settings['shrink_height_limit'] ) ) { echo ' checked="checked"'; } ?>>
-                  <label for="<?php echo $filter->prefix; ?>shrink_height_limit" class="awf-secondary-label">
+                  <label for="<?php echo $filter->prefix; ?>shrink_height_limit" class="awf-secondary-label" style="display:inline-flex;margin: 5px 0;align-items: center;white-space:nowrap;">
+                    <input type="checkbox" style="margin-right:-5px;" name="<?php echo $filter->prefix; ?>shrink_height_limit" id="<?php echo $filter->prefix; ?>shrink_height_limit" value="yes"<?php if( ! empty( $filter->settings['shrink_height_limit'] ) ) { echo ' checked="checked"'; } ?>>
                     <span class="woocommerce-help-tip" data-tip="<?php esc_attr_e( 'Adjust height limit for smaller lists, for example when filter options get hidden via the Empty items style setting.', 'annasta-filters' ); ?>"></span>
                     <?php esc_html_e( 'Auto-shrink for shorter options list', 'annasta-filters' ); ?>
                   </label>

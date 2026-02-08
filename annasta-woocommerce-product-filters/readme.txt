@@ -1,9 +1,9 @@
-=== annasta Woocommerce Product Filters ===
+=== annasta Filters for WooCommerce ===
 Contributors: annastaa
-Tags: product filter, ajax filter, woocommerce filter, woocommerce product filter, woocommerce products filter
+Tags: product filter, ajax filter, woocommerce filter, woocommerce product filters, woocommerce products filter
 Requires at least: 5.7
-Tested up to: 6.8
-Stable tag: 1.8.1
+Tested up to: 6.9
+Stable tag: 1.8.2
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -12,7 +12,7 @@ All-in-one products search and filtering solution for your WooCommerce shop with
 
 == Description ==
 
-annasta WooCommerce filters will provide you with fast and flexible search through the products of your shop. Our free plugin offers a plenitude of premium features, including the **product Categories**, Tags, **WooCommerce product attributes**, custom product taxonomy and **product meta data** filters support. Enjoy the rich customization options of the **dedicated Customizer section**, custom filter icons and color box styles, built-in **infinite scroll** and button-controlled offcanvas sidebar options, step-by-step product finders, SEO options, caching-enhanced performance, and more!
+annasta Filters for WooCommerce provide the fast and flexible search through the products of your shop. Our free plugin offers a plenitude of premium features, including the **product Categories**, Tags, **WooCommerce product attributes**, custom product taxonomy and **product meta data** filters support. Enjoy the rich customization options of the **dedicated Customizer section**, custom filter icons and color box styles, built-in **infinite scroll** and button-controlled offcanvas sidebar options, step-by-step product finders, SEO options, caching-enhanced performance, and more!
 
 Visit the [annasta Filters Demo Site](https://annasta.net/demos/annasta-woocommerce-product-filters/) to see the plugin in action.
 
@@ -99,9 +99,9 @@ We do maintain the program of the new features introduction for the future plugi
 
 == Screenshots ==
  
-1. annasta Woocommerce Product Filters on a shop page
+1. annasta Filters for WooCommerce on a shop page
 2. annasta Filters on a shop page
-3. annasta Woocommerce Filters in a popup sidebar controlled by "Filters" button
+3. annasta Filters for WooCommerce in a popup sidebar controlled by "Filters" button
 4. annasta Filters Preset admin page
 5. Product Categories filter settings
 6. Color boxes setup in a Color product attribute filter
@@ -124,10 +124,24 @@ We do maintain the program of the new features introduction for the future plugi
 * [Date Range Picker](https://github.com/dangrossman/daterangepicker)
 * [Moment.js](https://github.com/moment/moment/)
 * [Alpha Color Picker](https://github.com/BraadMartin/components/tree/master/customizer/alpha-color-picker)
-* [Font Awesome Free](https://fontawesome.com/icons?d=gallery&m=free)
+* [Font Awesome 5 Free](https://fontawesome.com/v5/search?ic=free-collection)
 * [Google Fonts](https://fonts.google.com)
 
 == Changelog ==
+
+= 1.8.3 =
+* Changed the plugin name to "annasta Filters for WooCommerce" in compliance with WordPress guidelines.
+* Added options that provide control over the automatic cache resets, including twice-daily Cron-powered checks and the ability to disable resets.
+* Added the Row Layout option for the products string search widget (to provide inline display for submit button).
+* Removed the "Show more"/"Show less" height limitation option for products search widgets.
+* Added AJAX pagination adjustments for block themes.
+* Added support files for the Twenty Twenty-Five theme
+* Fixed AJAX pagination for rewritten URLs.
+* Removed the plugin-provided moment.js files and added the native WordPress dependency instead.
+* Removed the select2 CSS fix that is not needed in the latest WooCommerce versions.
+* Freemius update to version 2.13.0
+* Upped the WooCommerce version compliance to 10.5
+* Upped the WordPress version compliance to 6.9
 
 = 1.8.2 =
 * SEO: added URL rewrite options that allow turning filtering parameters into permalinks.
@@ -222,7 +236,7 @@ We do maintain the program of the new features introduction for the future plugi
 
 = 1.7.3 =
 
-* Elementor compatibility support enhancements: added the dedicated annasta WooCommerce Filters widget for Elementor and provided editor previews.
+* Elementor compatibility support enhancements: added the dedicated annasta Filters for WooCommerce widget for Elementor and provided editor previews.
 * Fixed the "No products found" countainers duplication issue.
 * Added Italian translation files.
 * Minor fixes and enhancements.
@@ -387,7 +401,7 @@ We do maintain the program of the new features introduction for the future plugi
 * Upped Wordpress & WooCommerce versions compliance to 6.1 and 7.1 respectively
 
 = 1.5.5 =
-* Added the annasta WooCommerce Filters Guttenberg block
+* Added the annasta Filters for WooCommerce Guttenberg block
 * Added [Archive pages support](https://annasta.net/plugins/annasta-woocommerce-product-filters/documentation/product-lists-settings/archive-pages-support/) option in annasta Filters > Products Lists, that enables support for the titles and archives' descriptions of the filtered WooCommerce taxonomy archive pages
 * Added the **Product categories / subcategories** display option in annasta Filters > Products Lists > [Add elements](https://annasta.net/plugins/annasta-woocommerce-product-filters/documentation/product-lists-settings/add-to-product-list-template/) to provide the filters-supported categories display in place of the native Woocommerce categories display disabled by the annasta Filters > Plugin Settings > Force products display option
 * Added the auto-shrink option for filters with limited height
@@ -432,12 +446,12 @@ For older versions please [visit our changelog archive](https://annasta.net/plug
 
 == Installation ==
 
-1. Install the "annasta Woocommerce Product Filters" plugin from the "Plugins" screen of your WordPress admin, or upload its files to the /wp-content/plugins/annasta-woocommerce-product-filters directory of your site.
+1. Install the "annasta Filters for WooCommerce" plugin from the "Plugins" screen of your WordPress admin, or upload its files to the /wp-content/plugins/annasta-woocommerce-product-filters directory of your site.
 2. Activate the plugin on the "Plugins" screen of your WordPress installation.
 3. Navigate to the "Filter presets" section of the "annasta Filters" menu.
 4. Click on the cog (Edit preset) button of the Default preset.
 5. By default filters are set to display on all pages, but you can change this by limiting the display pages (to just the shop page, or some particular category page) in the "Display on" section of preset settings.
 6. Add as many filters as you like by selecting them in the "Preset Filters" dropdown and pushing the "+" (Add filter) button.
 7. Set filter options and save the preset.
-8. Unless your preset's Visibility is set to be controlled by the "Filters" toggle button, add the preset to the pages of your site. You can do that by either placing the "annasta WooCommerce Filters" Guttenberg block or widget into the desired sections of your site, or with the help of the [annasta_filters preset_id=1] shortcode.
+8. Unless your preset's Visibility is set to be controlled by the "Filters" toggle button, add the preset to the pages of your site. You can do that by either placing the "annasta Filters for WooCommerce" Guttenberg block or widget into the desired sections of your site, or with the help of the [annasta_filters preset_id=1] shortcode.
 9. Please refer to our [Getting Started Tutorial](https://annasta.net/plugins/annasta-woocommerce-product-filters/tutorials/getting-started/) for more detailed instructions.

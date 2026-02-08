@@ -143,7 +143,7 @@ if ('undefined' !== typeof wp && 'hooks' in wp && 'addAction' in wp.hooks) {
 
 registerBlockType('a-w-f/awf-block', {
   apiVersion: 2,
-  title: __('annasta WooCommerce Filters', 'annasta-filters'),
+  title: __('annasta Filters for WooCommerce', 'annasta-filters'),
   description: __('Display annasta Filters preset', 'annasta-filters'),
   keywords: [__('filters', 'annasta-filters'), __('product filters', 'annasta-filters'), __('Woocommerce', 'annasta-filters'), __('Woocommerce filters', 'annasta-filters')],
   icon: 'filter',
@@ -236,7 +236,7 @@ registerBlockType('a-w-f/awf-block', {
         className: "awf-block-edit"
       }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", {
         className: "awf-block-edit-title"
-      }, __('annasta WooCommerce Filters', 'annasta-filters')), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      }, __('annasta Filters for WooCommerce', 'annasta-filters')), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
         className: "awf-block-edit-container"
       }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(SelectControl, {
         value: props.attributes.annastaPreset,

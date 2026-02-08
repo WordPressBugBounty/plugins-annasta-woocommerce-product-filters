@@ -3,7 +3,7 @@
 	"apiVersion": 2,
 	"name": "a-w-f/awf-block",
 	"version": "1.0.0",
-	"title": "annasta WooCommerce Filters",
+	"title": "annasta Filters for WooCommerce",
 	"description": "Display annasta Filters preset",
 	"keywords": [ "filters", "product filters", "Woocommerce", "Woocommerce filters" ],
 	"category": "widgets",

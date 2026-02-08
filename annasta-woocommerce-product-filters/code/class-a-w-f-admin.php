@@ -47,12 +47,14 @@ if(! class_exists('A_W_F_admin') ) {
       add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ), 20 );
       add_action( 'wp_ajax_awf_admin', array( $this, 'ajax_controller' ) );
       
-      add_action( 'before_delete_post', array( $this, 'on_product_deletion') );
-      add_action( 'wp_trash_post', array( $this, 'on_product_trashing') );
-      add_filter( 'untrashed_post', array( $this, 'on_product_untrashing') );
-      add_action( 'woocommerce_update_product', array( $this, 'on_product_update' ) );
-      add_action( 'created_product_cat', array( $this, 'on_product_cat_created' ), 10, 2 );
-      add_action( 'delete_product_cat', array( $this, 'on_product_cat_deleted' ), 10, 4 );
+      if( 'none' !== get_option( 'awf_cache_reset_mode', 'default' ) ) {
+        add_action( 'before_delete_post', array( $this, 'on_product_deletion') );
+        add_action( 'wp_trash_post', array( $this, 'on_product_trashing') );
+        add_filter( 'untrashed_post', array( $this, 'on_product_untrashing') );
+        add_action( 'woocommerce_update_product', array( $this, 'on_product_update' ) );
+        add_action( 'created_product_cat', array( $this, 'on_product_cat_created' ), 10, 2 );
+        add_action( 'delete_product_cat', array( $this, 'on_product_cat_deleted' ), 10, 4 );
+      }
 
       $this->filter_style_limitations = array(
         'taxonomy' => array(
@@ -504,7 +506,7 @@ if(! class_exists('A_W_F_admin') ) {
     
     public function display_php_version_warning() {
       echo '<div class="notice notice-error"><p>',
-      sprintf( esc_html__( 'annasta Woocommerce Product Filters requires PHP Version 5.5 or later to function. Your server currently runs PHP version %1$s. Please, install the newer version of PHP on your server for the plugin to function properly.', 'annasta-filters' ), PHP_VERSION ),
+      sprintf( esc_html__( 'annasta Filters for WooCommerce requires PHP Version 5.5 or later to function. Your server currently runs PHP version %1$s. Please, install the newer version of PHP on your server for the plugin to function properly.', 'annasta-filters' ), PHP_VERSION ),
       '</p></div>';
     }
     
@@ -593,10 +595,6 @@ if(! class_exists('A_W_F_admin') ) {
         A_W_F::enqueue_style_options_css();
         wp_enqueue_style( 'awf-fontawesome', A_W_F_PLUGIN_URL . '/styles/fontawesome-all.min.css', array() );
         wp_enqueue_script( 'awf-admin', A_W_F_PLUGIN_URL . '/code/js/awf-admin.js', array( 'jquery', 'wp-color-picker', 'jquery-ui-sortable', 'jquery-blockui' ), A_W_F::$plugin_version );
-        
-        if( version_compare( WC_VERSION, '3.6', '>=' ) ) {
-          wp_enqueue_style( 'awf-select2-fix', A_W_F_PLUGIN_URL . '/styles/awf-select2-fix.css', false, A_W_F::$plugin_version );
-        }
 
         wp_localize_script( 'awf-admin', 'awf_js_data', array(
           'awf_ajax_referer' => wp_create_nonce( 'awf_ajax_nonce' ),
@@ -650,7 +648,7 @@ if(! class_exists('A_W_F_admin') ) {
         $this->generate_styles_css();
         
       } elseif( 'clear_awf_cache' === $_POST['awf_action'] ) {
-        $this->clear_awf_cache();
+        A_W_F::clear_awf_cache();
         
       } elseif( 'wrapper_detection' === $_POST['awf_action'] ) {
         $this->detect_products_html_wrapper();
@@ -1030,7 +1028,7 @@ if(! class_exists('A_W_F_admin') ) {
             }
 
             if( ! empty( $filter->settings['show_count'] ) || ( isset( $filter->settings['hide_empty'] ) && 'none' !== $filter->settings['hide_empty'] ) ) {
-              $this->clear_product_counts_cache();
+              A_W_F::clear_product_counts_cache();
             }
 
           } else {
@@ -2342,7 +2340,7 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
     public function awf_display_preset_btns( $preset_id, $admin_url ) {}
     
     public function awf_display_presets_list_footer( $admin_url = '' ) {
-      echo '<div style="padding-left:5px;">', sprintf( wp_kses( __( '<strong><a href="%1$s">Upgrade</a></strong> to <strong>annasta Woocommerce Product Filters Premium</strong> to manage multiple presets!', 'annasta-filters' ), array(  'a' => array( 'href' => array() ), 'strong' => array() ) ), esc_url( a_w_f_fs()->get_upgrade_url() ) ), '</div>';
+      echo '<div style="padding-left:5px;">', sprintf( wp_kses( __( '<strong><a href="%1$s">Upgrade</a></strong> to the <strong>Premium version of annasta Filters for WooCommerce</strong> to manage multiple presets!', 'annasta-filters' ), array(  'a' => array( 'href' => array() ), 'strong' => array() ) ), esc_url( a_w_f_fs()->get_upgrade_url() ) ), '</div>';
     }
 
     protected function display_preset_display_mode_popup( $preset_id, $options_only = false ) {
@@ -2533,6 +2531,7 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
         'type_options'            => array(),
         'style'                   => null,
         'style_options'           => array(),
+        'layout'                  => '1-column',
         'placeholder'             => __( 'Search products...', 'annasta-filters' ),
         'autocomplete'            => false,
         'height_limit'            => '0',
@@ -4591,6 +4590,11 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
           $msg .= __( 'Please customize the amount of product columns and products per page with the help of theme settings. If you notice discrepancy in the amount of products per page displayed by the filters\' AJAX returns, use the "Products per page" setting of the current page.', 'annasta-filters' );
           $msg .= '</span>';
           break;
+        case( 'blocksy' ):
+          $msg = '<span class="awf-theme-support-notice">';
+          $msg .= sprintf( wp_kses( __( 'Blocksy theme uses non-standard pagination that is not supported by the filters. Please consult <a href="%1$s" target="_blank">this documentation article</a> to resolve its pagination issues.', 'annasta-filters' ), array(  'a' => array( 'href' => array(), 'target' => array() ), 'strong' => array() ) ), esc_url( 'https://annasta.net/plugins/annasta-woocommerce-product-filters/troubleshoot/pagination-filters-get-reset/' ) );
+          $msg .= '</span>';
+          break;
         default: break;
       }
       
@@ -4713,7 +4717,7 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
           'type'     => 'checkbox',
           'name'     => __( 'Stock filter variations support', 'annasta-filters' ),
           'default'  => get_option( 'awf_variations_stock_support', 'no' ),
-          'desc_tip' => __( 'Enable stock filter support for variable products. WARNING: this beta option may slow down products display on sites with many products and/or slow servers.', 'annasta-filters' )
+          'desc_tip' => __( 'Enable stock filter support for variable products. WARNING: this option may slow down products display on sites with many products and/or slow servers.', 'annasta-filters' )
         ),
 
         120 => array(
@@ -4855,10 +4859,41 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
         '<tr>',
         '<th scope="row" class="titledesc">' ,
         '<label for="awf_counts_cache_days">', esc_html__( 'Product counts cache lifespan', 'annasta-filters' ),
-        '<span class="woocommerce-help-tip" data-tip="', esc_html__( 'Amount of days to keep the product counts cache transients in the database. Set to 0 to completely disable any cache produced by filters, including the Woocommerce products loop cache created during AJAX calls.', 'annasta-filters' ), '"></span>',
+        '<span class="woocommerce-help-tip" data-tip="', esc_attr__( 'Amount of days to keep the product counts cache transients in the database. Set to 0 to completely disable any cache produced by filters, including the WooCommerce products loop cache created during AJAX calls.', 'annasta-filters' ), '"></span>',
         '</label></th>',
         '<td class="forminp forminp-number">',
         '<input name="awf_counts_cache_days" id="awf_counts_cache_days" type="number" style="width: 60px;margin-right: 50px;" value="', get_option( 'awf_counts_cache_days', '10' ), '">',
+        '</td>',
+        '</tr>',
+
+        '<tr>',
+        '<th scope="row" class="titledesc">' ,
+        '<label for="awf-cache-reset-mode">', esc_html__( 'Automatic cache reset', 'annasta-filters' ),
+        '<span class="woocommerce-help-tip" data-tip="', esc_attr__( 'Set the desired cache reset mode. Automatic cache resets are performed when the underlying information (about products, categories or other terms) gets updated.', 'annasta-filters' ), '"></span>',
+        '</label></th>',
+        '<td class="forminp forminp-select">',
+          A_W_F::$admin->build_select_html(
+            array(
+              'id' => 'awf-cache-reset-mode',
+              'name' => 'awf_cache_reset_mode',
+              'options' => array(
+                'default' => __( 'On each product/category update', 'annasta-filters' ),
+                'cron' => __( 'Check twice daily (using Cron)', 'annasta-filters' ),
+                'none' => __( 'Disable', 'annasta-filters' ),
+              ),
+              'selected' => get_option( 'awf_cache_reset_mode', 'default' )
+            )
+          ),
+        '</td>',
+        '</tr>',
+
+        '<tr>',
+        '<th scope="row" class="titledesc">',
+        '<div class="awf-label">', esc_html__( 'Manual cache reset', 'annasta-filters' ),
+        '<span class="woocommerce-help-tip" data-tip="', esc_attr__( 'Use the button to clear filters\' cache.', 'annasta-filters' ), '"></span>',
+        '</div>',
+        '</th>',
+        '<td>',
         '<button type="button" id="awf_clear_awf_cache_btn" class="button button-secondary awf-fa-icon-text-btn awf-s-btn awf-fa-eraser-btn">', esc_html__( 'Clear filters cache', 'annasta-filters' ), '</button>',
         '</td>',
         '</tr>',
@@ -4885,7 +4920,7 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
         }
       }
 
-      $css = '/* annasta Woocommerce Product Filters autogenerated style options css */';
+      $css = '/* annasta Filters for WooCommerce autogenerated style options css */';
 			
       /*
 			if( 'yes' === get_option( 'awf_remove_wc_shop_title', 'no' ) ) {
@@ -5699,6 +5734,7 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
 
 				$css .= '.awf-filter-container.awf-product-search-container, .awf-preset-wrapper:not(.awf-1-column-preset) .awf-filter-container.awf-product-search-container{line-height:' . $height . ';}';
 				$css .= '.awf-filter-container.awf-product-search-container input[type=search].awf-filter, .awf-preset-wrapper:not(.awf-1-column-preset) .awf-filter-container.awf-product-search-container .awf-filter{height:' . $height . ';line-height:' . $height . ';}';
+				$css .= '.awf-filter-wrapper.awf-button-filter.awf-flex-search:not(.awf-dropdown) .awf-submit-btn-container button{height:' . $height . ';}';
 			}
 
       if( isset( $options['awf_search_ac_color'] ) ) {
@@ -6203,88 +6239,82 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
 		}
 		
     /* Clear product counts cache on product updates and/or deletes */ 
-    public function on_product_update( $product_id ) {  $this->clear_awf_cache(); }
+    public function on_product_update( $product_id ) {
+      switch( get_option( 'awf_cache_reset_mode', 'default' ) ) {
+        case 'default':
+          A_W_F::clear_awf_cache();
+          break;
+        case 'cron':
+          update_option( 'awf_enable_cron_cache_reset', '1' );
+          break;
+        default: break;
+      }
+    }
 
     public function on_product_deletion( $product_id ) {
       if( 'product' === get_post_type( $product_id ) && 'trash' !== get_post_status( $product_id ) ) {
-        $this->clear_awf_cache();
+        switch( get_option( 'awf_cache_reset_mode', 'default' ) ) {
+          case 'default':
+            A_W_F::clear_awf_cache();
+            break;
+          case 'cron':
+            update_option( 'awf_enable_cron_cache_reset', '1' );
+            break;
+          default: break;
+        }
       }
     }
 
     public function on_product_trashing( $product_id ) {
       if( 'product' === get_post_type( $product_id ) ) {
-        $this->clear_awf_cache();
+        switch( get_option( 'awf_cache_reset_mode', 'default' ) ) {
+          case 'default':
+            A_W_F::clear_awf_cache();
+            break;
+          case 'cron':
+            update_option( 'awf_enable_cron_cache_reset', '1' );
+            break;
+          default: break;
+        }
       }
     }
 
     public function on_product_untrashing() {
       if( 'product' === $GLOBALS['post_type'] ) {
-        $this->clear_awf_cache();
+        switch( get_option( 'awf_cache_reset_mode', 'default' ) ) {
+          case 'default':
+            A_W_F::clear_awf_cache();
+            break;
+          case 'cron':
+            update_option( 'awf_enable_cron_cache_reset', '1' );
+            break;
+          default: break;
+        }
       }
     }
   
-    public function on_product_cat_created( $term_id, $taxonomy_id ) {  $this->clear_product_counts_cache(); }
-    public function on_product_cat_deleted( $term_id, $taxonomy_id, $deleted_term, $object_ids ) {  $this->clear_product_counts_cache(); }
-
-    public function clear_product_counts_cache() {
-
-      global $wpdb;
-
-      $transient_name = '_transient_awf_counts_%';
-
-      for( $i = 1; $i <= 5; $i++ ) {
-        $sql = "SELECT `option_name` FROM $wpdb->options WHERE `option_name` LIKE '%s' LIMIT 10000";
-
-        $transients = $wpdb->get_results( $wpdb->prepare( $sql, $transient_name ), ARRAY_A );
-
-        if ( $transients && ! is_wp_error( $transients ) && is_array( $transients ) ) {
-
-          foreach ( $transients as $transient ) {
-            if ( is_array( $transient ) ) { $transient = current( $transient ); }
-              delete_transient( str_replace( '_transient_', '', $transient ) );
-          }
-
-        } else {
+    public function on_product_cat_created( $term_id, $taxonomy_id ) {
+      switch( get_option( 'awf_cache_reset_mode', 'default' ) ) {
+        case 'default':
+          A_W_F::clear_product_counts_cache();
           break;
-        }
-      }
-    }
-    /* endof Clear product counts cache on product updates and/or deletes */
-
-    protected function clear_expired_awf_cache() {
-
-      global $wpdb;
-
-      $now = time();
-
-      $transients_names = array( '_transient_timeout_awf_vss_products_cache_%', '_transient_timeout_awf_vss_variations_cache_%', '_transient_timeout_awf_vss_variable_term_id' );
-
-      foreach( $transients_names as $transient_name ) {
-        $sql = "SELECT `option_name` FROM $wpdb->options WHERE `option_name` LIKE '%s' AND option_value < $now LIMIT 5000";
-        $transients = $wpdb->get_col( $wpdb->prepare( $sql, $transient_name ) );
-
-        foreach ( $transients as $transient ) {
-          delete_transient( str_replace( '_transient_timeout_', '', $transient ) );
-        }
+        case 'cron':
+          update_option( 'awf_enable_cron_cache_reset', '1' );
+          break;
+        default: break;
       }
     }
 
-    public function clear_awf_cache() {
-
-      global $wpdb;
-
-      $transients_names = array( '_transient_timeout_awf_vss_products_cache_%', '_transient_timeout_awf_vss_variations_cache_%', '_transient_timeout_awf_vss_variable_term_id' );
-
-      foreach( $transients_names as $transient_name ) {
-        $sql = "SELECT `option_name` FROM $wpdb->options WHERE `option_name` LIKE '%s' LIMIT 5000";
-        $transients = $wpdb->get_col( $wpdb->prepare( $sql, $transient_name ) );
-
-        foreach ( $transients as $transient ) {
-          delete_transient( str_replace( '_transient_timeout_', '', $transient ) );
-        }
+    public function on_product_cat_deleted( $term_id, $taxonomy_id, $deleted_term, $object_ids ) {
+      switch( get_option( 'awf_cache_reset_mode', 'default' ) ) {
+        case 'default':
+          A_W_F::clear_product_counts_cache();
+          break;
+        case 'cron':
+          update_option( 'awf_enable_cron_cache_reset', '1' );
+          break;
+        default: break;
       }
-
-      $this->clear_product_counts_cache();
     }
 
     public function detect_products_html_wrapper() {

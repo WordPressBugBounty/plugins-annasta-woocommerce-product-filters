@@ -3,7 +3,7 @@
               <tr class="awf-hide-for-daterangepicker">
                 <td>
                   <label for="<?php echo $filter->prefix; ?>button_submission"><?php esc_html_e( 'Enable button submission', 'annasta-filters' ); ?></label>
-                  <span class="woocommerce-help-tip" data-tip="<?php esc_attr_e( 'Adding submit button will disable instant filter submission.', 'annasta-filters' ); ?>"></span>
+                  <span class="woocommerce-help-tip" data-tip="<?php esc_attr_e( 'Adding submit button will disable instant submission for this filter.', 'annasta-filters' ); ?>"></span>
                 </td>
                 <td>
                   <div class="awf-fo-flex1">

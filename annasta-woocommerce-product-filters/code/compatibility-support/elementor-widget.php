@@ -3,9 +3,9 @@
 defined( 'ABSPATH' ) or die( 'Access denied' );
 
 /**
- * annasta WooCommerce Product Filters Widget for Elementor.
+ * annasta Filters for WooCommerce Widget for Elementor.
  *
- * Inserts annasta WooCommerce Product Filters preset.
+ * Inserts the annasta Filters for WooCommerce preset into the selected site element.
  *
  * @since 1.7.3
  * 
@@ -15,7 +15,7 @@ class A_W_F_elementor_widget extends \Elementor\Widget_Base {
 	/**
 	 * Get widget name.
 	 *
-	 * Retrieve annasta WooCommerce Product Filters widget name.
+	 * Retrieve annasta Filters for WooCommerce widget name.
 	 *
 	 * @since 1.7.3
 	 * @access public
@@ -28,20 +28,20 @@ class A_W_F_elementor_widget extends \Elementor\Widget_Base {
 	/**
 	 * Get widget title.
 	 *
-	 * Retrieve annasta WooCommerce Product Filters widget title.
+	 * Retrieve annasta Filters for WooCommerce widget title.
 	 *
 	 * @since 1.7.3
 	 * @access public
 	 * @return string Widget title.
 	 */
 	public function get_title() {
-		return esc_html__( 'annasta WooCommerce Filters', 'annasta-filters' );
+		return esc_html__( 'annasta Filters for WooCommerce', 'annasta-filters' );
 	}
 
 	/**
 	 * Get widget icon.
 	 *
-	 * Retrieve annasta WooCommerce Product Filters widget icon.
+	 * Retrieve the annasta Filters for WooCommerce widget icon.
 	 *
 	 * @since 1.7.3
 	 * @access public
@@ -54,7 +54,7 @@ class A_W_F_elementor_widget extends \Elementor\Widget_Base {
 	/**
 	 * Get widget categories.
 	 *
-	 * Retrieve the list of categories the annasta WooCommerce Product Filters widget belongs to.
+	 * Retrieve the list of categories the annasta Filters for WooCommerce widget belongs to.
 	 *
 	 * @since 1.7.3
 	 * @access public
@@ -67,7 +67,7 @@ class A_W_F_elementor_widget extends \Elementor\Widget_Base {
 	/**
 	 * Get widget keywords.
 	 *
-	 * Retrieve the list of keywords the annasta WooCommerce Product Filters widget belongs to.
+	 * Retrieve the list of keywords the annasta Filters for WooCommerce widget belongs to.
 	 *
 	 * @since 1.7.3
 	 * @access public
@@ -91,7 +91,7 @@ class A_W_F_elementor_widget extends \Elementor\Widget_Base {
 	}
 
 	/**
-	 * Register annasta WooCommerce Product Filters widget controls.
+	 * Register annasta Filters for WooCommerce widget controls.
 	 *
 	 * Adds the select box with the list of the existing annasta Filters presets.
 	 *
@@ -139,7 +139,7 @@ class A_W_F_elementor_widget extends \Elementor\Widget_Base {
 	}
 
 	/**
-	 * Render annasta WooCommerce Product Filters widget output on the frontend.
+	 * Render annasta Filters for WooCommerce widget output on the frontend.
 	 *
 	 * Generate the annasta Filters preset HTML.
 	 *
@@ -170,9 +170,9 @@ class A_W_F_elementor_widget extends \Elementor\Widget_Base {
 	}
   
   /**
-	 * Get the list of annasta WooCommerce Product Filters presets.
+	 * Get the list of annasta Filters for WooCommerce presets.
 	 *
-	 * Returns the array of annasta WooCommerce Product Filters presets.
+	 * Returns the array of annasta Filters presets.
    * Array keys are the preset ids, with the values containing the corresponding preset label.
 	 *
 	 * @since 1.7.3

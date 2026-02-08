@@ -101,7 +101,7 @@ if( ! class_exists( 'A_W_F_gutenberg' ) ) {
                     }
 
                     if( ! empty( $notice ) ) {
-                        return '<h3 class="awf-block-preview-title">' .  __( 'annasta WooCommerce Filters', 'annasta-filters' ) . '</h3><div class="awf-block-preview-notice">' . $notice . '</div>';
+                        return '<h3 class="awf-block-preview-title">' .  __( 'annasta Filters for WooCommerce', 'annasta-filters' ) . '</h3><div class="awf-block-preview-notice">' . $notice . '</div>';
                     }
 
                     A_W_F::$preview_mode = true;

@@ -2,7 +2,7 @@
 /**
  * Reset all button control for annasta Filters Customizer section
  *
- * @package     annasta Woocommerce Product Filters Wordpress Plugin
+ * @package     annasta Filters for WooCommerce Wordpress Plugin
  * @since       1.3.0
  */
 

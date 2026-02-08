@@ -27,6 +27,22 @@
   font-weight: 900;
 }
 
+.woocommerce #awf-settings table.form-table .select2-container {
+  width: 100% !important;
+}
+
+#awf-settings table.form-table th .awf-label {
+  position: relative;
+  display: block;
+}
+
+#awf-settings table.form-table th .awf-label .woocommerce-help-tip {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  margin: -7px -24px 0 0;
+}
+
 .awf-spinner-overlay {
   position: absolute;
   top: 0;
@@ -3263,6 +3279,17 @@
 
 #awf-settings.awf-tab-plugin-settings #awf_hide_empty_filters {
   display: none;
+}
+
+#awf-settings button#awf_clear_awf_cache_btn {
+  margin: 0;
+  height: 45px;
+}
+
+#awf-settings button#awf_clear_awf_cache_btn::before {
+  top: auto;
+  left: 8px;
+  margin-top: 2px;
 }
 
 #awf-settings .awf-theme-support-notice {

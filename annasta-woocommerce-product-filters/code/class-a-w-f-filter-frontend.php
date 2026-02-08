@@ -198,62 +198,67 @@ if( ! class_exists( 'A_W_F_filter_frontend' ) ) {
 
       $html .= '<div class="awf-filters-container awf-filters-' . $this->preset_id . '-' . $this->id . '-container';
       $html .= ' awf-filters-' . $this->var_name;
-      if( 'search' === $this->module ) { $html .= ' awf-product-search'; }
       if( ! empty( $this->settings['style'] ) ) { $html .= ' awf-style-' . sanitize_html_class( $this->settings['style'] ); }
-      if( isset( $this->settings['layout'] ) ) {
 
-        $class = '';
-        $is_ss = wp_is_mobile();
+      if( 'search' === $this->module ) {
+        $html .= ' awf-product-search';
+      } else {
+        if( isset( $this->settings['layout'] ) ) {
 
-        switch( $this->settings['layout'] ) {
-          case 'row':
-            $fcs_options .= ' data-layout="awf-show-in-row"';
-            $class = 'awf-show-in-row';
-            break;
-          case 'row-left':
-            $fcs_options .= ' data-layout="awf-show-in-row-left"';
-            $class = 'awf-show-in-row-left';
-            break;
-          case '2-column':
-            $fcs_options .= ' data-layout="awf-2-column"';
-            $class = 'awf-2-column';
-            break;
-          case '3-column':
-            $fcs_options .= ' data-layout="awf-3-column"';
-            $class = 'awf-3-column';
-            break;
-          default: break;
-        }
+          $class = '';
+          $is_ss = wp_is_mobile();
 
-        if( ! empty( $this->settings['sslayout'] ) ) {
-          $html .= ' awf-ss-layout';
-
-          switch( $this->settings['sslayout'] ) {
+          switch( $this->settings['layout'] ) {
             case 'row':
-              $fcs_options .= ' data-ss-layout="awf-show-in-row"';
-              if( $is_ss ) { $class = 'awf-show-in-row'; }
+              $fcs_options .= ' data-layout="awf-show-in-row"';
+              $class = 'awf-show-in-row';
               break;
             case 'row-left':
-              $fcs_options .= ' data-ss-layout="awf-show-in-row-left"';
-              if( $is_ss ) { $class = 'awf-show-in-row-left'; }
+              $fcs_options .= ' data-layout="awf-show-in-row-left"';
+              $class = 'awf-show-in-row-left';
               break;
             case '2-column':
-              $fcs_options .= ' data-ss-layout="awf-2-column"';
-              if( $is_ss ) { $class = 'awf-2-column'; }
+              $fcs_options .= ' data-layout="awf-2-column"';
+              $class = 'awf-2-column';
               break;
             case '3-column':
-              $fcs_options .= ' data-ss-layout="awf-3-column"';
-              if( $is_ss ) { $class = 'awf-2-column'; }
+              $fcs_options .= ' data-layout="awf-3-column"';
+              $class = 'awf-3-column';
               break;
             default: break;
           }
+
+          if( ! empty( $this->settings['sslayout'] ) ) {
+            $html .= ' awf-ss-layout';
+
+            switch( $this->settings['sslayout'] ) {
+              case 'row':
+                $fcs_options .= ' data-ss-layout="awf-show-in-row"';
+                if( $is_ss ) { $class = 'awf-show-in-row'; }
+                break;
+              case 'row-left':
+                $fcs_options .= ' data-ss-layout="awf-show-in-row-left"';
+                if( $is_ss ) { $class = 'awf-show-in-row-left'; }
+                break;
+              case '2-column':
+                $fcs_options .= ' data-ss-layout="awf-2-column"';
+                if( $is_ss ) { $class = 'awf-2-column'; }
+                break;
+              case '3-column':
+                $fcs_options .= ' data-ss-layout="awf-3-column"';
+                if( $is_ss ) { $class = 'awf-2-column'; }
+                break;
+              default: break;
+            }
+          }
+
+          if( ! empty( $class ) ) { $html .= ' ' . $class; }
+
+        } else {
+          if( ! empty( $this->settings['show_in_row'] ) ) { $html .= ' awf-show-in-row'; }
         }
-
-        if( ! empty( $class ) ) { $html .= ' ' . $class; }
-
-      } else {
-        if( ! empty( $this->settings['show_in_row'] ) ) { $html .= ' awf-show-in-row'; }
       }
+
       if( ! empty( $this->settings['children_collapsible'] ) ) { $html .= ' awf-collapsible-children'; }
       if( isset( $this->settings['style_options']['hide_label'] ) ) { $html .= ' awf-hide-label'; }
       if( ! empty( $this->settings['height_limit'] ) ) {
@@ -984,6 +989,12 @@ if( ! class_exists( 'A_W_F_filter_frontend' ) ) {
       if( ! empty( $this->settings['is_collapsible'] ) ) {
         $classes[] = 'awf-collapsible';
         if( ! empty( $this->settings['collapsed_on'] ) ) { $classes[] = 'awf-collapsed'; }
+      }
+
+      if( 'search' === $this->module ) {
+        if( isset( $this->settings['layout'] ) && 'row' === $this->settings['layout'] ) {
+          $classes[] = 'awf-flex-search';
+        }
       }
     }
     

@@ -1,4 +1,4 @@
-/* annasta Woocommerce Product Filters */
+/* annasta Filters for WooCommerce */
 
 var a_w_f = typeof( a_w_f ) === 'undefined' ? {} : a_w_f;
 a_w_f.pretty_scrollbars = [];
@@ -1355,9 +1355,10 @@ jQuery( document ).ready( function( $ ){
         }
 
         $.each( awf_data.query, function( k, v ) {
-          if( 'orderby' !== k ) {
-            $containers.append( '<input type="hidden" name="' + k + '" value="' + v  + '">' );
-          }
+          if( 'orderby' === k ) { return true; }
+          if( ( 'current_rewrites' in awf_data ) && ( 0 <= awf_data.current_rewrites.indexOf( k ) ) ) { return true; }
+
+          $containers.append( '<input type="hidden" name="' + k + '" value="' + v  + '">' );
         });
       }
     }
@@ -1519,7 +1520,7 @@ jQuery( document ).ready( function( $ ){
     if( 'undefined' === typeof( query ) ) {
       query = $.extend( true, {}, awf_data.query );
     }
-    
+
     var data = {
       action: 'awf',
       awf_front: 1,
@@ -2062,6 +2063,10 @@ jQuery( document ).ready( function( $ ){
       
       var $page_numbers = $pagination_containers.find( awf_data.ajax_pagination.page_number );
 
+      if( 'block_pagination' in awf_data.ajax_pagination ) {
+        $page_numbers = $page_numbers.add( $pagination_containers.find( awf_data.ajax_pagination.next ) ).add( $pagination_containers.find( awf_data.ajax_pagination.prev ) );
+      }
+
       $page_numbers
         .off( 'click' )
         .on( 'click', function( event ) {
@@ -2070,10 +2075,19 @@ jQuery( document ).ready( function( $ ){
           var $page_number = $( this );
           var number = '';
 
-          if( $page_number.hasClass( 'next' ) ) {
-            $page_number = $pagination_containers.find( '.current' ).first().parent().next().find( awf_data.ajax_pagination.page_number );
-          } else if( $page_number.hasClass( 'prev' ) ) {
-            $page_number = $pagination_containers.find( '.current' ).first().parent().prev().find( awf_data.ajax_pagination.page_number );
+          if( $page_number.is( awf_data.ajax_pagination.next ) ) {
+            if( 'block_pagination' in awf_data.ajax_pagination ) {
+              $page_number = $pagination_containers.find( '.current' ).next( awf_data.ajax_pagination.page_number );
+            } else {
+              $page_number = $pagination_containers.find( '.current' ).first().parent().next().find( awf_data.ajax_pagination.page_number );
+            }
+            
+          } else if( $page_number.is( awf_data.ajax_pagination.prev ) ) {
+            if( 'block_pagination' in awf_data.ajax_pagination ) {
+              $page_number = $pagination_containers.find( '.current' ).prev( awf_data.ajax_pagination.page_number );
+            } else {
+              $page_number = $pagination_containers.find( '.current' ).first().parent().prev().find( awf_data.ajax_pagination.page_number );
+            }
           }
 
           number = $page_number.text().replace( /[^0-9]/gi, '' );
@@ -2083,7 +2097,12 @@ jQuery( document ).ready( function( $ ){
           awf_data.ajax_pagination_url = $page_number.attr( 'href' );
           awf_data.ajax_pagination_loading = true;
 
-          a_w_f.update_url();
+          if( 'rewrite_page' in awf_data ) {
+            window.history.pushState( { awf_ajax_call: true }, '', awf_data.ajax_pagination_url );
+          } else {
+            a_w_f.update_url();
+          }
+          
           a_w_f.ajax_filter( true );
       });
 

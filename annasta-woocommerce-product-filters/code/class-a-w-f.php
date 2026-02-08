@@ -118,6 +118,7 @@ if ( !class_exists( 'A_W_F' ) ) {
                     }
                 }
             } );
+            add_action( 'awf_cron_cache_reset', array($this, 'cron_cache_reset') );
             self::$presets = get_option( 'awf_presets', array() );
             if ( !is_array( self::$presets ) ) {
                 self::$presets = array();
@@ -275,19 +276,14 @@ if ( !class_exists( 'A_W_F' ) ) {
                 return;
             }
             require 'class-a-w-f-admin.php';
-            self::$admin = A_W_F_admin::get_instance();
-            self::$admin->clear_awf_cache();
+            self::clear_awf_cache();
         }
 
         public static function uninstall_plugin() {
             if ( !current_user_can( 'activate_plugins' ) ) {
                 return;
             }
-            if ( empty( self::$admin ) ) {
-                require 'class-a-w-f-admin.php';
-                self::$admin = A_W_F_admin::get_instance();
-            }
-            self::$admin->clear_awf_cache();
+            self::clear_awf_cache();
             unregister_widget( 'A_W_F_widget' );
             $all_options = wp_load_alloptions();
             $awf_options = array(
@@ -371,7 +367,9 @@ if ( !class_exists( 'A_W_F' ) ) {
                 'awf_add_canonical',
                 'awf_add_nofollow',
                 'awf_canonical_parameters',
-                'awf_force_ppt_on_fps'
+                'awf_cache_reset_mode',
+                'awf_enable_cron_cache_reset',
+                'awf_cache_reset_counts_rebuild'
             );
             foreach ( $all_options as $name => $value ) {
                 if ( 0 !== strpos( $name, 'awf_' ) ) {
@@ -389,7 +387,7 @@ if ( !class_exists( 'A_W_F' ) ) {
         }
 
         public function display_wc_absence_warning() {
-            echo '<div class="notice notice-warning is-dismissible"><p>', esc_html__( 'annasta Woocommerce Product Filters requires WooCommerce plugin to function properly. Please install WooCommerce online shop to use the annasta Woocommerce Product Filters plugin.', 'annasta-filters' ), '</p></div>';
+            echo '<div class="notice notice-warning is-dismissible"><p>', esc_html__( 'annasta Filters for WooCommerce requires WooCommerce plugin to function properly. Please install WooCommerce online shop to use the annasta Filters for WooCommerce plugin.', 'annasta-filters' ), '</p></div>';
         }
 
         public function load_textdomain() {
@@ -708,7 +706,6 @@ if ( !class_exists( 'A_W_F' ) ) {
         }
 
         public function add_rewrite_rules( $wp_rules ) {
-            // error_log( 'adding awf rewrites' );
             $awf_rules = get_option( 'awf_rewrite_rules', array() );
             unset($awf_rules[0]);
             $awf_rules = array_filter( $awf_rules );
@@ -828,7 +825,6 @@ if ( !class_exists( 'A_W_F' ) ) {
                     ) );
                 }
             }
-            // error_log( print_r( $wp_rules, true ) );
             return $wp_rules;
         }
 
@@ -841,6 +837,62 @@ if ( !class_exists( 'A_W_F' ) ) {
                 $response[] = ( empty( $match[1] ) ? $k . '=$matches[' . $i++ . ']' : $k . '=' . $match[1] );
             }
             return implode( '&', $response );
+        }
+
+        public static function clear_product_counts_cache() {
+            global $wpdb;
+            $transient_name = '_transient_awf_counts_%';
+            for ($i = 1; $i <= 5; $i++) {
+                $sql = "SELECT `option_name` FROM {$wpdb->options} WHERE `option_name` LIKE '%s' LIMIT 10000";
+                $transients = $wpdb->get_results( $wpdb->prepare( $sql, $transient_name ), ARRAY_A );
+                if ( $transients && !is_wp_error( $transients ) && is_array( $transients ) ) {
+                    foreach ( $transients as $transient ) {
+                        if ( is_array( $transient ) ) {
+                            $transient = current( $transient );
+                        }
+                        delete_transient( str_replace( '_transient_', '', $transient ) );
+                    }
+                } else {
+                    break;
+                }
+            }
+        }
+
+        public static function clear_awf_cache() {
+            global $wpdb;
+            $transients_names = array('_transient_timeout_awf_vss_products_cache_%', '_transient_timeout_awf_vss_variations_cache_%', '_transient_timeout_awf_vss_variable_term_id');
+            foreach ( $transients_names as $transient_name ) {
+                $sql = "SELECT `option_name` FROM {$wpdb->options} WHERE `option_name` LIKE '%s' LIMIT 5000";
+                $transients = $wpdb->get_col( $wpdb->prepare( $sql, $transient_name ) );
+                foreach ( $transients as $transient ) {
+                    delete_transient( str_replace( '_transient_timeout_', '', $transient ) );
+                }
+            }
+            self::clear_product_counts_cache();
+        }
+
+        public static function cron_cache_reset() {
+            if ( '1' === get_option( 'awf_enable_cron_cache_reset' ) ) {
+                self::clear_awf_cache();
+                if ( !empty( get_option( 'awf_cache_reset_counts_rebuild' ) ) ) {
+                    $url = get_permalink( wc_get_page_id( 'shop' ) );
+                    wp_safe_remote_get( $url );
+                    $categories = get_terms( array(
+                        'taxonomy'   => 'product_cat',
+                        'parent'     => 0,
+                        'hide_empty' => false,
+                    ) );
+                    if ( !is_wp_error( $categories ) ) {
+                        foreach ( $categories as $c ) {
+                            $url = get_term_link( $c );
+                            if ( !is_wp_error( $url ) ) {
+                                wp_safe_remote_get( $url );
+                            }
+                        }
+                    }
+                }
+            }
+            delete_option( 'awf_enable_cron_cache_reset' );
         }
 
         private function awf_autoloader( $class ) {

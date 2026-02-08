@@ -1,5 +1,5 @@
 /**
- * annasta Woocommerce Product Filters live preview functionality for Wordpress Customizer
+ * annasta Filters for WooCommerce live preview functionality for Wordpress Customizer
  */
 
 var a_w_f_customizer = { settings: {} };

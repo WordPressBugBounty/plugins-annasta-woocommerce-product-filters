@@ -608,11 +608,11 @@ if( ! class_exists('A_W_F_frontend') ) {
 				}
 			}
 
-			if( $this->shop_on_frontpage && get_option( 'awf_force_ppt_on_fps', false ) ) {
+			if( $this->shop_on_frontpage && isset( $this->get_access_to['force_ppt_on_fps'] ) ) {
 				add_action( 'parse_request', function( $q ) {
 
 					if( $q->query_vars ) {
-						$awf_vars = array();
+						$awf_vars = array( 'paged' );
 
 						foreach( $this->vars as $arr ) {
 							$awf_vars = array_merge( array_values( $awf_vars ), $arr );
@@ -1033,6 +1033,10 @@ if( ! class_exists('A_W_F_frontend') ) {
 					foreach( $rewrites as $parameter => $values ) {
 						$rewrite_parameters[$parameter] = $parameter . '-' . $parameters[$parameter];
 						unset( $parameters[$parameter] );
+
+						if( false !== strpos( $url, '/' . $rewrite_parameters[$parameter] ) ) {
+							$rewrite_parameters = array_diff_key( $rewrite_parameters, array( $parameter => '' ) );
+						}
 					}
 
 					$url = trailingslashit( $url ) . implode( '/', $rewrite_parameters );
@@ -1404,8 +1408,8 @@ if( ! class_exists('A_W_F_frontend') ) {
 					
 					$query[] = array(
 						'key' => $meta,
-						'value' => NULL,
-						'compare' => 'NOT IN',
+						'value' => '',
+						'compare' => '!=',
 					);
 					
 					$query[] = array(
@@ -2751,8 +2755,7 @@ if( ! class_exists('A_W_F_frontend') ) {
 			if ( ! empty( get_option( 'awf_daterangepicker_enabled' ) ) ) {
 				$js_dependencies[] = 'awf-daterangepicker';
 				wp_enqueue_style( 'awf-daterangepicker', A_W_F_PLUGIN_URL . '/styles/daterangepicker.css' );
-				wp_enqueue_script( 'awf-moment', A_W_F_PLUGIN_URL . '/code/js/moment.min.js', array(), A_W_F::$plugin_version );
-				wp_enqueue_script( 'awf-daterangepicker', A_W_F_PLUGIN_URL . '/code/js/daterangepicker.js', array( 'jquery', 'awf-moment' ), A_W_F::$plugin_version );
+				wp_enqueue_script( 'awf-daterangepicker', A_W_F_PLUGIN_URL . '/code/js/daterangepicker.js', array( 'jquery', 'moment' ), A_W_F::$plugin_version );
 			}
 
 			switch( get_option( 'awf_fontawesome_font_enqueue', 'awf' ) ) {
@@ -2829,6 +2832,9 @@ if( ! class_exists('A_W_F_frontend') ) {
 				$js_data['rewrite'] = 'yes';
 				if( isset( $this->rewrites[$this->url_page] ) ) {
 					$js_data['rewrite_page'] = $this->url_page;
+					if( $this->current_rewrites ) {
+						$js_data['current_rewrites'] = array_values( $this->current_rewrites );
+					}
 				}
 			}
 
@@ -2890,6 +2896,7 @@ if( ! class_exists('A_W_F_frontend') ) {
 						'type' => $pagination_type,
 						'page_number' => empty( $selectors['page_number'] ) ? 'a.page-numbers' : $selectors['page_number'],
 						'next' => empty( $selectors['pagination_next'] ) ? '.next' : $selectors['pagination_next'],
+						'prev' => '.prev',
 						'product_container' => empty( $selectors['product'] ) ? '.product' : $selectors['product'],
 					);
 					
@@ -2917,8 +2924,9 @@ if( ! class_exists('A_W_F_frontend') ) {
 					$js_data['pagination_container'] .= ', .wp-block-query-pagination';
 				}
 
-				if( isset( $js_data['next'] ) ) {
-					$js_data['next'] .= ', .wp-block-query-pagination-next';
+				if( isset( $js_data['ajax_pagination']['next'] ) ) {
+					$js_data['ajax_pagination']['next'] .= ', .wp-block-query-pagination-next';
+					$js_data['ajax_pagination']['prev'] .= ', .wp-block-query-pagination-previous';
 				}
 			}
 			
@@ -2972,7 +2980,7 @@ if( ! class_exists('A_W_F_frontend') ) {
 					$preset_name = empty( $this->preset->name ) ? sprintf( __( 'Filters Preset #%1$s', 'annasta-filters' ), $preset_id ) : $this->preset->name;
 
 					if( in_array( $this->preset->display_mode, array( 'togglable', 'togglable-on-s' ) ) ) {
-						$html .= '<h3 class="awf-preset-preview-title">annasta WooCommerce Filters&nbsp;&nbsp;&gt;&nbsp;&nbsp;<span>' . $preset_name . '</span></h3>';
+						$html .= '<h3 class="awf-preset-preview-title">annasta Filters for WooCommerce&nbsp;&nbsp;&gt;&nbsp;&nbsp;<span>' . $preset_name . '</span></h3>';
 						$html .= '<div class="awf-preset-preview-notice"><div class="awf-preset-preview-notice-heading">' . __( 'Preview unavailable.', 'annasta-filters' ) . '</div><div class="awf-preset-preview-notice-description">';
 
 						switch( $this->preset->display_mode ) {
@@ -2989,7 +2997,7 @@ if( ! class_exists('A_W_F_frontend') ) {
 
 					} else {
 						if( empty( A_W_F::$front->get_access_to['elementor_preview'] ) ) {
-							$html .= '<h3 class="awf-preset-preview-title">annasta WooCommerce Filters&nbsp;&nbsp;&gt;&nbsp;&nbsp;<span>' . $preset_name . '</span></h3>';
+							$html .= '<h3 class="awf-preset-preview-title">annasta Filters for WooCommerce&nbsp;&nbsp;&gt;&nbsp;&nbsp;<span>' . $preset_name . '</span></h3>';
 						}
 		
 						$html .= '<div class="awf-preset-preview-html">' . $this->preset->get_html() . '</div>';
@@ -3657,10 +3665,12 @@ if( ! class_exists('A_W_F_frontend') ) {
 					set_transient( $this->counts_cache_name, $this->counts, $expiration );
 				}
 				
-				$cleanup_transients = get_transient( 'awf_counts_cleanup' );
+				if( 'cron' !== get_option( 'awf_cache_reset_mode', 'default' ) ) {
+					$delay_cleanup = get_transient( 'awf_counts_cleanup' );
 
-				if( false === $cleanup_transients ) {
-					$this->clear_expired_counts_cache();
+					if( false === $delay_cleanup ) {
+						$this->clear_expired_counts_cache();
+					}
 				}
 			}
 		}

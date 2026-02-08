@@ -11,7 +11,7 @@ if( ! class_exists( 'A_W_F_widget' ) ) {
         'description' => esc_html__( 'Filters for WooCommerce products.', 'annasta-filters' ),
         'show_instance_in_rest' => true,
       );
-      parent::__construct( 'awf_widget', __( 'annasta WooCommerce Filters Widget', 'annasta-filters' ), $settings );
+      parent::__construct( 'awf_widget', __( 'annasta Filters for WooCommerce Widget', 'annasta-filters' ), $settings );
       add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ) );
     }
     

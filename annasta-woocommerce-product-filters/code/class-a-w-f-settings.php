@@ -1,6 +1,6 @@
 <?php
 /**
- * annasta WooCommerce Filters Admin Settings
+ * annasta Filters for WooCommerce Admin Settings
  *
  */
 
@@ -246,7 +246,7 @@ if( ! class_exists( 'A_W_F_settings' ) ) {
         
         A_W_F::build_query_vars();
         
-        if( $clear_counts_cache ) { A_W_F::$admin->clear_product_counts_cache(); }
+        if( $clear_counts_cache ) { A_W_F::clear_product_counts_cache(); }
         A_W_F::$admin->generate_styles_css();
 
       } elseif( 'product-list-settings' == $current_section ) {
@@ -354,6 +354,23 @@ if( ! class_exists( 'A_W_F_settings' ) ) {
         update_option( 'awf_user_js', trim( $_POST['awf_user_js'] ) );
         update_option( 'awf_counts_cache_days', intval( $_POST['awf_counts_cache_days'] ) );
 
+        if( isset( $_POST['awf_cache_reset_mode'] ) ) {
+
+          $v = sanitize_key( $_POST['awf_cache_reset_mode'] );
+          update_option( 'awf_cache_reset_mode', $v );
+
+          if( 'cron' === $v ) {
+            if( ! wp_next_scheduled( 'awf_cron_cache_reset' ) ) {
+              wp_schedule_event( current_time( 'timestamp' ), 'twicedaily', 'awf_cron_cache_reset' );
+            }
+
+          } else {
+            if( wp_next_scheduled( 'awf_cron_cache_reset' ) ) {
+              wp_clear_scheduled_hook( 'awf_cron_cache_reset' );
+            }
+          }
+        }
+
         A_W_F::$admin->generate_styles_css();
       }
     }
@@ -381,7 +398,7 @@ if( ! class_exists( 'A_W_F_settings' ) ) {
 
     public function after_awf_variations_stock_support_update( $old_value, $new_value, $option_name ) {
       if( $old_value !== $new_value ) {
-        A_W_F::$admin->clear_awf_cache();
+        A_W_F::clear_awf_cache();
       }
     }
 

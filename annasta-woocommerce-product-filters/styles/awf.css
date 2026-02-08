@@ -1,4 +1,4 @@
-/* annasta Woocommerce Product Filters Wordpress Plugin Stylesheet */
+/* annasta Filters for WooCommerce Wordpress Plugin Stylesheet */
 
 /** General */
 
@@ -625,6 +625,45 @@ li.awf-filter-container {
   display: none;
 }
 
+.awf-filter-wrapper.awf-button-filter.awf-flex-search {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.awf-filter-wrapper.awf-button-filter.awf-flex-search .awf-filter-title-container {
+  width: 100%;
+}
+
+.awf-filter-wrapper.awf-button-filter.awf-flex-search .awf-filters-container {
+  width: auto;
+  flex-grow: 1;
+}
+
+.awf-filter-wrapper.awf-button-filter.awf-flex-search .awf-filter-container .awf-filter {
+  width: 50px;
+  flex-grow: 1;
+}
+
+.awf-filter-wrapper.awf-button-filter.awf-flex-search .awf-filter-container {
+  display: inline-flex;
+  width: 100%;
+}
+
+.awf-filter-wrapper.awf-button-filter.awf-flex-search .awf-submit-btn-container button {
+  margin: 0 0 0 5px;
+  overflow: hidden;
+}
+
+.awf-dropdown.awf-button-filter.awf-flex-search .awf-submit-btn-container {
+  padding: 10px;
+}
+
+.awf-dropdown.awf-button-filter.awf-flex-search .awf-submit-btn-container button {
+  margin: 0;
+  width: 100%;
+}
+
 .awf-filter-container.awf-product-search-container {
   position: relative;
   line-height: 45px;
@@ -684,6 +723,10 @@ li.awf-filter-container {
   box-sizing: border-box;
   cursor: default;
   white-space: normal;
+}
+
+.awf-filter-wrapper.awf-button-filter.awf-flex-search:not(.awf-dropdown) .awf-submit-btn-container button {
+  height: 45px;
 }
 
 .awf-filter-container.awf-product-search-container label {
@@ -1395,6 +1438,9 @@ li.awf-filter-container {
   padding: 0 10px 0 38px;
 }
 
+.awf-preset-wrapper:not(.awf-1-column-preset) .awf-filter-wrapper.awf-button-filter.awf-flex-search:not(.awf-dropdown) .awf-submit-btn-container button {
+  height: 38px;
+}
 /* 2-column Layout */
 
 .awf-preset-wrapper.awf-2-column-preset > form.awf-filters-form {
