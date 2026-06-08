@@ -25,7 +25,7 @@ if( 'range' === $filter->settings['type'] ) :
   }
 ?>
               <tr class="range-type-container">
-                <td><label for="<?php echo $filter->prefix; ?>range_type"><?php esc_html_e( 'Range values', 'annasta-filters' ); ?></label></td>
+                <td><label for="<?php echo esc_attr( $filter->prefix ); ?>range_type"><?php esc_html_e( 'Range values', 'annasta-filters' ); ?></label></td>
                 <td>
 <?php
   echo A_W_F::$admin->build_select_html( array(

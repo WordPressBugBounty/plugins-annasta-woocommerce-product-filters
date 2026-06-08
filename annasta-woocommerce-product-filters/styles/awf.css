@@ -1267,6 +1267,69 @@ li.awf-filter-container {
 
 /**** Row Layout */
 
+.awf-layout-filter-in-row,
+.awf-layout-filter-in-row ul {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
+
+.awf-layout-filter-in-row {
+  align-items: baseline;
+  gap: 15px;
+}
+
+.awf-layout-filter-in-row ul {
+  gap: 10px;
+}
+
+.awf-filter-wrapper.awf-layout-filter-in-row.awf-vl-row-separator ul,
+.awf-filter-wrapper.awf-layout-filter-in-row.awf-slash-row-separator ul,
+.awf-filter-wrapper.awf-vl-row-separator .awf-show-in-row ul,
+.awf-filter-wrapper.awf-vl-row-separator .awf-show-in-row-left ul,
+.awf-filter-wrapper.awf-slash-row-separator .awf-show-in-row ul,
+.awf-filter-wrapper.awf-slash-row-separator .awf-show-in-row-left ul {
+  gap: 0;
+}
+
+.awf-filter-wrapper.awf-vl-row-separator .awf-show-in-row ul,
+.awf-filter-wrapper.awf-slash-row-separator .awf-show-in-row ul {
+  justify-content: center;
+}
+
+.awf-filter-wrapper.awf-vl-row-separator li.awf-filter-container,
+.awf-filter-wrapper.awf-slash-row-separator li.awf-filter-container {
+  white-space: nowrap;
+}
+
+.awf-filter-wrapper.awf-vl-row-separator .awf-show-in-row ul li.awf-filter-container,
+.awf-filter-wrapper.awf-vl-row-separator .awf-show-in-row-left ul li.awf-filter-container:not(:last-of-type),
+.awf-filter-wrapper.awf-slash-row-separator .awf-show-in-row ul li.awf-filter-container,
+.awf-filter-wrapper.awf-slash-row-separator .awf-show-in-row-left ul li.awf-filter-container:not(:last-of-type) {
+  flex-grow: 0;
+}
+
+.awf-filter-wrapper.awf-layout-filter-in-row.awf-vl-row-separator ul li.awf-filter-container:not(:last-of-type)::after,
+.awf-filter-wrapper.awf-vl-row-separator .awf-show-in-row ul li.awf-filter-container:not(:last-of-type)::after,
+.awf-filter-wrapper.awf-vl-row-separator .awf-show-in-row-left ul li.awf-filter-container:not(:last-of-type)::after {
+  content: "|";
+  display: inline;
+  padding: 0 10px;
+}
+
+.awf-filter-wrapper.awf-layout-filter-in-row.awf-slash-row-separator ul li.awf-filter-container:not(:last-of-type)::after,
+.awf-filter-wrapper.awf-slash-row-separator .awf-show-in-row ul li.awf-filter-container:not(:last-of-type)::after,
+.awf-filter-wrapper.awf-slash-row-separator .awf-show-in-row-left ul li.awf-filter-container:not(:last-of-type)::after {
+  content: "/";
+  display: inline;
+  padding: 0 10px;
+}
+
+.awf-layout-filter-in-row .awf-filter-title-container {
+  white-space: nowrap;
+  font-size: inherit;
+}
+
 .awf-show-in-row ul,
 .awf-show-in-row-left ul {
 	display: flex;
@@ -1292,8 +1355,11 @@ li.awf-filter-container {
 
 .awf-filters-container.awf-show-in-row ul li.awf-filter-container,
 .awf-filters-container.awf-show-in-row-left ul li.awf-filter-container {
-	flex-grow: 1;
 	margin: 0 5px 5px 0;
+}
+
+.awf-filters-container.awf-show-in-row ul li.awf-filter-container {
+	flex-grow: 1;
 }
 
 .awf-show-in-row.awf-collapsible-children ul li.awf-parent-container,

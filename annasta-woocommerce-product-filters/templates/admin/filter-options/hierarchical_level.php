@@ -4,7 +4,7 @@
 <?php else: ?>
 
               <tr class="awf-hide-for-range-type">
-                <td><label for="<?php echo $filter->prefix; ?>hierarchical_level"><?php esc_html_e( 'Hierarchical level', 'annasta-filters' ); ?></label><span class="woocommerce-help-tip" data-tip="<?php esc_attr_e( 'Customize the starting hierarchical level display of the current filter.', 'annasta-filters' ); ?>"></span></td>
+                <td><label for="<?php echo esc_attr( $filter->prefix ); ?>hierarchical_level"><?php esc_html_e( 'Hierarchical level', 'annasta-filters' ); ?></label><span class="woocommerce-help-tip" data-tip="<?php esc_attr_e( 'Customize the starting hierarchical level display of the current filter.', 'annasta-filters' ); ?>"></span></td>
                 <td>
                 <?php
   $select_options = array(

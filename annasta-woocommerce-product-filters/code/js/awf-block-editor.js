@@ -142,7 +142,7 @@ if ('undefined' !== typeof wp && 'hooks' in wp && 'addAction' in wp.hooks) {
 }
 
 registerBlockType('a-w-f/awf-block', {
-  apiVersion: 2,
+  apiVersion: 3,
   title: __('annasta Filters for WooCommerce', 'annasta-filters'),
   description: __('Display annasta Filters preset', 'annasta-filters'),
   keywords: [__('filters', 'annasta-filters'), __('product filters', 'annasta-filters'), __('Woocommerce', 'annasta-filters'), __('Woocommerce filters', 'annasta-filters')],
@@ -241,7 +241,9 @@ registerBlockType('a-w-f/awf-block', {
       }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(SelectControl, {
         value: props.attributes.annastaPreset,
         options: Object.values(annasta_presets),
-        onChange: updatePresetId
+        onChange: updatePresetId,
+        __nextHasNoMarginBottom: true,
+        __next40pxDefaultSize: true
       })));
     };
 
@@ -282,14 +284,17 @@ registerBlockType('a-w-f/awf-block', {
       label: __('Filters Preset', 'annasta-filters'),
       value: props.attributes.annastaPreset,
       options: Object.values(annasta_presets),
-      onChange: updatePresetId
+      onChange: updatePresetId,
+      __nextHasNoMarginBottom: true,
+      __next40pxDefaultSize: true
     }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(ToggleControl, {
       style: {
         marginTop: '50px'
       },
       label: __('Preview', 'annasta-filters'),
       checked: !props.attributes.blockEditMode,
-      onChange: togglePreview
+      onChange: togglePreview,
+      __nextHasNoMarginBottom: true
     }))), isEditing ? renderEditMode() : (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(Disabled, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(ServerSideRender, {
       block: "a-w-f/awf-block",
       attributes: {

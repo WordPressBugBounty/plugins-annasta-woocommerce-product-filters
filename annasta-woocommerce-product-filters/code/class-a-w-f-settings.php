@@ -316,6 +316,7 @@ if( ! class_exists( 'A_W_F_settings' ) ) {
 
         update_option( 'awf_customizer_options', $customizer_options );
 
+        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
         update_option( 'awf_user_css', trim( $_POST['awf_user_css'] ) );
         A_W_F::$admin->generate_styles_css();
         
@@ -351,6 +352,7 @@ if( ! class_exists( 'A_W_F_settings' ) ) {
 
         update_option( 'awf_customizer_options', $customizer_options );
 
+        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
         update_option( 'awf_user_js', trim( $_POST['awf_user_js'] ) );
         update_option( 'awf_counts_cache_days', intval( $_POST['awf_counts_cache_days'] ) );
 

@@ -14,8 +14,8 @@
                       <tr>
                         <td colspan="2">
                           <div class="awf-add-ppp-value-container">
-                            <div><label for="<?php echo $filter->prefix; ?>add_ppp_value"><?php esc_html_e( 'Add value', 'annasta-filters' ); ?></label><span class="woocommerce-help-tip" data-tip="<?php esc_attr_e( 'To update a label add the same value again with the new label. Use the value of -1 for the all products option.', 'annasta-filters' ); ?>"></span><input id="<?php echo $filter->prefix; ?>add_ppp_value" type="text" class="awf-add-ppp-value" size="5"></div>
-                            <div><label for="<?php echo $filter->prefix; ?>add_ppp_label"><?php esc_html_e( 'label', 'annasta-filters' ); ?></label><input id="<?php echo $filter->prefix; ?>add_ppp_label" type="text" class="awf-add-ppp-label"></div>
+                            <div><label for="<?php echo esc_attr( $filter->prefix ); ?>add_ppp_value"><?php esc_html_e( 'Add value', 'annasta-filters' ); ?></label><span class="woocommerce-help-tip" data-tip="<?php esc_attr_e( 'To update a label add the same value again with the new label. Use the value of -1 for the all products option.', 'annasta-filters' ); ?>"></span><input id="<?php echo esc_attr( $filter->prefix ); ?>add_ppp_value" type="text" class="awf-add-ppp-value" size="5"></div>
+                            <div><label for="<?php echo esc_attr( $filter->prefix ); ?>add_ppp_label"><?php esc_html_e( 'label', 'annasta-filters' ); ?></label><input id="<?php echo esc_attr( $filter->prefix ); ?>add_ppp_label" type="text" class="awf-add-ppp-label"></div>
                           </div>
                         </td>
                         <td class="awf-buttons-column">

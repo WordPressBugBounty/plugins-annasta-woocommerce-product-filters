@@ -127,6 +127,8 @@ if ( !class_exists( 'A_W_F' ) ) {
                 if ( wp_doing_ajax() && isset( $_REQUEST['awf_front'] ) ) {
                     add_action( 'wp_ajax_awf', array($this, 'frontend_ajax_controller') );
                     add_action( 'wp_ajax_nopriv_awf', array($this, 'frontend_ajax_controller') );
+                    add_action( 'wp_ajax_awf_get_nonce', array($this, 'frontend_nonce_controller') );
+                    add_action( 'wp_ajax_nopriv_awf_get_nonce', array($this, 'frontend_nonce_controller') );
                 } else {
                     $this->initialize_admin();
                 }
@@ -369,7 +371,8 @@ if ( !class_exists( 'A_W_F' ) ) {
                 'awf_canonical_parameters',
                 'awf_cache_reset_mode',
                 'awf_enable_cron_cache_reset',
-                'awf_cache_reset_counts_rebuild'
+                'awf_cache_reset_counts_rebuild',
+                'awf_style_options_css'
             );
             foreach ( $all_options as $name => $value ) {
                 if ( 0 !== strpos( $name, 'awf_' ) ) {
@@ -395,12 +398,19 @@ if ( !class_exists( 'A_W_F' ) ) {
         }
 
         public function frontend_ajax_controller() {
+            if ( !check_ajax_referer( 'awf_nonce', 'awf_nonce', false ) ) {
+                wp_die( -1 );
+            }
             if ( !empty( $_GET['awf_action'] ) ) {
                 $this->initialize_frontend();
                 self::$front->ajax_controller();
             } else {
                 die;
             }
+        }
+
+        public function frontend_nonce_controller() {
+            wp_die( wp_create_nonce( 'awf_nonce' ) );
         }
 
         public function register_widget() {
@@ -922,7 +932,36 @@ if ( !class_exists( 'A_W_F' ) ) {
                     array(),
                     A_W_F::$plugin_version
                 );
+            } else {
+                $css = get_option( 'awf_style_options_css', '' );
+                if ( !empty( $css ) ) {
+                    wp_register_style( 'awf-style-options', false );
+                    wp_enqueue_style( 'awf-style-options' );
+                    wp_add_inline_style( 'awf-style-options', $css );
+                }
             }
+        }
+
+        public static function wpml_translate_taxonomy_base_slug( $taxonomy, $url ) {
+            if ( !class_exists( 'SitePress' ) ) {
+                return $url;
+            }
+            $tax_obj = get_taxonomy( $taxonomy );
+            if ( empty( $tax_obj->rewrite['slug'] ) ) {
+                return $url;
+            }
+            $original_slug = $tax_obj->rewrite['slug'];
+            $translated_slug = apply_filters(
+                'wpml_get_translated_slug',
+                $original_slug,
+                $taxonomy,
+                null,
+                'taxonomy'
+            );
+            if ( !empty( $translated_slug ) && $translated_slug !== $original_slug ) {
+                $url = str_replace( $original_slug, $translated_slug, $url );
+            }
+            return $url;
         }
 
         final function __clone() {

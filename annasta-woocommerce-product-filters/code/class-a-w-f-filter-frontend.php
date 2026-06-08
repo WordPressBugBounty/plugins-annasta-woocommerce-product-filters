@@ -175,7 +175,16 @@ if( ! class_exists( 'A_W_F_filter_frontend' ) ) {
         }
       }
 
-      $html = $this->edit_filter_wrapper( $wrapper_classes, $wrapper_options, $wrapper_append );
+      if( ! empty( $this->settings['layout'] ) ) {
+        if( 'row-with-title' === $this->settings['layout'] ) {
+          $wrapper_classes[] = 'awf-layout-filter-in-row';
+        }
+        if( ! empty( $this->settings['row_separator'] ) ) {
+          $wrapper_classes[] = 'awf-' . esc_attr( $this->settings['row_separator'] ) . '-row-separator';
+        }
+      }
+
+      $this->edit_filter_wrapper( $wrapper_classes, $wrapper_options, $wrapper_append );
 
       $html = '<div id="' . $this->cid . '-wrapper"';
       $html .= ' class="' . implode( ' ', $wrapper_classes ) . '" data-taxonomy="' . esc_attr( $this->var_name ) . '"' . $wrapper_options;
@@ -338,7 +347,7 @@ if( ! class_exists( 'A_W_F_filter_frontend' ) ) {
 
       $html .= '<label for="' . A_W_F::$front->preset->caller_id . '-' . $this->var_name . '" class="screen-reader-text" data-badge-label="' . ( empty( $this->settings['active_prefix'] ) ? '' : esc_attr( $this->settings['active_prefix'] ) ) . '">';
       $html .= esc_html__( 'Search products:', 'annasta-filters' ) . '</label>';
-      $html .= '<input type="search" id="' . A_W_F::$front->preset->caller_id . '-' . $this->var_name . '"';
+      $html .= '<input type="search" id="' . esc_attr( A_W_F::$front->preset->caller_id . '-' . $this->var_name ) . '"';
       $html .= ' name="' . esc_attr( $this->var_name ) . '" value="' . esc_attr( stripcslashes($this->active_values[0]) ) . '" data-taxonomy="' . esc_attr( $this->var_name ) . '"';
       $html .= ' class="' . implode( ' ', $this->input_classes ) . '"';
       
@@ -349,13 +358,13 @@ if( ! class_exists( 'A_W_F_filter_frontend' ) ) {
       if( ! empty( $this->settings['autocomplete'] ) ) {
         $html .= ' autocomplete="off">';
         $html .= '<button type="button" class="awf-clear-search-btn" tabindex="-1" title="' . esc_attr__( 'Clear search field', 'annasta-filters' ) . '"><i class="fas fa-times awf-clear-search-input"></i></button>';
-        $html .= '<div id="' . A_W_F::$front->preset->caller_id . '-' . $this->var_name . '-autocomplete-container" class="awf-product-search-autocomplete-container awf-collapsed';
+        $html .= '<div id="' . esc_attr( A_W_F::$front->preset->caller_id . '-' . $this->var_name . '-autocomplete-container' ) . '" class="awf-product-search-autocomplete-container awf-collapsed';
         
         if( ! empty( $this->settings['style_options']['autocomplete_height_limit'] ) ) {
           if( 'yes' === get_option( 'awf_pretty_scrollbars' ) ) { $html .= ' awf-pretty-scrollbars'; }
         }
         
-        $html .= '" data-after="' . $this->settings['type_options']['autocomplete_after'] . '"></div>';
+        $html .= '" data-after="' . esc_attr( $this->settings['type_options']['autocomplete_after'] ) . '"></div>';
 
       } else {
         $html .= '><button type="button" class="awf-clear-search-btn" tabindex="-1" title="' . esc_attr__( 'Clear search field', 'annasta-filters' ) . '"><i class="fas fa-times awf-clear-search-input"></i></button>';
@@ -710,7 +719,7 @@ if( ! class_exists( 'A_W_F_filter_frontend' ) ) {
 
     public function get_single_type_term_url( $term ) {
 
-      $url_filters = A_W_F::$front->url_query;
+      $url_filters = empty( A_W_F::$front->url_query ) ? array() : A_W_F::$front->url_query;
       $url = A_W_F::$front->current_url;
       $redirect = false;
 
@@ -776,7 +785,7 @@ if( ! class_exists( 'A_W_F_filter_frontend' ) ) {
 
     public function get_multi_type_term_url( $term ) {
 
-      $url_filters = A_W_F::$front->url_query;
+      $url_filters = empty( A_W_F::$front->url_query ) ? array() : A_W_F::$front->url_query;
       $url = A_W_F::$front->current_url;
       $href_terms = $this->active_values;
       $redirect = false;
@@ -867,7 +876,7 @@ if( ! class_exists( 'A_W_F_filter_frontend' ) ) {
     }
     
     public function get_range_type_term_url( $term ) {
-      $url_filters = A_W_F::$front->url_query;
+      $url_filters = empty( A_W_F::$front->url_query ) ? array() : A_W_F::$front->url_query;
       $url = A_W_F::$front->current_url;
       
       if( in_array( $term->slug, $this->active_values ) && in_array( $term->next_value, $this->active_values ) ) {
@@ -944,6 +953,20 @@ if( ! class_exists( 'A_W_F_filter_frontend' ) ) {
           if( $permastruct ) {
             $permastruct = trim( $permastruct, '/' );
             $this->redirect_url = home_url( str_replace( '%' . $this->settings['taxonomy'] . '%', $parameters[A_W_F::$front->vars->tax[$this->settings['taxonomy']]], $permastruct ) );
+
+            if( class_exists( 'SitePress' ) ) {
+              global $woocommerce_wpml;
+
+              if( $woocommerce_wpml && isset( $woocommerce_wpml->url_translation ) ) {
+                $base = $woocommerce_wpml->url_translation->get_translated_tax_slug( $this->settings['taxonomy'] );
+                if( ! empty( $base['translated_slug'] ) ) {
+                  $this->redirect_url = str_replace( $base['slug'], $base['translated_slug'], $this->redirect_url );
+                } else {
+                  $this->redirect_url = A_W_F::wpml_translate_taxonomy_base_slug( $this->settings['taxonomy'], $this->redirect_url );
+                }
+              }
+            }
+
             $this->redirect_parameters = array();
 
             if( A_W_F::$front->is_archive && isset( A_W_F::$front->query->tax[A_W_F::$front->is_archive] ) ) {
@@ -962,6 +985,10 @@ if( ! class_exists( 'A_W_F_filter_frontend' ) ) {
           unset( $parameters[A_W_F::$front->vars->tax[$this->settings['taxonomy']]] );
           $parameters = array_merge( $parameters, $this->redirect_parameters );
           $parameters[A_W_F::$front->vars->misc['archive']] = 1;
+
+          if( ! empty( $this->settings['redirect_to_archive'] ) ) {
+            $this->redirect_url = null;
+          }          
         }
 			}
     }

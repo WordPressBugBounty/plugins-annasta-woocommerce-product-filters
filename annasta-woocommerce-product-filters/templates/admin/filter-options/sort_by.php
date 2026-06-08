@@ -4,7 +4,7 @@
   if ( 'taxonomy' === $filter->module ) { $tr_class = ''; }
   ?>
               <tr class="<?php echo $tr_class; ?>">
-                <td><label for="<?php echo $filter->prefix; ?>sort_by"><?php esc_html_e( 'Sort filter items by', 'annasta-filters' ); ?></label></td>
+                <td><label for="<?php echo esc_attr( $filter->prefix ); ?>sort_by"><?php esc_html_e( 'Sort filter items by', 'annasta-filters' ); ?></label></td>
                 <td>
 <?php
   $select_options = array(

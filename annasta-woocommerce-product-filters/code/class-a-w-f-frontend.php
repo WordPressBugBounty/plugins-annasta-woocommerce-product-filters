@@ -120,6 +120,11 @@ if( ! class_exists('A_W_F_frontend') ) {
 				}
 				$url = esc_url_raw( $url );
 
+				if( wp_parse_url( $url, PHP_URL_HOST ) !== wp_parse_url( home_url(), PHP_URL_HOST ) ) {
+					wp_send_json_error( __( 'Error requesting paged URL', 'annasta-filters' ), 400 );
+					die();
+				}
+
 				$parameters = array(
 					'awf_action' => 'filter',
 					'awf_paged' => $page_number
@@ -393,7 +398,7 @@ if( ! class_exists('A_W_F_frontend') ) {
 					$response['url'] = add_query_arg( $url_filters, $url );
 				}
 
-				echo( json_encode( $response ) );
+				wp_send_json( $response );
 
 			} else if( 'update_filters' === $_GET['awf_action'] ) {
 
@@ -427,18 +432,20 @@ if( ! class_exists('A_W_F_frontend') ) {
 
 				$this->prepare_product_counts();
 
-				foreach( $_GET['awf_callers'] as $caller ) {
-					$caller = sanitize_text_field( $caller );
+				if( ! empty( $_GET['awf_callers'] ) && is_array( $_GET['awf_callers'] ) ) {
+					foreach( $_GET['awf_callers'] as $caller ) {
+						$caller = sanitize_text_field( $caller );
 
-					$pieces = substr( $caller, 0, -strlen( '-wrapper' ) );
-					$pieces = explode( '-', $pieces );
-					$preset_id = (int) array_pop( $pieces );
+						$pieces = substr( $caller, 0, -strlen( '-wrapper' ) );
+						$pieces = explode( '-', $pieces );
+						$preset_id = (int) array_pop( $pieces );
 
-					if( isset( A_W_F::$presets[$preset_id] ) ) {
-						$preset = new A_W_F_preset_frontend( $preset_id );
+						if( isset( A_W_F::$presets[$preset_id] ) ) {
+							$preset = new A_W_F_preset_frontend( $preset_id );
 
-						if( ! empty( $_GET['awf_rewrite'] ) ) {
-							$response['links'][$preset->id] = $preset->get_filters_links();
+							if( ! empty( $_GET['awf_rewrite'] ) ) {
+								$response['links'][$preset->id] = $preset->get_filters_links();
+							}
 						}
 					}
 				}
@@ -455,7 +462,7 @@ if( ! class_exists('A_W_F_frontend') ) {
 					$response['price_filter_min_max'] = $this->get_price_filter_min_max();
 				}
 				
-				echo( json_encode( $response ) );
+				wp_send_json( $response );
 			}
 
 			die();
@@ -466,16 +473,16 @@ if( ! class_exists('A_W_F_frontend') ) {
 			if( ! empty( $_GET['awf_query'] ) ) {
 				
 				foreach( $_GET['awf_query'] as $var => $value ) {
-					if( ( false !== ( $taxonomy = array_search( $var, $this->vars->tax ) ) ) ) {
+					if( ( false !== ( $taxonomy = array_search( $var, $this->vars->tax, true ) ) ) ) {
 						$this->query->tax[$taxonomy] = array_map( 'sanitize_text_field', explode( ',', $value ) );
-						
-					} elseif( false !== ( $awf_var_name = array_search( $var, $this->vars->awf ) ) ) {
+
+					} elseif( false !== ( $awf_var_name = array_search( $var, $this->vars->awf, true ) ) ) {
 						$this->query->awf[$awf_var_name] = sanitize_text_field( $value );
 
-					} else if( false !== ( $meta_var_name = array_search( $var, $this->vars->meta ) ) ) {
+					} else if( false !== ( $meta_var_name = array_search( $var, $this->vars->meta, true ) ) ) {
 						$this->query->meta[$meta_var_name] = array_map( 'sanitize_text_field', explode( ',', $value ) );
-						
-					} elseif( false !== ( $range_var_name = array_search( $var, $this->vars->range ) ) ) {
+
+					} elseif( false !== ( $range_var_name = array_search( $var, $this->vars->range, true ) ) ) {
 						$this->query->range[$range_var_name] = (float) $value;
 					}
 				}
@@ -786,10 +793,14 @@ if( ! class_exists('A_W_F_frontend') ) {
 						$this->query->tax[$var_name] = $terms;
 
 					} else if( false !== ( $awf_var_name = array_search( $var, $this->vars->awf ) ) ) {
-						$this->query->awf[$awf_var_name] = sanitize_text_field( urldecode( $value ) );
+						if( is_string( $value ) ) {
+							$this->query->awf[$awf_var_name] = sanitize_text_field( urldecode( $value ) );
+						}
 
 					} else if( false !== ( $meta_var_name = array_search( $var, $this->vars->meta ) ) ) {
-						$this->query->meta[$meta_var_name] = explode( ',', sanitize_text_field( urldecode( $value ) ) );
+						if( is_string( $value ) ) {
+							$this->query->meta[$meta_var_name] = explode( ',', sanitize_text_field( urldecode( $value ) ) );
+						}
 
 					} else if( false !== ( $range_var_name = array_search( $var, $this->vars->range ) ) ) {
 						$this->query->range[$range_var_name] = (float) $value;
@@ -946,8 +957,10 @@ if( ! class_exists('A_W_F_frontend') ) {
 				if( $this->permalinks_on ) {
 					unset( $url_query[$this->vars->tax[$this->is_archive]] );
 				} else {
-					$url_query[$this->is_archive] = $url_query[$this->vars->tax[$this->is_archive]];
-					unset( $url_query[$this->vars->tax[$this->is_archive]] );
+					if( ! is_bool( $this->is_archive ) ) {
+						$url_query[$this->is_archive] = $url_query[$this->vars->tax[$this->is_archive]];
+						unset( $url_query[$this->vars->tax[$this->is_archive]] );
+					}
 				}
 			}
 			
@@ -1122,6 +1135,8 @@ if( ! class_exists('A_W_F_frontend') ) {
 							$base = $woocommerce_wpml->url_translation->get_translated_tax_slug( $taxonomy );
 							if( ! empty( $base['translated_slug'] ) ) {
 								$termlink = str_replace( $base['slug'], $base['translated_slug'], $termlink );
+							} else {
+								$termlink = A_W_F::wpml_translate_taxonomy_base_slug( $taxonomy, $termlink );
 							}
 						}
 					}
@@ -2708,7 +2723,7 @@ if( ! class_exists('A_W_F_frontend') ) {
 		public function insert_sc_ajax_vars( $attrs ) {
 			foreach( $attrs as $name => $value ) {
 				if( 'class' === $name ) { continue; }
-				echo '<input type="hidden" name="' . $name . '" value="' . $value . '" class="awf-sc-var">';
+				echo '<input type="hidden" name="' . esc_attr( $name ) . '" value="' . esc_attr( $value ) . '" class="awf-sc-var">';
 			}
 		}
 
@@ -2809,9 +2824,10 @@ if( ! class_exists('A_W_F_frontend') ) {
 			$current_url_pieces[1] = isset( $current_url_pieces[1] ) ? wp_parse_args( $current_url_pieces[1] ) : array();
 			$selectors = get_option( 'awf_custom_selectors', array() );
 
-			$js_data = array( 
+			$js_data = array(
 				'filters_url' => $current_url_pieces[0],
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
+				'nonce' => wp_create_nonce( 'awf_nonce' ),
 				'ajax_mode' => get_option( 'awf_ajax_mode', 'compatibility_mode' ),
 				'cm_v2' => get_option( 'awf_cm_v2', 'no' ),
 				'query' => array_merge( (array) $this->url_query, $current_url_pieces[1] ),
@@ -3205,9 +3221,9 @@ if( ! class_exists('A_W_F_frontend') ) {
 
 							if( 1 === count( $this->query->tax[$this->is_archive] ) ) {
 								if( 'yes' === get_option( 'awf_force_wrapper_reload', 'no' ) ) {
-									echo '<div class="awf-ajax-term-description term-description"><p>', $term->description, '</p></div>';
+									echo '<div class="awf-ajax-term-description term-description">', wp_kses_post( wpautop( strip_shortcodes( $term->description ) ) ), '</div>';
 								} else {
-									echo '<div class="term-description" style="display: none;"><p>', $term->description, '</p></div>';
+									echo '<div class="term-description" style="display: none;">', wp_kses_post( wpautop( strip_shortcodes( $term->description ) ) ), '</div>';
 								}
 								
 							} else {
@@ -3246,18 +3262,18 @@ if( ! class_exists('A_W_F_frontend') ) {
 			} else {
 				if( 'yes' === get_option( 'awf_force_wrapper_reload', 'no' ) ) {
 					if( 'yes' === get_option( 'awf_remove_wc_shop_title', 'no' ) ) {
-						echo '<div class="awf-wc-shop-title" style="display: none;">', woocommerce_page_title( false ), '</div>';
+						echo '<div class="awf-wc-shop-title" style="display: none;">', wp_kses_post( woocommerce_page_title( false ) ), '</div>';
 					} else {
-						echo '<h1 class="awf-ajax-page-title woocommerce-products-header__title page-title">', woocommerce_page_title( false ), '</h1>';
+						echo '<h1 class="awf-ajax-page-title woocommerce-products-header__title page-title">', wp_kses_post( woocommerce_page_title( false ) ), '</h1>';
 					}
 
 				} else {
 					if( $this->is_archive ) {
-						echo '<div class="awf-wc-shop-title" style="display: none;">', $this->get_archive_title(), '</div>';
+						echo '<div class="awf-wc-shop-title" style="display: none;">', wp_kses_post( $this->get_archive_title() ), '</div>';
 
 					} else {
 						if( 'seo' === get_option( 'awf_shop_title', 'wc_default' ) ) {
-							echo '<div class="awf-wc-shop-title" style="display: none;">', woocommerce_page_title( false ), '</div>';
+							echo '<div class="awf-wc-shop-title" style="display: none;">', wp_kses_post( woocommerce_page_title( false ) ), '</div>';
 						}
 					}
 				}
@@ -3635,6 +3651,10 @@ if( ! class_exists('A_W_F_frontend') ) {
 				$counts_cache_query->awf_lang = $this->language;
 			}
 
+			if( ! empty( $this->is_sc_page ) ) {
+				$counts_cache_query->awf_sc_page = $this->is_sc_page;
+			}
+			
 			// $counts_cache_query = apply_filters( 'awf_product_counts_query_cache', $counts_cache_query );
 
 			$this->counts_cache_name = 'awf_counts_' . md5( wp_json_encode( $counts_cache_query ) );

@@ -20,7 +20,7 @@ if( wp_doing_ajax() && isset( $_REQUEST['awf_front'] ) && isset( $_GET['awf_acti
   
         $output = '<a href="#" class="oceanwp-off-canvas-filter"><i class="icon-menu"></i><span class="off-canvas-filter-text">'. esc_html( $text ) .'</span></a>';
   
-        echo apply_filters( 'oceanwp_off_canvas_filter_button_output', $output );
+        echo wp_kses_post( apply_filters( 'oceanwp_off_canvas_filter_button_output', $output ) );
       }, 11 );
     }
   

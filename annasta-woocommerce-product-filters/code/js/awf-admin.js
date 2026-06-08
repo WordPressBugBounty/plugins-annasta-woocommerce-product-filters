@@ -1806,9 +1806,11 @@ jQuery( document ).ready( function( $ ) {
       $awf_loader_color.wpColorPicker( {
         change: function(event, ui) {
           $awf_loader_preview[0].style.setProperty( '--awf-loader-color', ui.color.toString() );
+          $( '.woocommerce-save-button' ).removeAttr( 'disabled' );
         },
         clear: function() {
           $awf_loader_preview[0].style.setProperty( '--awf-loader-color', '#666666' );
+          $( '.woocommerce-save-button' ).removeAttr( 'disabled' );
         }
       } );
       
@@ -1822,9 +1824,11 @@ jQuery( document ).ready( function( $ ) {
       $awf_overlay_color.wpColorPicker( {
         change: function(event, ui) {
           $awf_overlay_preview[0].style.setProperty( '--awf-overlay-color', ui.color.toString() );
+          $( '.woocommerce-save-button' ).removeAttr( 'disabled' );
         },
         clear: function() {
           $awf_overlay_preview[0].style.setProperty( '--awf-overlay-color', '#ffffff' );
+          $( '.woocommerce-save-button' ).removeAttr( 'disabled' );
         }
       } );
 

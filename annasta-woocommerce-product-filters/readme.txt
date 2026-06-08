@@ -1,10 +1,10 @@
 === annasta Filters for WooCommerce ===
 Contributors: annastaa
 Tags: product filter, ajax filter, woocommerce filter, woocommerce product filters, woocommerce products filter
-Requires at least: 5.7
-Tested up to: 6.9
-Stable tag: 1.8.2
-Requires PHP: 7.0
+Requires at least: 6.3
+Tested up to: 7.0
+Stable tag: 1.8.3
+Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -128,6 +128,23 @@ We do maintain the program of the new features introduction for the future plugi
 * [Google Fonts](https://fonts.google.com)
 
 == Changelog ==
+
+= 1.8.4 =
+* General code cleanup, optimization, syntax and security checks and fixes
+* Multiple fixes and optimizations: JSON templates, archive redirects, AJAX updates of archive descriptions etc
+* Introduced nonce regeneration in frontend AJAX.
+* Updated the plugin's Gutenberg block to API version 3
+* Optimization of the custom CSS file generation procedures
+* Added checks and fallback for cases of server-side glitches during custom CSS generation
+* Added new row layout: in line with title.
+* Added separators setting for row layouts.
+* Added WPML support for archive redirects in URL filtering mode.
+* Freemius update to version 2.13.1
+* Upped the WordPress minimum version requirement to 6.3
+* Upped the PHP minimum version requirement to 7.4
+* Upped the WooCommerce minimum version requirement to 8.7
+* Upped the WordPress version compliance to 7.0
+* Upped the WooCommerce version compliance to 10.8
 
 = 1.8.3 =
 * Changed the plugin name to "annasta Filters for WooCommerce" in compliance with WordPress guidelines.
@@ -399,48 +416,6 @@ We do maintain the program of the new features introduction for the future plugi
 * Added WPML support for images style
 * Minor JS and CSS optimization and fixes
 * Upped Wordpress & WooCommerce versions compliance to 6.1 and 7.1 respectively
-
-= 1.5.5 =
-* Added the annasta Filters for WooCommerce Guttenberg block
-* Added [Archive pages support](https://annasta.net/plugins/annasta-woocommerce-product-filters/documentation/product-lists-settings/archive-pages-support/) option in annasta Filters > Products Lists, that enables support for the titles and archives' descriptions of the filtered WooCommerce taxonomy archive pages
-* Added the **Product categories / subcategories** display option in annasta Filters > Products Lists > [Add elements](https://annasta.net/plugins/annasta-woocommerce-product-filters/documentation/product-lists-settings/add-to-product-list-template/) to provide the filters-supported categories display in place of the native Woocommerce categories display disabled by the annasta Filters > Plugin Settings > Force products display option
-* Added the auto-shrink option for filters with limited height
-* Added the AJAX response jQuery object as a parameter to awf_after_ajax_products_update
-* Improved page titles and meta support on no results found pages
-* Added the non-JS active badges and reset buttons' support for the wrappers reload mode
-* Fix in the collapsible filters JS
-* Added WooCommerce taxes support to dynamic price sliders
-* Added WPML support for preset associations (**Display on** section of filters preset settings)
-* Added WPML anti-caching adjustment for AJAX
-* Code optimization and cleanup
-* Freemius update to version 2.4.5
-* Upped Woocommerce version compliance to 6.9
-
-= 1.5.3 =
-* Fixed the admin preview detection routine: limited previews to Widgets section
-* Added WPML support to string search autocomplete
-* Minor fixes and improvements
-
-= 1.5.2 =
-* Fixed Widgets area visibility issue
-* Added an option to customize the togglable popup "Close" button label
-* Added WPML support in stock filter for variations
-* Upped Wordpress & WooCommerce versions compliance to 6.0 and 6.5 respectively
-
-= 1.5.1 =
-* Enhancement: variable products' stock status support code revision based on new Woocommerce lookup tables
-* Enhancement: added support for non-Latin attributes/ categories / tags slugs
-* Fix for Polylang "language" variable
-* Minor fixes and code clean up and optimization
-* Upped Woocommerce version compliance to 6.4
-
-= 1.5.0 =
-
-* Added option to enable 3d party compatibility support
-* Added compatibility adjustments code for YITH WooCommerce Compare plugin
-* CSS adjustments
-* Security fix: Freemius update to version 2.4.3
-* Upped Woocommerce version compliance to 6.2
 
 For older versions please [visit our changelog archive](https://annasta.net/plugins/annasta-woocommerce-product-filters/changelog-archive).
 

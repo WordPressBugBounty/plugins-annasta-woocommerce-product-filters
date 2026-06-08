@@ -40,6 +40,7 @@ if(! class_exists('A_W_F_admin') ) {
       }
       
       add_action( 'admin_init', array( $this, 'flush_rewrite_rules'), 1000 );
+      add_action( 'admin_init', array( $this, 'verify_styles_css' ) );
       add_action( 'admin_menu', array( $this, 'add_plugin_menu' ) );
       add_filter( 'plugin_action_links_' . plugin_basename( A_W_F_PLUGIN_FILE ), array( $this, 'plugin_settings_link' ) );
       add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 10, 2 );
@@ -414,7 +415,7 @@ if(! class_exists('A_W_F_admin') ) {
 
                 } elseif( ! empty( $filter->settings['style_options']['show_range_btn'] ) ) {
                   $filter->settings['button_submission'] = true;
-                  $filter->settings['style_options']['submit_button_label'] = __( 'Filter', 'Submit button label', 'annasta-filters' );
+                  $filter->settings['style_options']['submit_button_label'] = _x( 'Filter', 'Submit button label', 'annasta-filters' );
                 }
         
                 if( ! empty( $filter->settings['hide_preset_submit_btn'] ) && 'ajax-button' === get_option( 'awf_preset_' . $preset_id . '_type', 'ajax' ) ) {
@@ -1164,6 +1165,12 @@ if(! class_exists('A_W_F_admin') ) {
         }
       }
 
+      if( empty( $_POST[$filter->prefix . 'row_separator'] ) ) {
+        unset( $filter->settings['row_separator'] );
+      } else {
+        $filter->settings['row_separator'] = sanitize_key( $_POST[$filter->prefix . 'row_separator'] );
+      }
+
       if( ! empty( $filter->settings['terms_limitation_mode'] ) && 'active' === $filter->settings['terms_limitation_mode'] ) {
         $filter->settings['style_options']['display_active_filter_siblings'] = $this->get_sanitized_checkbox_setting( $filter, 'display_active_filter_siblings' );
         $filter->settings['style_options']['hide_active_filter_parents'] = $this->get_sanitized_checkbox_setting( $filter, 'hide_active_filter_parents' );
@@ -1699,9 +1706,11 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
 
     public function build_type_select( $filter ) {
 
-      $html = '<select name="' . $filter->prefix . 'type" id="' . $filter->prefix . 'type" class="awf-filter-type-select">';
+      $html = '<select name="' . esc_attr( $filter->prefix ) . 'type" id="' . esc_attr( $filter->prefix ) . 'type" class="awf-filter-type-select">';
 
       if( isset( $this->filter_style_limitations[$filter->module] ) ) {
+        $types = array();
+
         foreach( $this->filter_style_limitations[$filter->module] as $type => $styles ) {
           $types[$type]['label']= $this->filter_types[$type]['label'];
         }
@@ -1764,28 +1773,28 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
       $html .= '<div class="awf-range-type-advanced"><div class="awf-range-type-options-row">';
 
       $html .= '<div>';
-      $html .= '<label for="' . $filter->prefix . 'precision">' . esc_html__( 'Precision', 'annasta-filters' ) . '</label>';
+      $html .= '<label for="' . esc_attr( $filter->prefix ) . 'precision">' . esc_html__( 'Precision', 'annasta-filters' ) . '</label>';
       $html .= '<span class="woocommerce-help-tip" data-tip="' . esc_attr__( 'This setting controls the creation of radio-buttoned lists of ranges. With the default value of 0 a range with values 0, 10, 20, 30 will give you the following list of ranges: 0-10, 10-20, 20-30, without differences between the end and start values of adjacent range segments. Setting precision to 0.01 will alter the list to 0-9.99, 10-19.99, 20-29.99 etc. The smallest allowed value is 0.01.', 'annasta-filters' ) . '"></span>';
-      $html .= '<input id="' . $filter->prefix . 'precision" name="' . $filter->prefix . 'precision" type="text" value="' . esc_attr( isset( $filter->settings['type_options']['precision'] ) ? $filter->settings['type_options']['precision'] : '0' ) . '" style="width: 5em;">';
+      $html .= '<input id="' . esc_attr( $filter->prefix ) . 'precision" name="' . esc_attr( $filter->prefix ) . 'precision" type="text" value="' . esc_attr( isset( $filter->settings['type_options']['precision'] ) ? $filter->settings['type_options']['precision'] : '0' ) . '" style="width: 5em;">';
       $html .= '</div>';
 
       $html .= '<div>';
-      $html .= '<label for="' . $filter->prefix . 'decimals">' . esc_html__( 'Number of decimals', 'annasta-filters' ) . '</label>';
+      $html .= '<label for="' . esc_attr( $filter->prefix ) . 'decimals">' . esc_html__( 'Number of decimals', 'annasta-filters' ) . '</label>';
       $html .= '<span class="woocommerce-help-tip" data-tip="' . esc_attr__( 'Define the amount of range values\' decimals (digits to the right of the decimal point). This value controls only the display format of range values, internally they are automatically rounded to 2 decimal points. ', 'annasta-filters' ) . '"></span>';
-      $html .= '<input id="' . $filter->prefix . 'decimals" name="' . $filter->prefix . 'decimals" type="text" value="' . esc_attr( isset( $filter->settings['type_options']['decimals'] ) ? $filter->settings['type_options']['decimals'] : '0' ) . '" style="width: 5em;">';
+      $html .= '<input id="' . esc_attr( $filter->prefix ) . 'decimals" name="' . esc_attr( $filter->prefix ) . 'decimals" type="text" value="' . esc_attr( isset( $filter->settings['type_options']['decimals'] ) ? $filter->settings['type_options']['decimals'] : '0' ) . '" style="width: 5em;">';
       
       $html .= '</div>';
 
       $html .= '<div>';
-      $html .= '<label for="' . $filter->prefix . 'value_prefix">' . esc_html__( 'Value prefix', 'annasta-filters' ) . '</label>';
+      $html .= '<label for="' . esc_attr( $filter->prefix ) . 'value_prefix">' . esc_html__( 'Value prefix', 'annasta-filters' ) . '</label>';
       $html .= '<span class="woocommerce-help-tip" data-tip="' . esc_attr__( 'Symbol or word before the value (for currency symbols etc)', 'annasta-filters' ) . '"></span>';
-      $html .= '<input id="' . $filter->prefix . 'value_prefix" name="' . $filter->prefix . 'value_prefix" type="text" value="' . esc_attr( empty( $filter->settings['style_options']['value_prefix'] ) ? '' : $filter->settings['style_options']['value_prefix'] ) . '" style="width: 5em;">';
+      $html .= '<input id="' . esc_attr( $filter->prefix ) . 'value_prefix" name="' . esc_attr( $filter->prefix ) . 'value_prefix" type="text" value="' . esc_attr( empty( $filter->settings['style_options']['value_prefix'] ) ? '' : $filter->settings['style_options']['value_prefix'] ) . '" style="width: 5em;">';
       $html .= '</div>';
 
       $html .= '<div>';
-      $html .= '<label for="' . $filter->prefix . 'value_postfix">' . esc_html__( 'Value postfix', 'annasta-filters' ) . '</label>';
+      $html .= '<label for="' . esc_attr( $filter->prefix ) . 'value_postfix">' . esc_html__( 'Value postfix', 'annasta-filters' ) . '</label>';
       $html .= '<span class="woocommerce-help-tip" data-tip="' . esc_attr__( 'Symbol or word after the value (for currency symbols etc)', 'annasta-filters' ) . '"></span>';
-      $html .= '<input id="' . $filter->prefix . 'value_postfix" name="' . $filter->prefix . 'value_postfix" type="text" value="' . esc_attr( empty( $filter->settings['style_options']['value_postfix'] ) ? '' : $filter->settings['style_options']['value_postfix'] ) . '" style="width: 5em;">';
+      $html .= '<input id="' . esc_attr( $filter->prefix ) . 'value_postfix" name="' . esc_attr( $filter->prefix ) . 'value_postfix" type="text" value="' . esc_attr( empty( $filter->settings['style_options']['value_postfix'] ) ? '' : $filter->settings['style_options']['value_postfix'] ) . '" style="width: 5em;">';
       
       $html .= '</div></div>';
       
@@ -1799,17 +1808,17 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
       $segments_count = count( $filter->settings['type_options']['range_values'] ) - 1;
       
       $html = '<div>';
-      $html .= '<label for="' . $filter->prefix . 'range_min">' . esc_html__( 'Minimum value', 'annasta-filters' ) . '</label>';
+      $html .= '<label for="' . esc_attr( $filter->prefix ) . 'range_min">' . esc_html__( 'Minimum value', 'annasta-filters' ) . '</label>';
       $html .= '<span class="woocommerce-help-tip" data-tip="' . esc_attr__( 'This setting defines the left-most (lowest possible) value of the range control.', 'annasta-filters' ) . '"></span>';
-      $html .= '<input name="' . $filter->prefix . 'range_min" id="' . $filter->prefix . 'range_min" type="text" value="' . esc_attr( $filter->settings['type_options']['range_values'][0] ) . '" style="width: 10em;">';
+      $html .= '<input name="' . esc_attr( $filter->prefix ) . 'range_min" id="' . esc_attr( $filter->prefix ) . 'range_min" type="text" value="' . esc_attr( $filter->settings['type_options']['range_values'][0] ) . '" style="width: 10em;">';
       $html .= '</div><div>';
-      $html .= '<label for="' . $filter->prefix . 'range_max">' . esc_html__( 'Maximum value', 'annasta-filters' ) . '</label>';
+      $html .= '<label for="' . esc_attr( $filter->prefix ) . 'range_max">' . esc_html__( 'Maximum value', 'annasta-filters' ) . '</label>';
       $html .= '<span class="woocommerce-help-tip" data-tip="' . esc_attr__( 'This setting defines the right-most (highest possible) value of the range control.', 'annasta-filters' ) . '"></span>';
-      $html .= '<input name="' . $filter->prefix . 'range_max" id="' . $filter->prefix . 'range_max" type="text" value="' . esc_attr( $filter->settings['type_options']['range_values'][$segments_count] ) . '" style="width: 10em;">';
+      $html .= '<input name="' . esc_attr( $filter->prefix ) . 'range_max" id="' . esc_attr( $filter->prefix ) . 'range_max" type="text" value="' . esc_attr( $filter->settings['type_options']['range_values'][$segments_count] ) . '" style="width: 10em;">';
       $html .= '</div><div>';
-      $html .= '<label for="' . $filter->prefix . 'range_segments">' . esc_html__( 'Range divisions', 'annasta-filters' ) . '</label>';
+      $html .= '<label for="' . esc_attr( $filter->prefix ) . 'range_segments">' . esc_html__( 'Range divisions', 'annasta-filters' ) . '</label>';
       $html .= '<span class="woocommerce-help-tip" data-tip="' . esc_attr__( 'Define the amount of range segments. In a range slider this will control the amount of poles with labeled values displayed on the range scale. This setting has to be equal to or greater than 1. WARNING: please don\'t set very small ( less than 0.1 ) differences between the poles, it may result in an uneven segments distribution.', 'annasta-filters' ) . '"></span>';
-      $html .= '<input name="' . $filter->prefix . 'range_segments" id="' . $filter->prefix . 'range_segments" type="text" value="' . $segments_count . '" style="width: 5em;">';
+      $html .= '<input name="' . esc_attr( $filter->prefix ) . 'range_segments" id="' . esc_attr( $filter->prefix ) . 'range_segments" type="text" value="' . $segments_count . '" style="width: 5em;">';
       $html .= '</div>';
 
       return $html;
@@ -1864,8 +1873,8 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
 
       if( is_null( $filter->settings['style'] ) ) { $filter->settings['style'] = reset( $styles ); }
 
-      $select_html = '<select name="' . $filter->prefix . 'style" id="' . $filter->prefix . 'style" class="awf-filter-style-select">';
-      $options_html = '<div id="' . $filter->prefix . 'style_options_container" class="awf-style-options-container">';
+      $select_html = '<select name="' . esc_attr( $filter->prefix ) . 'style" id="' . esc_attr( $filter->prefix ) . 'style" class="awf-filter-style-select">';
+      $options_html = '<div id="' . esc_attr( $filter->prefix ) . 'style_options_container" class="awf-style-options-container">';
 
       foreach( $styles as $value ) {
         $select_html .= '<option value="' . esc_attr( $value ) . '"';
@@ -1905,7 +1914,7 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
       $html = '<div class="awf-daterangepicker-options-container">';
       
       $html .= '<div class="awf-options-row">';
-      $html .= '<label for="' . $filter->prefix . 'date_picker_type">' . esc_html__( 'Date picker type', 'annasta-filters' ) . '</label>';
+      $html .= '<label for="' . esc_attr( $filter->prefix ) . 'date_picker_type">' . esc_html__( 'Date picker type', 'annasta-filters' ) . '</label>';
       $html .= A_W_F::$admin->build_select_html( array(
         'name' => $filter->prefix . 'date_picker_type', 
         'id' => $filter->prefix . 'date_picker_type', 
@@ -1916,7 +1925,7 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
       $html .= '</div>';
       
       $html .= '<div class="awf-options-row">';
-      $html .= '<label for="' . $filter->prefix . 'db_date_format">' . esc_html__( 'Database date format', 'annasta-filters' ) . '</label>';
+      $html .= '<label for="' . esc_attr( $filter->prefix ) . 'db_date_format">' . esc_html__( 'Database date format', 'annasta-filters' ) . '</label>';
       $html .= '<span class="woocommerce-help-tip" data-tip="' . esc_attr__( 'Select the date format in which date values are stored in the database.', 'annasta-filters' ) . '"></span>';
       $html .= A_W_F::$admin->build_select_html( array(
         'name' => $filter->prefix . 'db_date_format', 
@@ -1928,8 +1937,8 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
       $html .= '</div>';
       
       $html .= '<div class="awf-options-row">';
-      $html .= '<label for="' . $filter->prefix . 'daterangepicker_placeholder">' . esc_html__( 'Placeholder text', 'annasta-filters' ) . '</label>';
-      $html .= '<input id="' . $filter->prefix . 'daterangepicker_placeholder" type="text" name="' . $filter->prefix . 'daterangepicker_placeholder" value="' . esc_attr( empty( $filter->settings['style_options']['daterangepicker_placeholder'] ) ? __( 'Select date...', 'annasta-filters' ) : $filter->settings['style_options']['daterangepicker_placeholder'] ) . '">';
+      $html .= '<label for="' . esc_attr( $filter->prefix ) . 'daterangepicker_placeholder">' . esc_html__( 'Placeholder text', 'annasta-filters' ) . '</label>';
+      $html .= '<input id="' . esc_attr( $filter->prefix ) . 'daterangepicker_placeholder" type="text" name="' . esc_attr( $filter->prefix ) . 'daterangepicker_placeholder" value="' . esc_attr( empty( $filter->settings['style_options']['daterangepicker_placeholder'] ) ? __( 'Select date...', 'annasta-filters' ) : $filter->settings['style_options']['daterangepicker_placeholder'] ) . '">';
       $html .= '</div>';
       
       $html .= '</div>';
@@ -2044,10 +2053,10 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
 
       $html = '<ul>';
       $html .= '<li>';
-      $html .= '<input id="' . $filter->prefix . 'show_label" type="checkbox" name="' . $filter->prefix . 'show_label" value="yes"';
+      $html .= '<input id="' . esc_attr( $filter->prefix ) . 'show_label" type="checkbox" name="' . esc_attr( $filter->prefix ) . 'show_label" value="yes"';
       if( ! isset( $filter->settings['style_options']['hide_label'] ) ) { $html .= ' checked="checked"'; }
       $html .= '>';
-      $html .= '<label for="' . $filter->prefix . 'show_label">' . esc_html__( 'Display label', 'annasta-filters' ) . '</label>';
+      $html .= '<label for="' . esc_attr( $filter->prefix ) . 'show_label">' . esc_html__( 'Display label', 'annasta-filters' ) . '</label>';
       $html .= '</li>';
       $html .= '</ul>';
 
@@ -2061,21 +2070,23 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
     protected function build_terms_colours_list( $filter, $terms_by_parent, $parent_id = 0 ) {
       $terms_html = '';
 
-      foreach ( $terms_by_parent[$parent_id] as $term ) {
-        $terms_html .= '<tr class="awf-term-colour-container">';
-        $terms_html .= '<td>' . esc_html( $term->name ) . '</td>';
-        $terms_html .= '<td>';
-        $terms_html .= '<input type="text" name="' . $filter->prefix . 'term_' . sanitize_html_class( $term->term_id ) . '_colour" value="';
-        if( isset( $filter->settings['style_options']['colours'] ) && isset( $filter->settings['style_options']['colours'][$term->term_id] ) ) {
-          $terms_html .= esc_attr( $filter->settings['style_options']['colours'][$term->term_id] );
-        }
-        $terms_html .= '" class="awf-colorpicker" >';
-        $terms_html .= '</td>';
-        $terms_html .= '</tr>';
+      if( isset( $terms_by_parent[$parent_id] ) && is_array( $terms_by_parent[$parent_id] ) ) {
+        foreach ( $terms_by_parent[$parent_id] as $term ) {
+          $terms_html .= '<tr class="awf-term-colour-container">';
+          $terms_html .= '<td>' . esc_html( $term->name ) . '</td>';
+          $terms_html .= '<td>';
+          $terms_html .= '<input type="text" name="' . esc_attr( $filter->prefix ) . 'term_' . sanitize_html_class( $term->term_id ) . '_colour" value="';
+          if( isset( $filter->settings['style_options']['colours'] ) && isset( $filter->settings['style_options']['colours'][$term->term_id] ) ) {
+            $terms_html .= esc_attr( $filter->settings['style_options']['colours'][$term->term_id] );
+          }
+          $terms_html .= '" class="awf-colorpicker" >';
+          $terms_html .= '</td>';
+          $terms_html .= '</tr>';
 
-        if( isset( $terms_by_parent[$term->term_id] ) ) {
-          $terms_html .= $this->build_terms_colours_list( $filter, $terms_by_parent, $term->term_id );
-        }
+          if( isset( $terms_by_parent[$term->term_id] ) ) {
+            $terms_html .= $this->build_terms_colours_list( $filter, $terms_by_parent, $term->term_id );
+          }
+        }        
       }
 
       return $terms_html;
@@ -2086,13 +2097,13 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
       
       if( in_array( $filter->settings['type_options']['range_type'], array( 'auto_range', 'custom_range' ) ) ) {
         $html .= '<div class="awf-range-slider-steps-container">';
-        $html .= '<label for="' . $filter->prefix . 'step">' . esc_html__( 'Slider step', 'annasta-filters' ) . '</label>';
+        $html .= '<label for="' . esc_attr( $filter->prefix ) . 'step">' . esc_html__( 'Slider step', 'annasta-filters' ) . '</label>';
         $html .= '<span class="woocommerce-help-tip" data-tip="' . esc_attr__( 'This controls the smallest step that a value in a range slider control can jump to.', 'annasta-filters' ) . '"></span>';
-        $html .= '<input id="' . $filter->prefix . 'step" name="' . $filter->prefix . 'step" type="text" value="' . esc_attr( empty( $filter->settings['style_options']['step'] ) ? '1' : $filter->settings['style_options']['step'] ) . '" style="width: 5em;">';
+        $html .= '<input id="' . esc_attr( $filter->prefix ) . 'step" name="' . esc_attr( $filter->prefix ) . 'step" type="text" value="' . esc_attr( empty( $filter->settings['style_options']['step'] ) ? '1' : $filter->settings['style_options']['step'] ) . '" style="width: 5em;">';
         $html .= '</div>';
         
         $html .= '<div class="awf-range-slider-tooltips-container">';
-        $html .= '<label for="' . $filter->prefix . 'slider_tooltips">' . esc_html__( 'Tooltips display', 'annasta-filters' ) . '</label>';
+        $html .= '<label for="' . esc_attr( $filter->prefix ) . 'slider_tooltips">' . esc_html__( 'Tooltips display', 'annasta-filters' ) . '</label>';
         $html .= '<span class="woocommerce-help-tip" data-tip="' . esc_attr__( 'This option controls the display of tooltip labels for the current values of range slider.', 'annasta-filters' ) . '"></span>';
         
         $tooltips_options = array( 'none' => __( 'None', 'annasta-filters' ), 'above_handles' => __( 'Above slider handles', 'annasta-filters' ) );
@@ -2110,24 +2121,24 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
       if( A_W_F::$premium && 'taxonomy_range' !== $filter->settings['type_options']['range_type'] ) {
 
         $html .= '<div class="awf-range-slider-hide-slider-labels-container">';
-        $html .= '<input type="checkbox" id="' . $filter->prefix . 'hide_slider_labels" name="' . $filter->prefix . 'hide_slider_labels" class="awf-range-slider-hide-slider-labels" value="yes"';
+        $html .= '<input type="checkbox" id="' . esc_attr( $filter->prefix ) . 'hide_slider_labels" name="' . esc_attr( $filter->prefix ) . 'hide_slider_labels" class="awf-range-slider-hide-slider-labels" value="yes"';
         if( ! empty( $filter->settings['style_options']['hide_slider_labels'] ) ) { $html .= ' checked="checked"'; }
         $html .= '>';
-        $html .= '<label for="' . $filter->prefix . 'hide_slider_labels">' . esc_html__( 'Hide value labels', 'annasta-filters' ) . '</label>';
+        $html .= '<label for="' . esc_attr( $filter->prefix ) . 'hide_slider_labels">' . esc_html__( 'Hide value labels', 'annasta-filters' ) . '</label>';
         $html .= '</div>';
 
         $html .= '<div class="awf-range-slider-hide-slider-poles-container">';
-        $html .= '<input type="checkbox" id="' . $filter->prefix . 'hide_slider_poles" name="' . $filter->prefix . 'hide_slider_poles" class="awf-range-slider-hide-slider-poles" value="yes"';
+        $html .= '<input type="checkbox" id="' . esc_attr( $filter->prefix ) . 'hide_slider_poles" name="' . esc_attr( $filter->prefix ) . 'hide_slider_poles" class="awf-range-slider-hide-slider-poles" value="yes"';
         if( ! empty( $filter->settings['style_options']['hide_slider_poles'] ) ) { $html .= ' checked="checked"'; }
         $html .= '>';
-        $html .= '<label for="' . $filter->prefix . 'hide_slider_poles">' . esc_html__( 'Hide poles', 'annasta-filters' ) . '</label>';
+        $html .= '<label for="' . esc_attr( $filter->prefix ) . 'hide_slider_poles">' . esc_html__( 'Hide poles', 'annasta-filters' ) . '</label>';
         $html .= '</div>';
 
         $html .= '<div class="awf-range-slider-hide-slider-container">';
-        $html .= '<input type="checkbox" id="' . $filter->prefix . 'hide_slider" name="' . $filter->prefix . 'hide_slider" class="awf-range-slider-hide-slider" value="yes"';
+        $html .= '<input type="checkbox" id="' . esc_attr( $filter->prefix ) . 'hide_slider" name="' . esc_attr( $filter->prefix ) . 'hide_slider" class="awf-range-slider-hide-slider" value="yes"';
         if( ! empty( $filter->settings['style_options']['hide_slider'] ) ) { $html .= ' checked="checked"'; }
         $html .= '>';
-        $html .= '<label for="' . $filter->prefix . 'hide_slider">' . esc_html__( 'Hide slider', 'annasta-filters' ) . '</label>';
+        $html .= '<label for="' . esc_attr( $filter->prefix ) . 'hide_slider">' . esc_html__( 'Hide slider', 'annasta-filters' ) . '</label>';
         $html .= '<span class="woocommerce-help-tip" data-tip="' . esc_attr__( 'Hide the slider in cases when you wish to submit range values exclusively through interactive tooltips controls.', 'annasta-filters' ) . '"></span>';
         $html .= '</div>';
       }
@@ -2247,11 +2258,11 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
           $premium_markup = ' awf-premium-option-container';
           if( A_W_F::$premium ) { $premium_markup = ''; }
 
-          $html .= '<div class="awf-fo-flex2' . $premium_markup . '"><label for="' . $filter->prefix. 'hide_active_filter_parents" class="awf-label">' . __( 'Hide active filter parents', 'annasta-filters' ) . '</label><input type="checkbox" name="' . $filter->prefix. 'hide_active_filter_parents" id="' . $filter->prefix. 'hide_active_filter_parents" value="yes"' . ( ! empty( $filter->settings['style_options']['hide_active_filter_parents'] ) ? ' checked="checked"' : '' ) .'></div>';
-          $html .= '<div class="awf-fo-flex2' . $premium_markup . '" style="align-items:center;"><label for="' . $filter->prefix. 'active_filter_level_up" class="awf-label">' . __( 'Enable one level up button', 'annasta-filters' ) . '</label><input type="checkbox" name="' . $filter->prefix. 'active_filter_level_up" id="' . $filter->prefix. 'active_filter_level_up" value="yes"' . ( ! empty( $filter->settings['style_options']['active_filter_level_up'] ) ? ' checked="checked"' : '' ) .'><div style="display:flex;align-items:center;justify-content:flex-end;flex-grow:1;"><label for="' . $filter->prefix. 'active_filter_level_up_tip" class="awf-secondary-label">' . __( 'Level up tip', 'annasta-filters' ) . '</label><input id="' . $filter->prefix . 'active_filter_level_up_tip" name="' . $filter->prefix . 'active_filter_level_up_tip" type="text" value="' . esc_attr( isset( $filter->settings['style_options']['active_filter_level_up_tip'] ) ? $filter->settings['style_options']['active_filter_level_up_tip'] : '' ) . '" style="width:200px;"></div></div>';
+          $html .= '<div class="awf-fo-flex2' . $premium_markup . '"><label for="' . esc_attr( $filter->prefix ) . 'hide_active_filter_parents" class="awf-label">' . __( 'Hide active filter parents', 'annasta-filters' ) . '</label><input type="checkbox" name="' . esc_attr( $filter->prefix ) . 'hide_active_filter_parents" id="' . esc_attr( $filter->prefix ) . 'hide_active_filter_parents" value="yes"' . ( ! empty( $filter->settings['style_options']['hide_active_filter_parents'] ) ? ' checked="checked"' : '' ) .'></div>';
+          $html .= '<div class="awf-fo-flex2' . $premium_markup . '" style="align-items:center;"><label for="' . esc_attr( $filter->prefix ) . 'active_filter_level_up" class="awf-label">' . __( 'Enable one level up button', 'annasta-filters' ) . '</label><input type="checkbox" name="' . esc_attr( $filter->prefix ) . 'active_filter_level_up" id="' . esc_attr( $filter->prefix ) . 'active_filter_level_up" value="yes"' . ( ! empty( $filter->settings['style_options']['active_filter_level_up'] ) ? ' checked="checked"' : '' ) .'><div style="display:flex;align-items:center;justify-content:flex-end;flex-grow:1;"><label for="' . esc_attr( $filter->prefix ) . 'active_filter_level_up_tip" class="awf-secondary-label">' . __( 'Level up tip', 'annasta-filters' ) . '</label><input id="' . esc_attr( $filter->prefix ) . 'active_filter_level_up_tip" name="' . esc_attr( $filter->prefix ) . 'active_filter_level_up_tip" type="text" value="' . esc_attr( isset( $filter->settings['style_options']['active_filter_level_up_tip'] ) ? $filter->settings['style_options']['active_filter_level_up_tip'] : '' ) . '" style="width:200px;"></div></div>';
 
           
-          $html .= '<div class="awf-fo-flex2"><label for="' . $filter->prefix. 'display_active_filter_siblings" class="awf-label">' . __( 'Display active filters siblings', 'annasta-filters' ) . '</label><input type="checkbox" name="' . $filter->prefix. 'display_active_filter_siblings" id="' . $filter->prefix. 'display_active_filter_siblings" value="yes"' . ( ! empty( $filter->settings['style_options']['display_active_filter_siblings'] ) ? ' checked="checked"' : '' ) .'><span class="awf-secondary-label">' . esc_html__( 'Siblings of an active filter belonging to the last hierarchical level will always be displayed.', 'annasta-filters' ) . '</span></div></br>' .
+          $html .= '<div class="awf-fo-flex2"><label for="' . esc_attr( $filter->prefix ) . 'display_active_filter_siblings" class="awf-label">' . __( 'Display active filters siblings', 'annasta-filters' ) . '</label><input type="checkbox" name="' . esc_attr( $filter->prefix ) . 'display_active_filter_siblings" id="' . esc_attr( $filter->prefix ) . 'display_active_filter_siblings" value="yes"' . ( ! empty( $filter->settings['style_options']['display_active_filter_siblings'] ) ? ' checked="checked"' : '' ) .'><span class="awf-secondary-label">' . esc_html__( 'Siblings of an active filter belonging to the last hierarchical level will always be displayed.', 'annasta-filters' ) . '</span></div></br>' .
 
           '<div class="awf-info-notice">' . '<div>' . esc_html__( 'Active filters list refreshes on page loads. If this renders it incompatible with some AJAX-based options, use the URL filtering style or the "Force page reloads" filter setting.', 'annasta-filters' ) . '</div></div></br>' .
           
@@ -3434,7 +3445,7 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
             '</td>',
             '<td class="awf-buttons-column">',
               '<button type="button" class="button button-secondary awf-fa-icon awf-fas-icon awf-fa-delete-btn awf-delete-template-option-btn" title="',
-              esc_attr( 'Remove', 'annasta-filters' ), '" data-option="', esc_attr( $option ), '" data-setting-id="', esc_attr( $id ), '"></button>',
+              esc_attr__( 'Remove', 'annasta-filters' ), '" data-option="', esc_attr( $option ), '" data-setting-id="', esc_attr( $id ), '"></button>',
             '</td>',
             '</tr>'
             ;
@@ -3722,18 +3733,20 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
     public function get_loader_css( $customizer_options, $full_css = true ) {
 
       $loader_style = 0;
-      if( ! empty( $customizer_options['awf_loader_style'] ) ) { $loader_style = $customizer_options['awf_loader_style']; }
+      if( ! empty( $customizer_options['awf_loader_style'] ) ) {
+        $loader_style = $customizer_options['awf_loader_style'];
+      }
 
-      $css = $options = $animation_speed = '';
+      $css = $options = $animation_speed = $delay = '';
 
       $loader_color = 'var(--awf-loader-color)';
       $loader_size = 'var(--awf-loader-size)';
 
       if( ! $full_css ) {
 
-        $loader_size =  empty( $customizer_options['awf_loader_size'] ) ? '50px' : $customizer_options['awf_loader_size'] . 'px';
-        $loader_color =  empty( $customizer_options['awf_loader_color'] ) ? 'inherit' : $customizer_options['awf_loader_color'];
-        $loader_opacity =  empty( $customizer_options['awf_loader_opacity'] ) ? '1' : $customizer_options['awf_loader_opacity'];
+        $loader_size =  empty( $customizer_options['awf_loader_size'] ) ? '50px' : intval( $customizer_options['awf_loader_size'] ) . 'px';
+        $loader_color =  sanitize_hex_color( $customizer_options['awf_loader_color'] ?? '' ) ?: 'inherit';
+        $loader_opacity = min( 1, max( 0, (float) ( empty( $customizer_options['awf_loader_opacity'] ) ? '1' : $customizer_options['awf_loader_opacity'] ) ) );
 
         $options = '
           height: ' . $loader_size . ';
@@ -3743,8 +3756,9 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
           opacity: ' . $loader_opacity . ';
         ';
 
-        if( ! empty( $customizer_options['awf_loader_color'] ) ) {
-          $options .= 'color:' . $customizer_options['awf_loader_color'] . ';';
+        $safe_loader_color = sanitize_hex_color( $customizer_options['awf_loader_color'] ?? '' );
+        if( ! empty( $safe_loader_color ) ) {
+          $options .= 'color:' . $safe_loader_color . ';';
         }
 
         $delay = 'animation-delay:-0.375s;';
@@ -3884,8 +3898,8 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
 
       if( ! $full_css ) {
         if( ! empty( $customizer_options['awf_fix_loader'] ) ) {
-          $overlay_color = empty( $customizer_options['awf_overlay_color'] ) ? '#ffffff' : $customizer_options['awf_overlay_color'];
-          $overlay_opacity = empty( $customizer_options['awf_overlay_opacity'] ) ? '0.5' : $customizer_options['awf_overlay_opacity'];
+          $overlay_color = sanitize_hex_color( $customizer_options['awf_overlay_color'] ?? '' ) ?: '#ffffff';
+          $overlay_opacity = min( 1, max( 0, (float) ( empty( $customizer_options['awf_overlay_opacity'] ) ? '0.5' : $customizer_options['awf_overlay_opacity'] ) ) );
 
           $css .= '
           .awf-filterable .blockUI.blockOverlay{
@@ -3909,12 +3923,13 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
           }';
   
         } else {
-          if( ! empty( $customizer_options['awf_overlay_color'] ) ) {
-            $css .= '.awf-filterable .blockUI.blockOverlay{background:' . $customizer_options['awf_overlay_color'] . ' !important;}';
+          $safe_overlay_color = sanitize_hex_color( $customizer_options['awf_overlay_color'] ?? '' );
+          if( ! empty( $safe_overlay_color ) ) {
+            $css .= '.awf-filterable .blockUI.blockOverlay{background:' . $safe_overlay_color . ' !important;}';
           }
 
           if( ! empty( $customizer_options['awf_overlay_opacity'] ) ) {
-            $css .= '.awf-filterable .blockUI.blockOverlay{opacity:' . $customizer_options['awf_overlay_opacity'] . ' !important;}';
+            $css .= '.awf-filterable .blockUI.blockOverlay{opacity:' . min( 1, max( 0, (float) $customizer_options['awf_overlay_opacity'] ) ) . ' !important;}';
           }
         }
 
@@ -4533,7 +4548,7 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
 
         foreach( A_W_F::$presets as $preset_id => $preset ) {
           foreach( $preset['filters'] as $filter_id => $position ) {
-            if( 'meta' === get_option( A_W_F_filter::get_prefix( $preset_id, $filter_id, '' ) . 'module', '' ) ) {
+            if( 'meta' === get_option( A_W_F_filter::get_prefix( $preset_id, $filter_id ) . 'module', '' ) ) {
               $filter = new A_W_F_filter( $preset_id, $filter_id );
               if( $filter->settings['meta_name'] === $meta_name && ! empty( $filter->name ) ) {
                 $filter_defaults['prefix'] = $filter->settings['title'] . ' ';
@@ -4553,6 +4568,7 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
       if ( version_compare( WC_VERSION, '3.6', '>=' ) ) {
         global $wpdb;
 
+        // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
         $db_row = $wpdb->get_row( "SELECT MAX( max_price ) as max_price FROM {$wpdb->wc_product_meta_lookup}" );
 
         if( ! empty( $db_row ) && 0 < $db_row->max_price ) {
@@ -4903,6 +4919,15 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
       ;
     }
 
+    public function verify_styles_css() {
+      $filename = get_option( 'awf_style_options_file' );
+      $file_path = trailingslashit( wp_upload_dir()['basedir'] ) . 'annasta-filters/css/' . $filename;
+
+      if( empty( $filename ) || ! file_exists( $file_path ) ) {
+        $this->generate_styles_css();
+      }
+    }
+
     public function generate_styles_css() {
 
       $languages = array();
@@ -5076,18 +5101,24 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
       }
       
       $awf_uploads_folder = trailingslashit( wp_upload_dir()['basedir'] ) . 'annasta-filters/css';
+
+      update_option( 'awf_style_options_css', $css, false );
+
       if( wp_mkdir_p( $awf_uploads_folder ) ) {
         require_once( ABSPATH . 'wp-admin/includes/file.php' );
+
         $old_files = list_files( $awf_uploads_folder, 1 );
-        if( $old_files ) {
-          foreach( $old_files as $file ) {
-            unlink( $file );
+        $filename = 'style-options-' . time() . '.css';
+
+        if( false !== file_put_contents( trailingslashit( $awf_uploads_folder ) . $filename, $css ) ) {
+          update_option( 'awf_style_options_file', $filename );
+
+          if( $old_files ) {
+            foreach( $old_files as $file ) {
+              unlink( $file );
+            }
           }
         }
-        
-        $filename = 'style-options-' . time() . '.css';
-        file_put_contents( trailingslashit( $awf_uploads_folder ) . $filename, $css );
-        update_option( 'awf_style_options_file', $filename );
       }
     }
 		
@@ -5095,7 +5126,7 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
      * Generate custom CSS based on Customizer settings
      *
      * @param boolean|array $options
-     * @return void
+     * @return string
      */
     protected function generate_customizer_css( $options = false ) {
 			
@@ -5105,6 +5136,7 @@ echo sprintf( wp_kses( __( '<a href="%1$s" target="_blank">annasta Filters Suppo
 
 			if( false === $options ) {
 				$options = get_option( 'awf_customizer_options', array() );
+        $default_options = array();
         $options = array_filter( $options, function( $v ) {
           return ( ! is_null( $v ) && $v !== '' );
         } );

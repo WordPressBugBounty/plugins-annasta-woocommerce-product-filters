@@ -13,6 +13,23 @@ jQuery( document ).ready( function( $ ){
     a_w_f.preset_wrappers = $( '.awf-preset-wrapper' );
   }
 
+  a_w_f.awf_nonce_refresh_queue = [];
+  a_w_f.awf_nonce_refresh_in_progress = false;
+
+  a_w_f.refresh_nonce = function( callback ) {
+    a_w_f.awf_nonce_refresh_queue.push( callback );
+    if( a_w_f.awf_nonce_refresh_in_progress ) { return; }
+
+    a_w_f.awf_nonce_refresh_in_progress = true;
+
+    $.get( awf_data.ajax_url, { action: 'awf_get_nonce', awf_front: 1 }, function( nonce ) {
+      awf_data.nonce = $.trim( nonce );
+      a_w_f.awf_nonce_refresh_in_progress = false;
+      var pending = a_w_f.awf_nonce_refresh_queue.splice( 0 );
+      $.each( pending, function( i, fn ) { fn(); } );
+    } );
+  };
+
   a_w_f.set_filter_events = function( $filter ) {
     
     var $preset_wrapper = $filter.closest( '.awf-preset-wrapper' );
@@ -95,14 +112,14 @@ jQuery( document ).ready( function( $ ){
 
       $clear_btn
         .on( 'click', function() {
-          $( '#' + $filter.attr( 'id' ) + '-autocomplete-container' ).first().html( '' );
+          $( '.awf-product-search-autocomplete-container' ).empty();
           $filter.removeClass( 'awf-cancel-product-search-update' ).val( '' ).trigger( 'change' ).trigger( 'focus' );
         })
         .on( 'keydown', function( e ) {
           if( e.keyCode === 13 || e.keyCode === 32 ) {
             e.preventDefault();
 
-            $( '#' + $filter.attr( 'id' ) + '-autocomplete-container' ).first().html( '' );
+            $( '.awf-product-search-autocomplete-container' ).empty();
             $filter.addClass( 'awf-cancel-product-search-update' ).val( '' ).trigger( 'focus' );
           }
         })
@@ -240,17 +257,18 @@ jQuery( document ).ready( function( $ ){
     });
   };
   
-  a_w_f.get_search_autocomplete_products = function( $filter_container, $filter, $autocomplete ) {
+  a_w_f.get_search_autocomplete_products = function( $filter_container, $filter, $autocomplete, retried ) {
 
     var $autocompletes = $( '.awf-product-search-autocomplete-container' );
 
     if( $autocomplete.attr( 'data-after' ) < $filter.val().length ) {
       $filter_container.addClass( 'awf-autocomplete-searching' );
       
-      var data = { 
-        action: 'awf', 
-        awf_action: 'get_search_autocomplete', 
+      var data = {
+        action: 'awf',
+        awf_action: 'get_search_autocomplete',
         awf_front: 1,
+        awf_nonce: awf_data.nonce,
         awf_filter: $filter.closest( '.awf-filter-wrapper' ).first().attr( 'id' ),
         awf_ajax_extras: ( 'ajax_extras' in awf_data ) ? awf_data.ajax_extras : ''
       };
@@ -267,6 +285,17 @@ jQuery( document ).ready( function( $ ){
         dataType: "html",
         data:     data,
         success:  function( response ) {
+
+          if( '-1' === response ) {
+            if( ! retried ) {
+              a_w_f.refresh_nonce( function() {
+                a_w_f.get_search_autocomplete_products( $filter_container, $filter, $autocomplete, true );
+              });
+            }
+            $filter_container.removeClass( 'awf-autocomplete-searching' );
+            return;
+          }
+          
           if( response ) {
             var $response = $( response );
             if( $response.hasClass( 'woocommerce' ) ) {
@@ -959,6 +988,7 @@ jQuery( document ).ready( function( $ ){
 
     if( 'dedicated_ajax' === awf_data.ajax_mode ) {
       url = awf_data.ajax_url;
+      ajax_data.awf_nonce = awf_data.nonce;
 
     } else {
 
@@ -986,6 +1016,19 @@ jQuery( document ).ready( function( $ ){
         dataType:   'html',
         data:        ajax_data,
         success:  function( response ) {
+
+          if( '-1' === response ) {
+
+            a_w_f.refresh_nonce( function() {
+              ajax_data.awf_nonce = awf_data.nonce;
+              a_w_f.update_products( ajax_data, is_sc ? $wrapper : false );
+            });
+
+            $wrapper.unblock();
+            $( 'body' ).removeClass( 'awf-loading-ajax' );
+            return;
+          }
+
           if( response ) {
 
             if( 'ajax_pagination' in awf_data
@@ -1245,7 +1288,8 @@ jQuery( document ).ready( function( $ ){
       data:     { 
         action: 'awf', 
         awf_action: 'update_filters',
-        awf_front: 1, 
+        awf_front: 1,
+        awf_nonce: awf_data.nonce,
         awf_query: awf_data.query,
         awf_ajax_extras: ( 'ajax_extras' in awf_data ) ? awf_data.ajax_extras : '',
         awf_archive_page: ( 'archive_page' in awf_data ) ? awf_data.archive_page : '',
@@ -1254,6 +1298,12 @@ jQuery( document ).ready( function( $ ){
         awf_callers: callers,
       },
       success:  function( response ) {
+
+        if( -1 === response ) {
+          a_w_f.refresh_nonce( function() { a_w_f.update_counts( data ); });
+          return;
+        }
+
         if( response ) {
 
           $.each( response.counts, function( taxonomy, slugs ) {
@@ -1515,8 +1565,8 @@ jQuery( document ).ready( function( $ ){
     return data;
   }
 
-  a_w_f.request_url = function( query ) {
-    
+  a_w_f.request_url = function( query, retried ) {
+
     if( 'undefined' === typeof( query ) ) {
       query = $.extend( true, {}, awf_data.query );
     }
@@ -1525,16 +1575,31 @@ jQuery( document ).ready( function( $ ){
       action: 'awf',
       awf_front: 1,
       awf_action: 'request_url',
+      awf_nonce: awf_data.nonce,
       awf_query: query,
       awf_rewrite: a_w_f.get_rewrites_ajax_data()
     }
 
-    return $.ajax({
+    var deferred = $.Deferred();
+
+    $.ajax({
       type:     "get",
       url:      awf_data.ajax_url,
       dataType: "json",
       data: data
+    }).then( function( response ) {
+      if( -1 === response && ! retried ) {
+        a_w_f.refresh_nonce( function() {
+          a_w_f.request_url( query, true ).then( function( r ) {
+            deferred.resolve( r );
+          });
+        });
+      } else {
+        deferred.resolve( -1 === response ? {} : response );
+      }
     });
+
+    return deferred.promise();
   }
   
   a_w_f.build_url = function( query, archive_url ) {

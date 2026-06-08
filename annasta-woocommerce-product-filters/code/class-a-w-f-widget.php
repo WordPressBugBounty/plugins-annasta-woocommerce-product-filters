@@ -53,7 +53,7 @@ if( ! class_exists( 'A_W_F_widget' ) ) {
         
       ?>
       <p>
-      <input class="widefat awf-widget-title<?php echo $new_class; ?>" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="hidden" value="<?php echo esc_attr( $presets[$instance['preset_id']] ); ?>">
+      <input class="widefat awf-widget-title<?php echo esc_attr( $new_class ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="hidden" value="<?php echo esc_attr( $presets[$instance['preset_id']] ); ?>">
       <label for="<?php echo esc_attr( $this->get_field_id( 'preset_id' ) ); ?>" class="awf-widget-label"><?php esc_html_e( 'Filters Preset', 'annasta-filters' ); ?></label> 
       <select class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'preset_id' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'preset_id' ) ); ?>">
       <?php 

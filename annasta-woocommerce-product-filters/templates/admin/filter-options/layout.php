@@ -1,7 +1,7 @@
 <?php if ( ! defined( 'ABSPATH' ) ) { exit; } ?>
 
               <tr class="awf-hide-for-range-slider awf-hide-for-daterangepicker">
-                <td><label for="<?php echo $filter->prefix; ?>layout"><?php esc_html_e( 'Layout', 'annasta-filters' ); ?></label></td>
+                <td><label for="<?php echo esc_attr( $filter->prefix ); ?>layout"><?php esc_html_e( 'Layout', 'annasta-filters' ); ?></label></td>
                 <td><div class="awf-fo-flex2">
 <?php
   if( 'search' === $filter->module ) {
@@ -12,8 +12,9 @@
 
   } else {
     $options = array(
-      'row'      => __( 'Display in row (align center)', 'annasta-filters' ),
+      'row'      => __( 'Display in row (justified)', 'annasta-filters' ),
       'row-left' => __( 'Display in row (align left)', 'annasta-filters' ),
+      'row-with-title' => __( 'Display in row and in line with title', 'annasta-filters' ),
       '1-column' => __( '1 column', 'annasta-filters' ),
       '2-column' => __( '2 columns', 'annasta-filters' ),
       '3-column' => __( '3 columns', 'annasta-filters' ),
@@ -42,11 +43,31 @@ if( isset( $filter->settings['sslayout'] ) ) {
 
 ?>
 
-                    <label for="<?php echo $filter->prefix; ?>sslayout" style="width:100%;text-align:right;align-self:center;margin-left:25px;white-space:nowrap;"><?php esc_html_e( 'On smaller screens', 'annasta-filters' ); ?><span class="woocommerce-help-tip" data-tip="<?php esc_attr_e( 'Layout on screens smaller than the preset Responsive Width', 'annasta-filters' ); ?>"></span></label>
+                    <label for="<?php echo esc_attr( $filter->prefix ); ?>sslayout" style="width:100%;text-align:right;align-self:center;margin-left:25px;white-space:nowrap;"><?php esc_html_e( 'On smaller screens', 'annasta-filters' ); ?><span class="woocommerce-help-tip" data-tip="<?php esc_attr_e( 'Layout on screens smaller than the preset Responsive Width', 'annasta-filters' ); ?>"></span></label>
 <?php
 
   echo A_W_F::$admin->build_select_html( $select_2_options );
 }
 ?>
-                </div></td>
+                </div>
+
+                <div class="awf-fo-flex2" style="align-items:center;">
+<?php
+                  $select_3_options = array(
+                    'name' => $filter->prefix . 'row_separator',
+                    'id' => $filter->prefix . 'row_separator',
+                    'selected' => empty( $filter->settings['row_separator'] ) ? '' : $filter->settings['row_separator'],
+                    'custom' => ' style="width:auto;"',
+                    'options' => array(
+                      '' => __( 'None', 'annasta-filters' ),
+                      'vl' => '&nbsp;|',
+                      'slash' => '&nbsp;/'
+                    )
+                  );
+?>
+                  <label for="<?php echo esc_attr( $filter->prefix ); ?>row_separator"><?php esc_html_e( 'Row separator', 'annasta-filters' ); ?><span class="woocommerce-help-tip" data-tip="<?php esc_attr_e( 'Separator for the filter terms being displayed in a row. For plain values with separators (products per page etc), set filter style to "Labels".', 'annasta-filters' ); ?>"></span></label>
+                  <?php echo A_W_F::$admin->build_select_html( $select_3_options ); ?>
+                </div>
+
+                </td>
               </tr>

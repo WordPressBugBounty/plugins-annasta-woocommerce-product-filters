@@ -74,15 +74,15 @@ class A_W_F_customizer_control_alpha_color_control extends WP_Customize_Control 
 		// Begin the output. ?>
 <?php // Output the label and description if they were passed in.
 			if ( isset( $this->label ) && '' !== $this->label ) {
-				echo '<span class="customize-control-title">' . sanitize_text_field( $this->label ) . '</span>';
+				echo '<span class="customize-control-title">' . esc_html( $this->label ) . '</span>';
 			}
 			if ( isset( $this->description ) && '' !== $this->description ) {
-				echo '<span class="description customize-control-description">' . sanitize_text_field( $this->description ) . '</span>';
+				echo '<span class="description customize-control-description">' . esc_html( $this->description ) . '</span>';
 		} ?>
 		<div class="customize-control-content">
                 	<label>
-                    		<span class="screen-reader-text"><?php echo isset( $this->label ) && '' !== $this->label ? $this->label : "Alpha Color Picker"; ?></span>
-                    		<input class="awf-alpha-color-control" type="text" data-show-opacity="<?php echo $show_opacity; ?>" data-palette="<?php echo esc_attr( $palette ); ?>" data-default-color="<?php echo esc_attr( $this->settings['default']->default ); ?>" <?php $this->link(); ?>  />
+                    		<span class="screen-reader-text"><?php echo isset( $this->label ) && '' !== $this->label ? esc_html( $this->label ) : 'Alpha Color Picker'; ?></span>
+                    		<input class="awf-alpha-color-control" type="text" data-show-opacity="<?php echo esc_attr( $show_opacity ); ?>" data-palette="<?php echo esc_attr( $palette ); ?>" data-default-color="<?php echo esc_attr( $this->settings['default']->default ); ?>" <?php $this->link(); ?>  />
                 	</label>
             	</div>
 <?php
