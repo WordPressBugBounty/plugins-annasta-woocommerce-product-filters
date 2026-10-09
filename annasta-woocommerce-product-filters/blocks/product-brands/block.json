@@ -1,0 +1,70 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "a-w-f/product-brands",
+	"version": "1.0.0",
+	"title": "annasta Product Brands",
+	"description": "List of WooCommerce product brands in different formats (list | dropdown | row), with multiple adjustment options, such as hidden empty terms, manual items selection, and other controls. Can be added to the Navigation block.",
+	"keywords": [ "brands", "product brands", "menu", "navigation", "Woocommerce" ],
+	"category": "widgets",
+	"icon": "tag",
+	"textdomain": "annasta-filters",
+	"usesContext": [
+		"textColor",
+		"customTextColor",
+		"backgroundColor",
+		"customBackgroundColor",
+		"overlayTextColor",
+		"customOverlayTextColor",
+		"overlayBackgroundColor",
+		"customOverlayBackgroundColor",
+		"fontSize",
+		"customFontSize",
+		"showSubmenuIcon",
+		"style",
+		"openSubmenusOnClick",
+		"submenuVisibility"
+	],
+	"supports": {
+		"html": false,
+		"reusable": false,
+		"color": {
+			"text": true,
+			"background": true,
+			"link": true
+		},
+		"typography": {
+			"fontSize": true,
+			"lineHeight": true,
+			"__experimentalFontFamily": true,
+			"__experimentalFontWeight": true,
+			"__experimentalFontStyle": true,
+			"__experimentalTextTransform": true,
+			"__experimentalLetterSpacing": true
+		},
+		"spacing": {
+			"margin": true,
+			"padding": true
+		}
+	},
+	"attributes": {
+		"display": { "type": "string", "default": "list" },
+		"collapse": { "type": "boolean", "default": true },
+		"label": { "type": "string", "default": "" },
+		"link": { "type": "string", "default": "none" },
+		"hideIfEmpty": { "type": "boolean", "default": false },
+		"limit": { "type": "number", "default": 0 },
+		"termsLink": { "type": "string", "default": "archive" },
+		"depth": { "type": "number", "default": 0 },
+		"excludeDefault": { "type": "boolean", "default": true },
+		"showCount": { "type": "boolean", "default": false },
+		"hideEmpty": { "type": "boolean", "default": true },
+		"orderby": { "type": "string", "default": "default" },
+		"columns": { "type": "number", "default": 1 },
+		"termsMode": { "type": "string", "default": "all" },
+		"terms": { "type": "array", "default": [], "items": { "type": "number" } },
+		"dynamic": { "type": "boolean", "default": false },
+		"dimEmpty": { "type": "boolean", "default": false }
+	},
+	"editorScript": "awf-terms-blocks-editor"
+}

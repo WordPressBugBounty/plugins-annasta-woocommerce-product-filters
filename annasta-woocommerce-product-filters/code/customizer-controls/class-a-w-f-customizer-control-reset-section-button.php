@@ -9,7 +9,7 @@
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 if( class_exists( 'WP_Customize_Control' ) ) {
-	
+
 	class A_W_F_customizer_control_reset_section_button extends WP_Customize_Control {
 
 		/**
@@ -24,6 +24,6 @@ if( class_exists( 'WP_Customize_Control' ) ) {
 			<?php
 		}
 	}
-	
+
 }
 

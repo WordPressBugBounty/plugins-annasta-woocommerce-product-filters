@@ -99,9 +99,9 @@ class A_W_F_elementor_widget extends \Elementor\Widget_Base {
 	 * @access protected
 	 */
 	protected function register_controls() {
-    $presets = $this->get_presets();
-    reset( $presets );
-    $default = key( $presets );
+		$presets = $this->get_presets();
+		reset( $presets );
+		$default = key( $presets );
 
 		$this->start_controls_section(
 			'content_section',
@@ -111,20 +111,20 @@ class A_W_F_elementor_widget extends \Elementor\Widget_Base {
 			]
 		);
 
-    $this->add_control(
-      'awf_preset',
-      [
-        'type' => \Elementor\Controls_Manager::SELECT,
-        'label' => esc_html__( 'Filters preset', 'annasta-filters' ),
-        'options' => $presets,
-        'default' => $default,
-      ]
-    );
+		$this->add_control(
+			'awf_preset',
+			[
+				'type' => \Elementor\Controls_Manager::SELECT,
+				'label' => esc_html__( 'Filters preset', 'annasta-filters' ),
+				'options' => $presets,
+				'default' => $default,
+			]
+		);
 
 		$this->end_controls_section();
 	}
 
-  /**
+	/**
 	 * Whether the reload preview is required or not.
 	 *
 	 * Used to determine whether the reload preview is required.
@@ -154,45 +154,46 @@ class A_W_F_elementor_widget extends \Elementor\Widget_Base {
 			return;
 		}
 
-    if( empty( A_W_F::$front ) ) {
-      if( \Elementor\Plugin::$instance->editor->is_edit_mode() ) {
-        A_W_F::$preview_mode = true;
-        A_W_F::get_instance()->initialize_frontend();
-        A_W_F::$front->get_access_to['elementor_preview'] = true;
-        A_W_F::$front->set_query_vars();
-        echo( A_W_F::$front->display_widget( $settings['awf_preset'], array() ) );
-        A_W_F::$front = false;
-      }
+		if( empty( A_W_F::$front ) ) {
+			if( \Elementor\Plugin::$instance->editor->is_edit_mode() ) {
+				A_W_F::$preview_mode = true;
+				A_W_F::get_instance()->initialize_frontend();
+				A_W_F::$front->get_access_to['elementor_preview'] = true;
+				A_W_F::$front->prepare_preview_context();
+				echo( A_W_F::$front->display_widget( $settings['awf_preset'], array() ) );
+				A_W_F::$front = false;
+				A_W_F::$preview_mode = false;
+			}
 
-    } else {
-      echo( A_W_F::$front->display_widget( $settings['awf_preset'], array() ) );
-    }
+		} else {
+			echo( A_W_F::$front->display_widget( $settings['awf_preset'], array() ) );
+		}
 	}
-  
-  /**
+
+	/**
 	 * Get the list of annasta Filters for WooCommerce presets.
 	 *
 	 * Returns the array of annasta Filters presets.
-   * Array keys are the preset ids, with the values containing the corresponding preset label.
+	 * Array keys are the preset ids, with the values containing the corresponding preset label.
 	 *
 	 * @since 1.7.3
 	 * @access private
-   * @return array annasta Filters presets.
+	 * @return array annasta Filters presets.
 	 */
 
-  private function get_presets() {
-    $awf_presets = array();
-    
-    if( empty( A_W_F::$presets ) ) {
-      $awf_presets[''] = __( 'Please create annasta Filters Preset', 'annasta-filters' );
-      
-    } else {
-      foreach( A_W_F::$presets as $preset_id => $preset_data ) {
-        $awf_presets[strval( $preset_id )] = __( get_option( 'awf_preset_' . $preset_id . '_name', '' ) );
-      }
-    }
+	private function get_presets() {
+		$awf_presets = array();
 
-    return $awf_presets;
-  }
+		if( empty( A_W_F::$presets ) ) {
+			$awf_presets[''] = __( 'Please create annasta Filters Preset', 'annasta-filters' );
+
+		} else {
+			foreach( A_W_F::$presets as $preset_id => $preset_data ) {
+				$awf_presets[strval( $preset_id )] = __( get_option( 'awf_preset_' . $preset_id . '_name', '' ) );
+			}
+		}
+
+		return $awf_presets;
+	}
 
 }

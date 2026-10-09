@@ -93,6 +93,15 @@ if ( !class_exists( 'A_W_F' ) ) {
          */
         public static $preview_mode = false;
 
+        /**
+         *
+         * Preview mode set by a REST preview route, reset after the route callback
+         *
+         * @since 1.8.5
+         * @var boolean
+         */
+        private static $rest_preview_mode = false;
+
         private function __construct() {
             self::$plugin_version = A_W_F_VERSION;
             if ( !class_exists( 'WooCommerce' ) ) {
@@ -105,20 +114,47 @@ if ( !class_exists( 'A_W_F' ) ) {
             if ( version_compare( get_bloginfo( 'version' ), '5.8', '>=' ) ) {
                 new A_W_F_gutenberg();
             }
+            new A_W_F_nav_menus();
+            new A_W_F_terms_blocks();
             add_action( 'init', array($this, 'load_textdomain') );
             add_action( 'widgets_init', array($this, 'register_widget') );
             add_action( 'init', array($this, 'register_shortcode') );
             add_action( 'customize_register', array($this, 'register_customizer') );
             add_filter( 'rewrite_rules_array', array($this, 'add_rewrite_rules'), 10 );
-            add_action( 'rest_api_init', function ( $wp_rest_server ) {
-                $referrer = wp_get_referer();
-                if ( !empty( $referrer ) ) {
-                    if ( false !== strpos( $referrer, get_admin_url( null, 'widgets.php' ) ) ) {
-                        self::$preview_mode = true;
-                    }
-                }
-            } );
+            add_action(
+                'update_option_awf_query_vars',
+                array($this, 'flush_rewrite_rules_on_labels_change'),
+                10,
+                2
+            );
+            add_action( 'add_option_awf_ss_engine', array($this, 'clear_counts_cache_on_search_change') );
+            add_action( 'update_option_awf_ss_engine', array($this, 'clear_counts_cache_on_search_change') );
+            add_action( 'add_option_awf_ss_sources', array($this, 'clear_counts_cache_on_search_change') );
+            add_action( 'update_option_awf_ss_sources', array($this, 'clear_counts_cache_on_search_change') );
+            add_filter(
+                'rest_request_before_callbacks',
+                array($this, 'set_rest_preview_mode'),
+                10,
+                3
+            );
+            add_filter(
+                'rest_request_after_callbacks',
+                array($this, 'unset_rest_preview_mode'),
+                10,
+                3
+            );
             add_action( 'awf_cron_cache_reset', array($this, 'cron_cache_reset') );
+            add_action( 'awf_counts_cache_cleanup', array('A_W_F', 'cleanup_counts_cache') );
+            if ( 'none' !== get_option( 'awf_cache_reset_mode', 'default' ) ) {
+                add_action( 'before_delete_post', array($this, 'on_product_deletion') );
+                add_action( 'wp_trash_post', array($this, 'on_product_trashing') );
+                add_action( 'untrashed_post', array($this, 'on_product_untrashing') );
+                add_action( 'woocommerce_update_product', array($this, 'on_product_update') );
+                add_action( 'woocommerce_product_set_stock_status', array($this, 'on_stock_status_change') );
+                add_action( 'woocommerce_variation_set_stock_status', array($this, 'on_stock_status_change') );
+                add_action( 'created_product_cat', array($this, 'on_product_cat_change') );
+                add_action( 'delete_product_cat', array($this, 'on_product_cat_change') );
+            }
             self::$presets = get_option( 'awf_presets', array() );
             if ( !is_array( self::$presets ) ) {
                 self::$presets = array();
@@ -159,6 +195,30 @@ if ( !class_exists( 'A_W_F' ) ) {
             self::$front = A_W_F_frontend::get_instance();
         }
 
+        /* Block preview (ServerSideRender) in the post, widgets and Customizer editors */
+        public function set_rest_preview_mode( $response, $handler, $request ) {
+            if ( preg_match( '#^/wp/v2/block-renderer/a-w-f/awf-block/?$#i', $request->get_route() ) ) {
+                self::$preview_mode = self::$rest_preview_mode = true;
+            }
+            return $response;
+        }
+
+        /* Batch requests run several routes in one process */
+        public function unset_rest_preview_mode( $response, $handler, $request ) {
+            if ( self::$rest_preview_mode ) {
+                self::$preview_mode = self::$rest_preview_mode = false;
+            }
+            return $response;
+        }
+
+        /* wp_is_serving_rest_request() since WP 6.5 */
+        public static function is_rest_request() {
+            if ( function_exists( 'wp_is_serving_rest_request' ) ) {
+                return wp_is_serving_rest_request();
+            }
+            return defined( 'REST_REQUEST' ) && REST_REQUEST;
+        }
+
         public static function get_instance() {
             if ( is_null( self::$instance ) ) {
                 self::$instance = new self();
@@ -166,12 +226,23 @@ if ( !class_exists( 'A_W_F' ) ) {
             return self::$instance;
         }
 
+        /**
+         * Plugin activation
+         *
+         * Bulk activation (Plugins screen) sends the bulk actions nonce and no plugin parameter. The rewrite rules
+         * are deleted, so that WordPress builds them with the plugin's rules on the next request.
+         */
         public static function activate_plugin() {
             if ( !current_user_can( 'activate_plugins' ) ) {
                 return;
             }
             $plugin = ( isset( $_REQUEST['plugin'] ) ? $_REQUEST['plugin'] : '' );
-            check_admin_referer( "activate-plugin_{$plugin}" );
+            if ( '' === $plugin && isset( $_REQUEST['action'] ) && 'activate-selected' === $_REQUEST['action'] ) {
+                check_admin_referer( 'bulk-plugins' );
+            } else {
+                check_admin_referer( "activate-plugin_{$plugin}" );
+            }
+            delete_option( 'rewrite_rules' );
             if ( empty( get_option( 'awf_presets' ) ) ) {
                 self::$presets = array(
                     1 => array(
@@ -278,14 +349,20 @@ if ( !class_exists( 'A_W_F' ) ) {
                 return;
             }
             require 'class-a-w-f-admin.php';
-            self::clear_awf_cache();
+            self::clear_awf_cache( true );
+            wp_clear_scheduled_hook( 'awf_counts_cache_cleanup' );
+            if ( !is_null( self::$instance ) ) {
+                remove_filter( 'rewrite_rules_array', array(self::$instance, 'add_rewrite_rules'), 10 );
+            }
+            flush_rewrite_rules( false );
         }
 
         public static function uninstall_plugin() {
             if ( !current_user_can( 'activate_plugins' ) ) {
                 return;
             }
-            self::clear_awf_cache();
+            self::clear_awf_cache( true );
+            wp_clear_scheduled_hook( 'awf_counts_cache_cleanup' );
             unregister_widget( 'A_W_F_widget' );
             $all_options = wp_load_alloptions();
             $awf_options = array(
@@ -361,18 +438,23 @@ if ( !class_exists( 'A_W_F' ) ) {
                 'awf_use_wc_orderby',
                 'awf_popup_fix_close_btn',
                 'awf_ss_engine',
+                'awf_ss_sources',
                 'awf_multilingual_support',
                 'awf_excluded_customizer_sections',
                 'awf_force_published_status',
                 'awf_cm_v2',
                 'awf_rewrite_rules',
+                'awf_rewritten_pages',
                 'awf_add_canonical',
+                'awf_add_noindex_filtered',
+                'awf_add_noindex_no_results',
                 'awf_add_nofollow',
                 'awf_canonical_parameters',
                 'awf_cache_reset_mode',
                 'awf_enable_cron_cache_reset',
                 'awf_cache_reset_counts_rebuild',
-                'awf_style_options_css'
+                'awf_style_options_css',
+                'awf_counts_cache_version'
             );
             foreach ( $all_options as $name => $value ) {
                 if ( 0 !== strpos( $name, 'awf_' ) ) {
@@ -715,11 +797,25 @@ if ( !class_exists( 'A_W_F' ) ) {
             return apply_filters( 'awf_seo_filters', $seo_parts );
         }
 
+        /**
+         * Filters rewrite rules, inserted before the matching WordPress rules
+         *
+         * The rule bases are taken from WordPress' own rules, exactly as registered: the shop archive (full shop page path,
+         * front, decoded slugs), the term archives (taxonomies without a query var are queried as taxonomy=name&term=slug),
+         * and the full page paths of the shortcode pages (child pages, decoded like the shop base). WPML: WCML translates only
+         * WooCommerce's own shop rules (shop/, feed, page), so the shop rules are added for the shop page path of every language.
+         * The pages that got rules are saved in awf_rewritten_pages: the frontend only rewrites their links.
+         *
+         * @param array $wp_rules
+         * @return array
+         */
         public function add_rewrite_rules( $wp_rules ) {
             $awf_rules = get_option( 'awf_rewrite_rules', array() );
             unset($awf_rules[0]);
             $awf_rules = array_filter( $awf_rules );
+            $rewritten_pages = array();
             if ( 0 === count( $awf_rules ) ) {
+                update_option( 'awf_rewritten_pages', $rewritten_pages );
                 return $wp_rules;
             }
             global $wp_rewrite;
@@ -751,36 +847,44 @@ if ( !class_exists( 'A_W_F' ) ) {
                     $rewrite['rewrite'] .= '(?:/' . $var . '-([^/]+))?';
                     $rewrite['matches'][] = array($var, false);
                 }
+                $paged = '(?:/' . $wp_rewrite->pagination_base . '/([0-9]{1,}))?';
                 if ( !$is_page ) {
-                    $rewrite['rewrite'] .= '(?:/page/([0-9]{1,}))?';
+                    $rewrite['rewrite'] .= $paged;
                     $rewrite['matches'][] = array('paged', false);
                 }
                 $awf_rewrites = array();
                 $position = 0;
                 switch ( $page ) {
                     case 'shop':
-                        $key = array_search( 'index.php?post_type=product&paged=$matches[1]', $wp_rules );
-                        $keys = array_keys( $wp_rules );
-                        $position = array_search( $key, $keys );
-                        if ( false !== $position ) {
-                            $position = (int) $position;
-                            $position++;
-                            if ( 'page' === get_option( 'show_on_front' ) && intval( get_option( 'page_on_front' ) ) === wc_get_page_id( 'shop' ) ) {
-                                $slugs = array_values( $vars );
-                                switch ( count( $slugs ) ) {
-                                    case 1:
-                                        $awf_rewrites['(' . implode( '|', $slugs ) . ')-([^/]+)(?:/page/([0-9]{1,}))?/?$'] = 'index.php?post_type=product&$matches[1]=$matches[2]&paged=$matches[3]';
-                                        break;
-                                    case 2:
-                                        $awf_rewrites['(' . implode( '|', $slugs ) . ')-([^/]+)(?:/page/([0-9]{1,}))?/?$'] = 'index.php?post_type=product&$matches[1]=$matches[2]&paged=$matches[3]';
-                                        $awf_rewrites[$slugs[0] . '-([^/]+)/' . $slugs[1] . '-([^/]+)(?:/page/([0-9]{1,}))?/?$'] = 'index.php?post_type=product&' . $slugs[0] . '=$matches[1]&' . $slugs[1] . '=$matches[2]&paged=$matches[3]';
-                                        break;
-                                    default:
-                                        break;
+                        $key = array_search( 'index.php?post_type=product&paged=$matches[1]', $wp_rules, true );
+                        if ( false === $key ) {
+                            break;
+                        }
+                        $position = (int) array_search( $key, array_keys( $wp_rules ), true );
+                        $position++;
+                        if ( 'page' === get_option( 'show_on_front' ) && intval( get_option( 'page_on_front' ) ) === wc_get_page_id( 'shop' ) ) {
+                            $slugs = array_values( $vars );
+                            switch ( count( $slugs ) ) {
+                                case 1:
+                                    $awf_rewrites['(' . implode( '|', $slugs ) . ')-([^/]+)' . $paged . '/?$'] = 'index.php?post_type=product&$matches[1]=$matches[2]&paged=$matches[3]';
+                                    break;
+                                case 2:
+                                    $awf_rewrites['(' . implode( '|', $slugs ) . ')-([^/]+)' . $paged . '/?$'] = 'index.php?post_type=product&$matches[1]=$matches[2]&paged=$matches[3]';
+                                    $awf_rewrites[$slugs[0] . '-([^/]+)/' . $slugs[1] . '-([^/]+)' . $paged . '/?$'] = 'index.php?post_type=product&' . $slugs[0] . '=$matches[1]&' . $slugs[1] . '=$matches[2]&paged=$matches[3]';
+                                    break;
+                                default:
+                                    break;
+                            }
+                        } else {
+                            $base = $this->get_rewrite_rule_base( $key, '/' . $wp_rewrite->pagination_base . '/([0-9]{1,})/?$' );
+                            if ( false !== $base ) {
+                                $bases = array($base);
+                                if ( class_exists( 'SitePress' ) ) {
+                                    $bases = array_unique( array_merge( $bases, $this->get_wpml_shop_page_paths() ) );
                                 }
-                            } else {
-                                $slug = get_post_field( 'post_name', wc_get_page_id( 'shop' ) );
-                                $awf_rewrites[$slug . $rewrite['rewrite'] . '/?$'] = 'index.php?post_type=product&' . $this->build_matches( $rewrite['matches'] );
+                                foreach ( $bases as $shop_base ) {
+                                    $awf_rewrites[$shop_base . $rewrite['rewrite'] . '/?$'] = 'index.php?post_type=product&' . $this->build_matches( $rewrite['matches'] );
+                                }
                             }
                         }
                         break;
@@ -789,34 +893,29 @@ if ( !class_exists( 'A_W_F' ) ) {
                             $parts = explode( '-', $page );
                             if ( 2 === count( $parts ) ) {
                                 $page_id = (int) array_pop( $parts );
-                                $page_slug = get_post_field( 'post_name', $page_id );
-                                if ( empty( $page_slug ) ) {
+                                $page_path = get_page_uri( $page_id );
+                                if ( empty( $page_path ) ) {
                                     continue 2;
                                 }
                                 $permastruct = $wp_rewrite->get_page_permastruct();
                                 $permastruct = trim( $permastruct, '/' );
-                                $permastruct = str_replace( '%pagename%', $page_slug, $permastruct );
+                                $permastruct = str_replace( '%pagename%', urldecode( $page_path ), $permastruct );
                                 $awf_rewrites[$permastruct . $rewrite['rewrite'] . '/?$'] = 'index.php?page_id=' . $page_id . '&' . $this->build_matches( $rewrite['matches'] );
                             }
                         } else {
                             $t = get_taxonomy( $page );
                             if ( $t && !empty( $t->rewrite['slug'] ) ) {
-                                $permastruct = $wp_rewrite->get_extra_permastruct( $page );
-                                $terms = ( $t->hierarchical ? '(.+?)' : '([^/]+)' );
-                                if ( $permastruct ) {
-                                    $permastruct = trim( $permastruct, '/' );
-                                    $permastruct = str_replace( '%' . $page . '%', $terms, $permastruct );
-                                } else {
-                                    $permastruct = rtrim( ltrim( $t->rewrite['slug'], '/' ), '/' ) . '/' . $terms;
+                                $tax_query = ( empty( $t->query_var ) ? 'taxonomy=' . $page . '&term=' : $t->query_var . '=' );
+                                $key = array_search( 'index.php?' . $tax_query . '$matches[1]&paged=$matches[2]', $wp_rules, true );
+                                if ( false === $key ) {
+                                    break;
                                 }
-                                $key = array_search( 'index.php?' . $page . '=$matches[1]&paged=$matches[2]', $wp_rules );
-                                $keys = array_keys( $wp_rules );
-                                $position = array_search( $key, $keys );
-                                if ( false !== $position ) {
-                                    $position = (int) $position;
-                                    array_unshift( $rewrite['matches'], array($page, false) );
-                                    $awf_rewrites[$permastruct . $rewrite['rewrite'] . '/?$'] = 'index.php?' . $this->build_matches( $rewrite['matches'] );
+                                $base = $this->get_rewrite_rule_base( $key, '/' . $wp_rewrite->pagination_base . '/?([0-9]{1,})/?$' );
+                                if ( false === $base ) {
+                                    break;
                                 }
+                                $position = (int) array_search( $key, array_keys( $wp_rules ), true );
+                                $awf_rewrites[$base . $rewrite['rewrite'] . '/?$'] = 'index.php?' . $tax_query . '$matches[1]&' . $this->build_matches( $rewrite['matches'], array(), 2 );
                             }
                         }
                         break;
@@ -833,15 +932,62 @@ if ( !class_exists( 'A_W_F' ) ) {
                         count( $wp_rules ),
                         true
                     ) );
+                    $rewritten_pages[] = $page;
                 }
             }
+            update_option( 'awf_rewritten_pages', $rewritten_pages );
             return $wp_rules;
         }
 
-        private function build_matches( $matches, $add = array() ) {
+        /**
+         * Base of a WordPress pagination rule, e.g. "shop" from "shop/page/([0-9]{1,})/?$"
+         *
+         * @since 1.8.5
+         * @param string $rule The WordPress rewrite rule regex.
+         * @param string $pagination_pattern The pagination part of the regex.
+         * @return string|false The base, or false if the rule doesn't end with the pagination pattern.
+         */
+        private function get_rewrite_rule_base( $rule, $pagination_pattern ) {
+            $length = strlen( $pagination_pattern );
+            if ( strlen( $rule ) <= $length || substr( $rule, -$length ) !== $pagination_pattern ) {
+                return false;
+            }
+            return substr( $rule, 0, -$length );
+        }
+
+        /**
+         * WPML: the shop page paths of all the active languages
+         *
+         * @since 1.8.5
+         * @return array Decoded shop page paths, as in the WooCommerce shop archive rules.
+         */
+        private function get_wpml_shop_page_paths() {
+            $paths = array();
+            $shop_page_id = wc_get_page_id( 'shop' );
+            $languages = apply_filters( 'wpml_active_languages', null, array(
+                'skip_missing' => 0,
+            ) );
+            if ( 0 < $shop_page_id && is_array( $languages ) ) {
+                foreach ( array_keys( $languages ) as $language ) {
+                    $page_id = apply_filters(
+                        'wpml_object_id',
+                        $shop_page_id,
+                        'page',
+                        false,
+                        $language
+                    );
+                    if ( $page_id && get_post( $page_id ) ) {
+                        $paths[] = urldecode( get_page_uri( $page_id ) );
+                    }
+                }
+            }
+            return $paths;
+        }
+
+        /* $i: the index of the first match, for rules whose earlier matches are already mapped */
+        private function build_matches( $matches, $add = array(), $i = 1 ) {
             $response = array();
             $matches = array_merge( $matches, $add );
-            $i = 1;
             foreach ( $matches as $match ) {
                 $k = ( empty( $match[0] ) ? '$matches[' . $i++ . ']' : $match[0] );
                 $response[] = ( empty( $match[1] ) ? $k . '=$matches[' . $i++ . ']' : $k . '=' . $match[1] );
@@ -849,26 +995,120 @@ if ( !class_exists( 'A_W_F' ) ) {
             return implode( '&', $response );
         }
 
-        public static function clear_product_counts_cache() {
-            global $wpdb;
-            $transient_name = '_transient_awf_counts_%';
-            for ($i = 1; $i <= 5; $i++) {
-                $sql = "SELECT `option_name` FROM {$wpdb->options} WHERE `option_name` LIKE '%s' LIMIT 10000";
-                $transients = $wpdb->get_results( $wpdb->prepare( $sql, $transient_name ), ARRAY_A );
-                if ( $transients && !is_wp_error( $transients ) && is_array( $transients ) ) {
-                    foreach ( $transients as $transient ) {
-                        if ( is_array( $transient ) ) {
-                            $transient = current( $transient );
-                        }
-                        delete_transient( str_replace( '_transient_', '', $transient ) );
-                    }
-                } else {
-                    break;
-                }
+        /**
+         * Rebuild the rewrite rules when the taxonomy parameters' labels change
+         *
+         * The rules are built from the labels, the links use the current ones.
+         *
+         * @since 1.8.5
+         * @param mixed $old_value The previous awf_query_vars value.
+         * @param mixed $value The new awf_query_vars value.
+         */
+        /**
+         * The counts and search results caches of searched pages depend on the string search settings
+         *
+         * @since 1.8.5
+         */
+        public function clear_counts_cache_on_search_change() {
+            self::clear_product_counts_cache();
+        }
+
+        public function flush_rewrite_rules_on_labels_change( $old_value, $value ) {
+            $old_labels = ( isset( $old_value['tax'] ) ? $old_value['tax'] : array() );
+            $new_labels = ( isset( $value['tax'] ) ? $value['tax'] : array() );
+            if ( $old_labels === $new_labels ) {
+                return;
+            }
+            $awf_rules = get_option( 'awf_rewrite_rules', array() );
+            unset($awf_rules[0]);
+            if ( array_filter( $awf_rules ) ) {
+                flush_rewrite_rules( false );
             }
         }
 
-        public static function clear_awf_cache() {
+        /**
+         * Version of the filters cache, part of the counts and variations stock cache transient names
+         *
+         * @since 1.8.5
+         * @return int
+         */
+        public static function get_cache_version() {
+            return (int) get_option( 'awf_counts_cache_version', 1 );
+        }
+
+        /**
+         * Invalidates the product counts cache
+         *
+         * Bumping the cache version invalidates every entry at once, also when the transients live in a persistent
+         * object cache, where they can't be selected from the options table. The outdated rows of the options table
+         * are removed in the background (see cleanup_counts_cache()).
+         *
+         * @param boolean $delete_now Delete all the counts transients of the options table right away (deactivation, uninstall)
+         */
+        public static function clear_product_counts_cache( $delete_now = false ) {
+            update_option( 'awf_counts_cache_version', self::get_cache_version() + 1, true );
+            if ( $delete_now ) {
+                self::cleanup_counts_cache( true );
+            } else {
+                delete_transient( 'awf_counts_cleanup' );
+                self::schedule_counts_cache_cleanup();
+            }
+        }
+
+        /* Runs the cleanup in a WP Cron request instead of the current one */
+        public static function schedule_counts_cache_cleanup( $delay = 0 ) {
+            if ( !wp_next_scheduled( 'awf_counts_cache_cleanup' ) ) {
+                wp_schedule_single_event( time() + $delay, 'awf_counts_cache_cleanup' );
+            }
+        }
+
+        /**
+         * Deletes the expired and outdated (previous cache versions) product counts transients from the options table
+         *
+         * Up to 5 batches of 5,000 per run; a larger cache continues in the next cron run.
+         *
+         * @since 1.8.5
+         * @param boolean $all Delete all the counts transients
+         */
+        public static function cleanup_counts_cache( $all = false ) {
+            global $wpdb;
+            if ( $all ) {
+                $sql = $wpdb->prepare( "SELECT option_name FROM {$wpdb->options} WHERE option_name LIKE %s LIMIT 5000", $wpdb->esc_like( '_transient_awf_counts_' ) . '%' );
+                $prefix = '_transient_';
+            } else {
+                $sql = $wpdb->prepare(
+                    "SELECT option_name FROM {$wpdb->options} WHERE option_name LIKE %s AND ( option_value < %d OR option_name NOT LIKE %s ) LIMIT 5000",
+                    $wpdb->esc_like( '_transient_timeout_awf_counts_' ) . '%',
+                    time(),
+                    $wpdb->esc_like( '_transient_timeout_awf_counts_' . self::get_cache_version() . '_' ) . '%'
+                );
+                $prefix = '_transient_timeout_';
+            }
+            for ($i = 0; $i < 5; $i++) {
+                $transients = $wpdb->get_col( $sql );
+                if ( empty( $transients ) ) {
+                    if ( !$all ) {
+                        set_transient( 'awf_counts_cleanup', '1', DAY_IN_SECONDS * 3 );
+                    }
+                    return;
+                }
+                foreach ( $transients as $transient ) {
+                    delete_transient( substr( $transient, strlen( $prefix ) ) );
+                }
+            }
+            if ( !$all ) {
+                self::schedule_counts_cache_cleanup( MINUTE_IN_SECONDS );
+            }
+        }
+
+        /**
+         * Clears the variations stock and the product counts caches
+         *
+         * The counts cache version is also part of the variations stock cache names.
+         *
+         * @param boolean $delete_now Delete the counts transients right away
+         */
+        public static function clear_awf_cache( $delete_now = false ) {
             global $wpdb;
             $transients_names = array('_transient_timeout_awf_vss_products_cache_%', '_transient_timeout_awf_vss_variations_cache_%', '_transient_timeout_awf_vss_variable_term_id');
             foreach ( $transients_names as $transient_name ) {
@@ -878,7 +1118,75 @@ if ( !class_exists( 'A_W_F' ) ) {
                     delete_transient( str_replace( '_transient_timeout_', '', $transient ) );
                 }
             }
-            self::clear_product_counts_cache();
+            delete_transient( 'awf_meta_keys' );
+            self::clear_product_counts_cache( $delete_now );
+        }
+
+        /* Automatic cache resets (awf_cache_reset_mode) */
+        protected function reset_cache_on_change( $counts_only = false ) {
+            switch ( get_option( 'awf_cache_reset_mode', 'default' ) ) {
+                case 'default':
+                    if ( $counts_only ) {
+                        self::clear_product_counts_cache();
+                    } else {
+                        self::clear_awf_cache();
+                    }
+                    break;
+                case 'cron':
+                    update_option( 'awf_enable_cron_cache_reset', '1' );
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        /**
+         * Product saves: cache reset in wp-admin, cron, WP-CLI and product management REST requests
+         *
+         * Checkout stock reductions save the products too: there only the stock status changes reset the cache
+         * (on_stock_status_change()), to avoid a permanently cold cache.
+         *
+         * @param int $product_id
+         */
+        public function on_product_update( $product_id ) {
+            if ( is_admin() || wp_doing_cron() || defined( 'WP_CLI' ) && WP_CLI || $this->is_product_management_rest_request() ) {
+                $this->reset_cache_on_change();
+            }
+        }
+
+        public function on_stock_status_change( $product_id ) {
+            $this->reset_cache_on_change();
+        }
+
+        public function on_product_deletion( $product_id ) {
+            if ( 'product' === get_post_type( $product_id ) && 'trash' !== get_post_status( $product_id ) ) {
+                $this->reset_cache_on_change();
+            }
+        }
+
+        public function on_product_trashing( $product_id ) {
+            if ( 'product' === get_post_type( $product_id ) ) {
+                $this->reset_cache_on_change();
+            }
+        }
+
+        public function on_product_untrashing( $post_id ) {
+            if ( 'product' === get_post_type( $post_id ) ) {
+                $this->reset_cache_on_change();
+            }
+        }
+
+        public function on_product_cat_change( $term_id ) {
+            $this->reset_cache_on_change( true );
+        }
+
+        /* REST requests other than the Store API (cart and checkout requests of the block themes) */
+        protected function is_product_management_rest_request() {
+            if ( !self::is_rest_request() ) {
+                return false;
+            }
+            $route = ( isset( $GLOBALS['wp']->query_vars['rest_route'] ) ? (string) $GLOBALS['wp']->query_vars['rest_route'] : '' );
+            return 0 !== strpos( ltrim( $route, '/' ), 'wc/store' );
         }
 
         public static function cron_cache_reset() {
@@ -942,6 +1250,15 @@ if ( !class_exists( 'A_W_F' ) ) {
             }
         }
 
+        /**
+         * WPML: translated taxonomy base slug in a URL or permastruct (WPML core filter, for the taxonomies WCML doesn't handle)
+         *
+         * The base is replaced only as a whole path segment, so that placeholders like %pwb-brand% stay intact.
+         *
+         * @param string $taxonomy
+         * @param string $url
+         * @return string
+         */
         public static function wpml_translate_taxonomy_base_slug( $taxonomy, $url ) {
             if ( !class_exists( 'SitePress' ) ) {
                 return $url;
@@ -959,9 +1276,34 @@ if ( !class_exists( 'A_W_F' ) ) {
                 'taxonomy'
             );
             if ( !empty( $translated_slug ) && $translated_slug !== $original_slug ) {
-                $url = str_replace( $original_slug, $translated_slug, $url );
+                $url = preg_replace(
+                    '#(^|/)' . preg_quote( trim( $original_slug, '/' ), '#' ) . '(?=/|$)#',
+                    '${1}' . addcslashes( trim( $translated_slug, '/' ), '\\$' ),
+                    $url,
+                    1
+                );
             }
             return $url;
+        }
+
+        /* Returns the language to restore with wpml_restore_language(), or false when no switch was needed */
+        public static function wpml_switch_to_default_language() {
+            if ( !class_exists( 'SitePress' ) ) {
+                return false;
+            }
+            $current_language = apply_filters( 'wpml_current_language', null );
+            $default_language = apply_filters( 'wpml_default_language', null );
+            if ( empty( $current_language ) || empty( $default_language ) || $current_language === $default_language ) {
+                return false;
+            }
+            do_action( 'wpml_switch_language', $default_language );
+            return $current_language;
+        }
+
+        public static function wpml_restore_language( $language ) {
+            if ( !empty( $language ) ) {
+                do_action( 'wpml_switch_language', $language );
+            }
         }
 
         final function __clone() {

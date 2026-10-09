@@ -322,8 +322,26 @@
   display: none;
 }
 
+.awf-premium-tag-container {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.awf-premium-tag {
+  display: inline-block;
+  margin-left: 4px;
+  padding: 1px 5px 2px;
+  line-height: inherit;
+  vertical-align: text-top;
+  color: #fff;
+  font-size: 10px;
+  background: #d00909;
+  border-radius: 3px;
+  user-select: none;
+}
+
 #awf-settings {
-    margin-top: 1em;
+  margin-top: 1em;
 }
 
 #awf-settings select, 
@@ -597,6 +615,12 @@
 #awf-settings table.form-table input[type="number"], 
 #awf-settings table.form-table input.regular-input {
   width: 100%;
+}
+
+#awf-settings h2 > .woocommerce-help-tip {
+  margin: 0 0px 0 1em;
+  vertical-align: top;
+  font-size: 20px;
 }
 
 #awf-settings h3 > .woocommerce-help-tip {
@@ -2316,6 +2340,21 @@
   align-items: center;
 }
 
+#awf-settings .awf-filter-options .awf-hidden-hide-empty .awf-unhide-active-filter-container.awf-hide-active-on {
+  display: none;
+}
+
+#awf-settings .awf-filter-options .awf-hide-active-parents-container {
+  display: none;
+  align-items: center;
+  justify-content: flex-end;
+  padding-left: 20px;
+}
+
+#awf-settings .awf-filter-options .awf-hide-active-on .awf-hide-active-parents-container {
+  display: flex;
+}
+
 #awf-settings .awf-ac-options-container.awf-collapsed {
   display: none;
 }
@@ -2644,7 +2683,7 @@
 }
 
 #awf-loader-extra-options-container select,
-#awf-loader-extra-options-container input {
+#awf-loader-extra-options-container input:not([type=checkbox]) {
   font-size: 12px;
   background: rgb(248, 248, 248);
 }
@@ -3010,6 +3049,10 @@
   box-shadow: 0 2px 2px #e2e2e2;
 }
 
+#awf-settings.awf-tab-seo-settings .awf-rewrite-front-shop-notice {
+  margin-top: 15px;
+}
+
 #awf-settings.awf-tab-seo-settings .awf-rewrite-rule-example .dashicons {
     height: auto;
     min-height: auto;
@@ -3313,7 +3356,20 @@
   font-weight: 600;
 }
 
-#awf-settings .awf-advanced-plugin-settings-table .awf-pretty-query-var-name-default {
+#awf-settings .awf-query-parameters-labels-table {
+  table-layout: fixed;
+}
+
+#awf-settings .awf-query-parameters-labels-table .awf-titledesc-col {
+  width: 200px;
+}
+
+#awf-settings .awf-query-parameters-labels-table th.awf-info-notice-container {
+  width: auto;
+}
+
+#awf-settings .awf-advanced-plugin-settings-table .awf-pretty-query-var-name-default,
+#awf-settings .awf-query-parameters-labels-table .awf-pretty-query-var-name-default {
   color: #898989;
   font-size: 13px;
   font-style: italic;
@@ -3334,6 +3390,10 @@
 
 #awf-settings .select2-container--default .select2-selection--multiple .select2-selection__choice {
   padding: 5px;
+}
+
+#awf-settings .select2-container--default .select2-selection--multiple .select2-selection__rendered li {
+  margin: 5px;
 }
 
 /* Togglable headings for admin sections */
@@ -3389,6 +3449,10 @@
 
 .woocommerce #awf-settings table.form-table.awf-ts th.awf-info-notice-container {
   padding-right: 10px;
+}
+
+.woocommerce #awf-settings table.form-table.awf-ts.awf-query-parameters-labels-table th.awf-info-notice-container {
+  padding-top: 5px;
 }
 
 #awf-settings .awf-ts span.description {
@@ -3514,5 +3578,57 @@
   font-size: 15px;
   font-weight: 600;
   margin-bottom: 5px;
+}
+
+/* "Meta data name" suggestions (jQuery UI autocomplete) */
+#awf-settings .awf-meta-keys-loader {
+  position: relative;
+  top: 7px;
+  margin: -10px 0 -10px 12px;
+  vertical-align: middle;
+  color: #999;
+  font-size: 20px;
+}
+
+.ui-autocomplete.awf-meta-keys-autocomplete {
+  position: absolute;
+  z-index: 100000;
+  max-height: 300px;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  list-style: none;
+  background: #fff;
+  border: 1px solid #8c8f94;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.ui-autocomplete.awf-meta-keys-autocomplete .ui-menu-item {
+  margin: 0;
+  color: #999;
+  font-size: 13px;
+}
+
+.ui-autocomplete.awf-meta-keys-autocomplete .ui-menu-item-wrapper {
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+.ui-autocomplete.awf-meta-keys-autocomplete .ui-menu-item-wrapper.ui-state-active {
+  margin: 0;
+  color: #fff;
+  background: #2271b1;
+}
+
+.ui-helper-hidden-accessible {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
 }
 

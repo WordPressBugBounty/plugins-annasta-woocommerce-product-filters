@@ -24,6 +24,9 @@
  *   to minimize conflicts with possible usage of the same library by other plugins / themes,
  *     (line 83 input) class="alpha-color-control" > class="awf-alpha-color-control"
  */
+
+defined( 'ABSPATH' ) or die( 'Access denied' );
+
 class A_W_F_customizer_control_alpha_color_control extends WP_Customize_Control {
 
 	/**
@@ -80,11 +83,11 @@ class A_W_F_customizer_control_alpha_color_control extends WP_Customize_Control 
 				echo '<span class="description customize-control-description">' . esc_html( $this->description ) . '</span>';
 		} ?>
 		<div class="customize-control-content">
-                	<label>
-                    		<span class="screen-reader-text"><?php echo isset( $this->label ) && '' !== $this->label ? esc_html( $this->label ) : 'Alpha Color Picker'; ?></span>
-                    		<input class="awf-alpha-color-control" type="text" data-show-opacity="<?php echo esc_attr( $show_opacity ); ?>" data-palette="<?php echo esc_attr( $palette ); ?>" data-default-color="<?php echo esc_attr( $this->settings['default']->default ); ?>" <?php $this->link(); ?>  />
-                	</label>
-            	</div>
+									<label>
+												<span class="screen-reader-text"><?php echo isset( $this->label ) && '' !== $this->label ? esc_html( $this->label ) : 'Alpha Color Picker'; ?></span>
+												<input class="awf-alpha-color-control" type="text" data-show-opacity="<?php echo esc_attr( $show_opacity ); ?>" data-palette="<?php echo esc_attr( $palette ); ?>" data-default-color="<?php echo esc_attr( $this->settings['default']->default ); ?>" <?php $this->link(); ?>  />
+									</label>
+							</div>
 <?php
 	}
 }

@@ -2,8 +2,8 @@
 Contributors: annastaa
 Tags: product filter, ajax filter, woocommerce filter, woocommerce product filters, woocommerce products filter
 Requires at least: 6.3
-Tested up to: 7.0
-Stable tag: 1.8.3
+Tested up to: 7.1
+Stable tag: 1.8.4
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -64,7 +64,7 @@ Use the versatile controls of the filters' admin interface to fine-tune the plug
 * Collapsible filters enable the toggle buttons that allow to open or collapse the lists of filtering options. Dropdowns (JavaScript-powered select boxes) are provided by the premium version of the plugin.
 * Hierarchical levels display control.
 * Hierarchical children (subcategories) display and collapse: hide/display/toggle the sub-levels of a WooCommerce filter created out of hierarchical taxonomy.
-* **Dynamic product counts** display is supported in all the taxonomy-based filters. [Zero count results concealment option](https://annasta.net/plugins/annasta-woocommerce-product-filters/documentation/filter-settings/empty-items-style/) is available in the premium version.
+* **Dynamic product counts** display is supported in all the taxonomy and meta data (ACF etc) based filters. [Option to hide empty items (with zero product counts)](https://annasta.net/plugins/annasta-woocommerce-product-filters/documentation/filter-settings/empty-items-style/) is available in the premium version.
 * [Customizable filter icons with hover state support](https://annasta.net/plugins/annasta-woocommerce-product-filters/documentation/filter-settings/custom-icons/) (any Font Awesome Free icon of your choice) can be set up directly through the filter admin interface.
 * Color boxes filter style for the color attributes.
 * **Modify filters appearance**, such as fonts, colors, borders and margins in the annasta Filters section of Wordpress Customizer (Appearance > Customize > annasta Filters).
@@ -128,6 +128,36 @@ We do maintain the program of the new features introduction for the future plugi
 * [Google Fonts](https://fonts.google.com)
 
 == Changelog ==
+
+= 1.8.5 =
+* Added "annasta Product Categories" and "annasta Product Brands" lists: menu items (Appearance > Menus), blocks with Navigation block support, and the [annasta_product_categories] / [annasta_product_brands] shortcodes.
+* Added the "Hide active items" filter option.
+* Product counts optimization to ensure faster queries.
+* Stock filter variations support: optimized for faster variations' queries on sites with enabled WooCommerce attributes lookup tables.
+* Products counts cache: added support for persistent object caches (Redis, Memcached), optimized the background cleanup procedures for expired entries, and cache resets on product changes made outside of the admin (REST API, WP-CLI, imports, checkout stock changes).
+* Added product counts for the meta data filters (single and multiple selection). Hidden empty meta data filters are available in the premium version.
+* Added the "String search in" setting: select the sources of the products string search (product title & content, SKU, categories & tags, product meta data). Works with the WooCommerce, Advanced Woo Search and Relevanssi engines.
+* Added the "WooCommerce extended" string search engine, which finds products matching any of the searched words.
+* String search: cached search results, a fix for the 100 results limit of Advanced Woo Search, variation results support for Relevanssi, and other fixes.
+* SEO: added the "Add noindex to filtered pages" and "Add noindex to empty results" options.
+* SEO: meta data filters can now be included in the "Indexable parameters" (premium).
+* SEO: the "Filterable archive identifier" and "Query parameters' labels" options have been moved to the new "Filtering parameters labels" section of the SEO tab (premium).
+* SEO: canonical links of paginated pages now point to the page itself.
+* SEO: added canonical links compatibility with Yoast SEO and Rank Math to avoid the addition of a second canonical tag.
+* The terms search box now ignores accents (Greek and Latin).
+* URL rewrites now support non-Latin page slugs, custom pagination bases, and translated WPML shop pages.
+* WPML: Color Boxes, Images, Custom Terms and terms limitation settings are now preserved when presets are edited in a non-default admin language, and Custom Terms labels are displayed on translated pages.
+* WPML: fixes in the translation of taxonomy base slugs in archive links and redirects.
+* Block themes: added archive titles and descriptions AJAX updates.
+* Block themes: added "Add to cart" buttons' events reattachment after AJAX updates.
+* Block themes: improved result counts synchronization after AJAX updates and no results pages.
+* Fixed the bulk plugin activations.
+* Security fixes: additional sanitization and escaping of the filters' output.
+* PHP and JS Code formatting brought in line with the WordPress Coding Standards (tabs indentation).
+* Other minor improvemnts, changes and fixes.
+* Freemius update to version 2.13.5
+* Upped the WordPress version compliance to 7.1
+* Upped the WooCommerce version compliance to 11.2
 
 = 1.8.4 =
 * General code cleanup, optimization, syntax and security checks and fixes

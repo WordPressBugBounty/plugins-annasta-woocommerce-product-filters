@@ -9,7 +9,7 @@
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 if( class_exists( 'WP_Customize_Control' ) ) {
-	
+
 	class A_W_F_customizer_control_title extends WP_Customize_Control {
 
 		public $type = 'awf-title';
@@ -35,6 +35,6 @@ if( class_exists( 'WP_Customize_Control' ) ) {
 			<?php
 		}
 	}
-	
+
 }
 

@@ -19,7 +19,7 @@ if( defined( 'YITH_WOOCOMPARE' ) ) {
 if( defined( 'PWB_PLUGIN_VERSION' ) ) {
 	add_action( 'pre_update_option_awf_query_vars', function( $new_value, $old_value, $option_name ) {
 		if( isset( $new_value['tax']['pwb-brand'] ) && false === get_option( 'awf_pwb-brand_pretty_name', false ) ) {
-      $new_value['tax']['pwb-brand'] = 'filter-pwb-brand';
+			$new_value['tax']['pwb-brand'] = 'filter-pwb-brand';
 		}
 
 		return $new_value;
@@ -27,7 +27,7 @@ if( defined( 'PWB_PLUGIN_VERSION' ) ) {
 }
 
 function awf_initialize_elementor_compatibility_support () {
-  include_once( A_W_F_PLUGIN_PATH . 'code/compatibility-support/elementor.php' );
+	include_once( A_W_F_PLUGIN_PATH . 'code/compatibility-support/elementor.php' );
 }
 add_filter( 'elementor/init', 'awf_initialize_elementor_compatibility_support' );
 

@@ -597,6 +597,18 @@ li.awf-filter-container {
   display: inherit;
 }
 
+.awf-filter-wrapper.awf-hide-active-terms .awf-filter-container.awf-active:not(.awf-hide-active-excluded),
+.awf-filter-wrapper.awf-hide-active-terms .awf-filter-container.awf-active:not(.awf-hide-active-excluded) + ul.awf-children-container,
+.awf-filter-wrapper.awf-hide-active-terms .awf-filter-container.awf-active.awf-no-available-children,
+.awf-filter-wrapper.awf-hide-active-terms .awf-filter-container.awf-active.awf-no-available-children + ul.awf-children-container {
+  display: none;
+}
+
+.awf-filter-wrapper.awf-button-filter.awf-submit-btn-hidden .awf-submit-btn-container,
+.awf-filter-wrapper.awf-button-filter.awf-submit-btn-hidden .awf-submit-btn {
+  display: none;
+}
+
 .awf-filter-wrapper.awf-af .awf-filter-container.awf-hidden-af {
   display: none;
 }
@@ -2411,6 +2423,157 @@ ul.awf-product-categories li.product-category .woocommerce-loop-category__title 
 }
 
 /* end of Product Categories / Subcategories Support */
+
+/* annasta Product Categories / Brands blocks outside of the Navigation block */
+
+.awf-terms-list,
+.awf-terms-list .awf-terms-list-children {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.awf-terms-list .awf-terms-list-children {
+  padding-left: 1em;
+}
+
+.awf-terms-list li {
+  margin: 0.25em 0;
+}
+
+.awf-terms-list .current-menu-item > a {
+  font-weight: bold;
+}
+
+/* Links */
+.awf-terms-list.awf-terms-list li a {
+  text-decoration: none;
+  white-space: normal;
+}
+
+.awf-terms-list.awf-terms-list li a:hover,
+.awf-terms-list.awf-terms-list li a:focus-visible {
+  text-decoration: underline;
+}
+
+/* Popup toggle buttons */
+.awf-terms-list .awf-terms-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4em;
+  min-width: 1.5em;
+  min-height: 1em;
+  height: 1lh;
+  margin: 0 0 0 0.25em;
+  padding: 0 0.25em;
+  vertical-align: top;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  color: inherit;
+  font: inherit;
+  line-height: inherit;
+  text-transform: none;
+  cursor: pointer;
+}
+
+.awf-terms-list .awf-terms-toggle.awf-terms-label-toggle {
+  min-height: 0;
+}
+
+/* Child levels */
+.awf-terms-list .awf-terms-list-children {
+  font-size: 0.92em;
+}
+
+.awf-terms-list .awf-terms-list-children .awf-terms-list-children {
+  font-size: 1em;
+}
+
+.awf-terms-list .awf-terms-toggle.awf-terms-label-toggle {
+  margin-left: 0;
+  padding-left: 0;
+}
+
+.awf-terms-list .awf-terms-toggle svg {
+  stroke: currentColor;
+  transition: transform 0.2s;
+}
+
+/* Arrows */
+.awf-terms-list .awf-terms-popup-item:hover > .awf-terms-toggle svg,
+.awf-terms-list .awf-terms-open > .awf-terms-toggle svg {
+  transform: rotate(180deg);
+}
+
+.awf-terms-list .awf-terms-popup .awf-terms-popup-item > .awf-terms-toggle svg,
+.awf-terms-list .awf-terms-popup .awf-terms-popup-item:hover > .awf-terms-toggle svg,
+.awf-terms-list .awf-terms-popup .awf-terms-popup-item.awf-terms-open > .awf-terms-toggle svg {
+  transform: rotate(-90deg);
+}
+
+/* Popups */
+.awf-terms-list .awf-terms-popup-item {
+  position: relative;
+  white-space: nowrap;
+}
+
+.awf-terms-list > .awf-terms-popup-item {
+  width: fit-content;
+  max-width: 100%;
+}
+
+.awf-terms-list .awf-terms-popup-item > .awf-terms-popup {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  min-width: 200px;
+  margin: 0;
+  padding: 0.5em 1em;
+  background-color: var(--wp--preset--color--base, #fff);
+  color: var(--wp--preset--color--contrast, inherit);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  text-align: left;
+}
+
+.awf-terms-list .awf-terms-popup-item:hover > .awf-terms-popup,
+.awf-terms-list .awf-terms-popup-item.awf-terms-open > .awf-terms-popup {
+  display: block;
+}
+
+.awf-terms-list .awf-terms-popup-item.awf-terms-align-right > .awf-terms-popup {
+  left: auto;
+  right: 0;
+}
+
+.awf-terms-list .awf-terms-popup .awf-terms-popup-item > .awf-terms-popup {
+  top: calc(-0.5em - 1px);
+  left: 100%;
+}
+
+.awf-terms-list .awf-terms-popup .awf-terms-popup-item.awf-terms-flyout-left > .awf-terms-popup {
+  left: auto;
+  right: 100%;
+}
+
+/* Row of top level items */
+.awf-terms-list.awf-terms-list-top-level-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5em 1.5em;
+}
+
+.awf-terms-list.awf-terms-list-top-level-row > li {
+  margin: 0;
+}
+
+/* end of annasta Product Categories / Brands blocks */
 
 /* Accessibility Adjustments */
 

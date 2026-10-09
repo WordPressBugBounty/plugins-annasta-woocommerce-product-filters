@@ -4,7 +4,7 @@ defined( 'ABSPATH' ) or die( 'Access denied' );
 /*
 * Plugin Name:  annasta Filters for WooCommerce
 * Description:  Filter the products of your WooCommerce shop by category, custom taxonomies, attributes, price, stock, on sale products and more!
-* Version:      1.8.4
+* Version:      1.8.5
 *
 * Author:       annasta.net
 * Author URI:   https://www.annasta.net
@@ -18,7 +18,7 @@ defined( 'ABSPATH' ) or die( 'Access denied' );
 * Requires at least: 6.3
 * Requires PHP: 7.4
 * WC requires at least: 8.7
-* WC tested up to: 10.8
+* WC tested up to: 11.2
 *
 */
 if ( !defined( 'A_W_F_PLUGIN_PATH' ) ) {
@@ -31,7 +31,7 @@ if ( !defined( 'A_W_F_PLUGIN_URL' ) ) {
     define( 'A_W_F_PLUGIN_URL', plugins_url( '', __FILE__ ) );
 }
 if ( !defined( 'A_W_F_VERSION' ) ) {
-    define( 'A_W_F_VERSION', '1.8.4' );
+    define( 'A_W_F_VERSION', '1.8.5' );
 }
 if ( function_exists( 'a_w_f_fs' ) ) {
     a_w_f_fs()->set_basename( false, __FILE__ );
